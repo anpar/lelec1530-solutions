@@ -1,0 +1,78 @@
+TP1/ex3
+1.
+Le circuit a une relation linéaire entre le courant d'entrée et la tension de sortie:
+\[V_{out} = \alpha + \beta I_{in}.\]
+Cette relation sera démontrée dans les points suivants.
+
+On peut cependant analyser intuitivement le comportement du circuit: on suppose que les transistors sont en régime de saturation. Dès lors, en partant d'un état donné, si la tension $V_{out}$ augmente, $V_{gs1}$ augmente et $V_{gs2}$ diminue, et donc $I_{ds1}$ augmente tandis que $I_{ds2}$ diminue. Par Kirchoff, $I_{in}$ augmente.
+On peut appliquer le même raisonnement dans le cas où $V_{out}$ diminue. Par conséquent, $V_{out}$ suit les variations de $I_{in}$.
+
+2.
+Tout d'abord, on observe que le transistor Q1 est monté en diode. Il y a donc deux états possibles:
+\begin{itemize}
+\item bloqué si $V_{out} < V_{T0,n}$,
+\item en saturation si $V_{out} > V_{T0,n}$.
+\end{itemize}
+
+Pour Q2:
+\begin{itemize}
+\item bloqué si $V_{bias} - V_{out} < V_{T0,n}$,
+\item en saturation si $V_{bias} - V_{out} > V_{T0,n}$ et $V_{DD} - V_{out} > V_{bias} - V_{T0,n}$.
+\item en triode si $V_{bias} - V_{out} > V_{T0,n}$ et $V_{DD} - V_{out} < V_{bias} - V_{T0,n}$.
+\end{itemize}
+
+Dans le cas où $V_{DD} < V_{bias} - V_{T0,n}$, on peut passer de ces conditions sur la tension $V_{out}$ à des conditions sur le courant $I_{in}$ en utilisant les équations des transistors lorsqu'ils sont en saturation (plage de fonctionnement "normal" du circuit).
+
+\begin{align*}
+    I_1 &= \frac{k}{2}\left(V_{out} - V_{T0,n}\right)^2 \\
+    I_2 &= \frac{k}{2}\left(V_{bias} - V_{out} - V_{T0,n}\right)^2 \\
+    I_{1} &= I_{in} + I_{2}
+\end{align*}
+    
+En résolvant ces équations, on trouve
+\[I_{in} = \frac{k}{2}\left(2 V_{T0,n} V_{bias} + (2 V_{bias} - 4 V_{T0,n}) V_{out} - V_{bias}^2\right)\]
+
+En prenant en compte la valeur de $V_{T0,n}$ et $V_{bias} = \SI{4}{V}$, on trouve
+\[I_{in} = k\left(\SI{2}{V} V_{out} - \SI{4}{V^2}\right)\]
+et donc
+\begin{itemize}
+\item si $I_{in} < -\SI{2}{V^2}k = -\SI{78}{\micro\ampere}$, Q1 est bloqué,
+\item si $I_{in} > \SI{2}{V^2}k = \SI{78}{\micro\ampere}$, Q2 est bloqué,
+\item sinon, les deux transistors sont en saturation.
+\end{itemize}
+
+3.
+Du point précédent, on trouve $-\SI{78}{\micro\ampere} < I_{in} < \SI{78}{\micro\ampere}$.
+
+4.
+
+Caractéristique:
+\begin{center}
+\includegraphics[width=0.6\textwidth,height=0.4\textwidth]{figures/ex3}
+\end{center}
+
+Equation de la caractéristique:
+\begin{itemize}
+    \item Si $I_{in} < \SI{-78}{\micro\ampere}$, Q1 est bloqué et
+        \[I_{in} = - I_2 = -\frac{k}{2}\left(V_{bias} - V_{out} - V_{T0,n}\right)^2,\]
+        donc \[V_{out} = V_{bias} - V_{T0,n} - \sqrt{\frac{2}{k}I_{in}}\]
+    \item Si $I_{in} > \SI{78}{\micro\ampere}$, Q2 est bloqué et
+        \[I_{in} = I_1 = \frac{k}{2}\left(V_{out} - V_{T0,n}\right)^2,\]
+        donc \[V_{out} = V_{T0,n} + \sqrt{\frac{2}{k}I_{in}}\]
+\end{itemize}
+
+
+5.
+
+On mesure la plage de fonctionnement linéaire par rapport à la sortie. La plage de fonctionnement linéaire s'étend entre $V_{T0,n}$ et $V_{bias} - V_{T0,n}$. On a donc une plage obtimale pour $V_{bias} = \SI{6}{V}$ (si $V_{bias} > \SI{6}{V}$, Q2 fonctionne en triode, et la relation entrée-sortie n'est plus linéaire).
+
+6.
+
+Si $k_1 \neq k_2$, on ne peut plus simplifier les termes en $V_{out}^2$ dans les équations (voir point 2), la relation entrée-sortie n'est donc plus linéaire.
+
+%Enoncé:
+%k: 10^-5, pas 10^5
+%point 2: en fonction de V_out et V_bias, puis I_in ? 
+%k = k1 = k2
+%point 2: extremement calculatoire en symbolique si V_bias quelconque => reformuler / fixer V_bias ?
+%I_{in} < 0 : peu intéressant.
