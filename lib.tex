@@ -29,7 +29,7 @@
 \usetikzlibrary{plotmarks}
 \usepackage{rotating}
 
-\usepackage{babel}
+\usepackage[french]{babel}
 % Listing
 % always put it after babel
 % http://tex.stackexchange.com/questions/100717/code-in-lstlisting-breaks-document-compile-error
@@ -124,3 +124,88 @@
 
 %\KOMAoptions{DIV=last}
 
+\usepackage{circuitikz}
+\usetikzlibrary{babel}
+\ctikzset{tripoles/mos style/arrows}
+
+\makeatletter
+\pgfcircdeclaremos{pmos}{
+          \anchor{S}{
+            \northeast
+          }
+          \anchor{source}{
+            \northeast
+          }
+          \anchor{D}{
+            \northeast
+            \pgf@y=-\pgf@y
+          }
+          \anchor{drain}{
+            \northeast
+            \pgf@y=-\pgf@y
+          }
+}{%
+            \pgfpathmoveto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@up}}
+            \pgfpathlineto{\pgfpoint{\pgf@circ@res@right}
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate height}\pgf@circ@res@up}}
+            \pgfpathlineto{\pgfpoint
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/base width}\pgf@circ@res@left}
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate height}\pgf@circ@res@up}}
+            \pgfusepath{draw}
+
+        \ifpgf@circuit@mos@arrows
+            \pgfscope             
+            \pgfslopedattimetrue 
+            \pgfallowupsidedownattimetrue
+            \pgfresetnontranslationattimefalse
+            \pgftransformlineattime{.4}{%
+                \pgfpoint%
+                    {\pgf@circ@res@right}%
+                    {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate height}\pgf@circ@res@up}%
+            }{%
+                \pgfpoint
+                    {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate width}\pgf@circ@res@left}%
+                    {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate height}\pgf@circ@res@up}%
+            }
+            \pgfnode{currarrow}{center}{}{}{\pgfusepath{stroke}}
+            \endpgfscope
+        \fi
+
+            \pgfscope
+            \pgfpathmoveto{\pgfpoint
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/base width}\pgf@circ@res@left}
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/base height}\pgf@circ@res@up}}
+            \pgfpathlineto{\pgfpoint
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/base width}\pgf@circ@res@left}
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/base height}\pgf@circ@res@down}}
+            \pgfsetlinewidth{2\pgflinewidth}
+            \pgfusepath{draw}
+            \endpgfscope
+
+            \pgfpathmoveto{\pgfpoint
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/base width}\pgf@circ@res@left}
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate height}\pgf@circ@res@down}}
+            \pgfpathlineto{\pgfpoint{\pgf@circ@res@right}
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate height}\pgf@circ@res@down}}
+            \pgfpathlineto{\pgfpoint{\pgf@circ@res@right}{\pgf@circ@res@down}}      
+
+            \pgfpathmoveto{\pgfpoint
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate width}\pgf@circ@res@left}
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate height}\pgf@circ@res@up}}
+            \pgfpathlineto{\pgfpoint
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate width}\pgf@circ@res@left}
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate height}\pgf@circ@res@down}}
+
+
+            \pgfpathmoveto{\pgfpoint
+                {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate width}\pgf@circ@res@left}
+                {\pgf@circ@res@up+\pgf@circ@res@down}}
+            \pgfpathlineto{\pgfpoint{\pgf@circ@res@left}{\pgf@circ@res@up+\pgf@circ@res@down}}
+            \pgfusepath{draw}
+
+%           \pgfpathcircle{\pgfpoint
+%               {\pgfkeysvalueof{/tikz/circuitikz/tripoles/pmos/gate width}\pgf@circ@res@left - \pgfkeysvalueof{/tikz/circuitikz/nodes width}*\pgfkeysvalueof{/tikz/circuitikz/bipoles/length}}
+%               {\pgf@circ@res@up+\pgf@circ@res@down}}{\pgfkeysvalueof{/tikz/circuitikz/nodes width}*\pgfkeysvalueof{/tikz/circuitikz/bipoles/length}}
+%           \pgfusepath{draw,fill}      
+
+}
