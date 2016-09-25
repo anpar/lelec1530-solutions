@@ -65,20 +65,48 @@ Voir exemples dans les slides.
 	Il reste à déterminer si Q1 est en triode où en saturation. Pour cela, il faut
 	comparer si $V_{DS1}$ et $V_{OV1}$. Comme $V_{DS1} = V_{GS1}$ et $V_{OV1} = V_{GS1} -
 	V_{T0,n}$, on a $V_{DS1} > V_{OV1}$ est Q1 est donc en saturation.
-	
 	\paragraph*{Remarque} Un transistor dont le drain est connecté à la grille est en
 	fait toujours soit coupé, soit en saturation. On appelle cela un montage en diode.
 	
 	On trouve ensuite $I$ en résolvant le système	
-	\[ I = \frac{\SI{5}{\volt}-V_{D1}}{\SI{270}{\kilo\ohm}} = k_n(V_{GS1} - 1)^2 = k_n(V_{D1} - 1)^2.\]	
+	\[ I = \frac{\SI{5}{\volt}-V_{D1}}{\SI{270}{\kilo\ohm}} = \frac{k_n}{2}(V_{GS1} - 1)^2 =
+	k_n(V_{D1} - 1)^2.\]	
 	On obtient
 	\[ V_{D1} = \SI{2.29}{\volt} \]
 	et
 	\[ I = \SI{10.04}{\micro\ampere}. \]
 	
-	\item Les transistors Q1 et Q2 sont montés en miroir de courant, le courant dans la branche
-	de droite est donc égal au courant dans le branche de gauche.
-	\item 
+	\item Comme $V_{GS2}  = V_{GS1} = \SI{2.29}{\volt} > V_{T0,n}$, Q2 est passant. Pour aller
+	plus loin, il faut faire une hypothèse et la vérifier a posteriori. On va ici supposer
+	que Q2 est en saturation, c'est à dire que $V_{DS2} > V_{OV2} = V_{GS1} - V_{T0,n} =
+	\SI{1.29}{\volt}$. Dans ce cas, en négligeant l'effet \textsc{Early}, le courant dans Q2
+	ne dépend que de $V_{GS2}$. Comme de plus, Q1 et Q2 sont identiques et que $V_{GS1} = V_{GS2}$,
+	on peut dire que le courant dans la branche de droite est identique au courant dans la branche
+	de gauche.
+	\paragraph{Remarque} Un tel montage est, pour cette raison, appelé "miroir de courant".
+	
+	\item Pour cela, il nous faut d'abord trouver le régime de fonctionnement de Q3. Comme
+	$V_{SG3} = \SI{5}{\volt} > |V_{T0,p}| = \SI{1}{\volt}$, on peut déjà dire que Q3 est passant.
+	
+	A nouveau, il faut faire des hypothèses pour aller plus loin et les vérifier a posteriori.
+	On suppose dans un premier temps que Q3 est en saturation, c'est à dire que $V_{SD3} >
+	V_{SG3} - |V_{T0,p}| = \SI{4}{\volt}$. Dans ce cas,
+	\[ \SI{10.04}{\micro\ampere} = \frac{k_p}{2}(V_{SG3} - 1)^2 \]
+	et on trouve $V_{SG3} = \SI{3.24}{\volt}$. On a donc une contradiction puisqu'on sait que
+	$V_{SG3} = \SI{5}{\volt}$ : Q3 ne peut donc être qu'en triode (i.e. $V_{SD3} < \SI{4}{\volt}$).
+	Dans ce cas,
+	\begin{align*}
+		\SI{10.04}{\micro\ampere} 	& = k_p(V_{SG3} - |V_{T0,p}| - \frac{V_{SD3}}{2})V_{SD3} \\
+									& = k_p(4 - \frac{(5 - V_{D3})}{2})(5-V_{D3}),
+	\end{align*}
+	et on a finalement
+	\[ V_{D3} = V_{D2} = \SI{4.3}{\volt}.\]
+	
+	L'hypothèse de régime triode pour Q3 est donc bien vérifiée puisque $V_{SD3} = \SI{0.7}{\volt} < 
+	\SI{4}{\volt}$. Il ne reste donc plus qu'à vérifier l'hypothèse prise pour Q2. Comme
+	$V_{DS2} = \SI{4.3}{\volt} > V_{GS2} - V_{T0,n} = \SI{1.29}{\volt}$, Q2 est bel et bien
+	en saturation.
+	
 	\item Voir questions précédentes.
 \end{enumerate}
 
