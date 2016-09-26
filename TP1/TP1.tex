@@ -38,6 +38,18 @@ Pour un transitor de type PMOS, la source est toujours à une tension plus
 	quadratique.
 	\item Avec l'augmentation de $V_{OUT} = V_D$, la tension $V_{SD}$ va diminuer
 	progressivement. Le transistor va donc finir par passer en régime triode.
+	On peut calculer pour quelle valeur de $V_{IN}$ le transistor passera de saturation
+	à triode. Le point de changement est donné par
+	\begin{align*}
+		 V_{SD} & = V_{SG} - |V_{T0,p}| \\
+		 V_{DD} - V_{OUT} & = V_{DD} - V_{IN} - 0.8 \\
+		 V_{OUT} & = V_{IN} + 0.8 \\
+		 RI & = V_{IN} + 0.8 \\
+		 R\frac{k_p}{2}(V_{SG} - |V_{T0,p}|)^2 & = V_{IN} + 0.8 \\
+		 R\frac{k_p}{2}(4.2 - V_{IN})^2 & = V_{IN} + 0.8.
+	\end{align*}
+	En connaissant $k_p$, on pourrait résoudre cette équation pour $V_{IN}$ et donc
+	trouver pour quelle valeur de l'entrée le transistor passerait de saturation à triode.
 \end{enumerate}
 
 On peut se convaincre du résultat à l'aide d'une simulation \textsc{Spice}.
