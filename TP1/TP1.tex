@@ -4,7 +4,7 @@
 Première question qu'il faut se poser : s'agit-t-il d'un PMOS ou d'un NMOS?
 La flèche se trouve au dessus, il s'agit donc d'un transistor de type PMOS.
 Identifions ensuite les différents ports du transistor : la \textit{grille},
-la \textit{source} et le \textit{drain}. La grille est facile à identifiée.
+la \textit{source} et le \textit{drain}. La grille est facile à identifier.
 Pour un transitor de type PMOS, la source est toujours à une tension plus
 élevée relativement au drain.
 
@@ -70,7 +70,7 @@ Voir exemples dans les slides.
 	
 	On trouve ensuite $I$ en résolvant le système	
 	\[ I = \frac{\SI{5}{\volt}-V_{D1}}{\SI{270}{\kilo\ohm}} = \frac{k_n}{2}(V_{GS1} - 1)^2 =
-	k_n(V_{D1} - 1)^2.\]	
+        \frac{k_n}{2}(V_{D1} - 1)^2.\]	
 	On obtient
 	\[ V_{D1} = \SI{2.29}{\volt} \]
 	et
@@ -97,7 +97,7 @@ Voir exemples dans les slides.
 	Dans ce cas,
 	\begin{align*}
 		\SI{10.04}{\micro\ampere} 	& = k_p(V_{SG3} - |V_{T0,p}| - \frac{V_{SD3}}{2})V_{SD3} \\
-									& = k_p(4 - \frac{(5 - V_{D3})}{2})(5-V_{D3}),
+									& = k_p\left(4 - \frac{5 - V_{D3}}{2}\right)(5-V_{D3}),
 	\end{align*}
 	et on a finalement
 	\[ V_{D3} = V_{D2} = \SI{4.3}{\volt}.\]
