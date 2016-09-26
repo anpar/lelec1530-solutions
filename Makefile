@@ -32,7 +32,8 @@ all: $(PROJNAME).pdf
 # -interactive=nonstopmode keeps the pdflatex backend from stopping at a
 # missing file reference and interactively asking you for an alternative.
 
-$(PROJNAME).pdf: $(PROJNAME).tex
+#$(PROJNAME).pdf: $(PROJNAME).tex
+%.pdf: %.tex
 	latexmk -pdf -pdflatex="texfot pdflatex" $<
 
 cleanall:
