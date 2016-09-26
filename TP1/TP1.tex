@@ -147,11 +147,11 @@ Voir exemples dans les slides.
 	\begin{itemize}
 		\item bloqué si $V_{bias} - V_{out} < V_{T0,n}$,
 		\item en saturation si $V_{bias} - V_{out} > V_{T0,n}$ et $V_{DD} - V_{out} > V_{bias} -
-		V_{T0,n}$.
-		\item en triode si $V_{bias} - V_{out} > V_{T0,n}$ et $V_{DD} - V_{out} < V_{bias} - V_{T0,n}$.
+                    V_{T0,n} - V_{out}$.
+                \item en triode si $V_{bias} - V_{out} > V_{T0,n}$ et $V_{DD} - V_{out} < V_{bias} - V_{T0,n} - V_{out}$.
 	\end{itemize}
 
-	Dans le cas où $V_{DD} < V_{bias} - V_{T0,n}$, on peut passer de ces conditions sur la tension
+	Dans le cas où $V_{DD} > V_{bias} - V_{T0,n}$, on peut passer de ces conditions sur la tension
 	$V_{out}$ à des conditions sur le courant $I_{in}$ en utilisant les équations des transistors
 	lorsqu'ils sont en saturation (plage de fonctionnement "normal" du circuit).
 
@@ -166,7 +166,7 @@ Voir exemples dans les slides.
 	^2\right)\]
 
 	En prenant en compte la valeur de $V_{T0,n}$ et $V_{bias} = \SI{4}{V}$, on trouve
-	\[I_{in} = k\left(\SI{2}{V} V_{out} - \SI{4}{V^2}\right)\]
+	\[I_{in} = k\left(2 V_{out} - 8\right)\]
 	et donc
 	\begin{itemize}
 		\item si $I_{in} < -\SI{2}{V^2}k = -\SI{78}{\micro\ampere}$, Q1 est bloqué,
