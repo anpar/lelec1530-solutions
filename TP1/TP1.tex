@@ -2,6 +2,7 @@
 
 \subsection{Exercice 1}
 Première question qu'il faut se poser : s'agit-t-il d'un PMOS ou d'un NMOS?
+% TODO: rephrase this
 La flèche se trouve au dessus, il s'agit donc d'un transistor de type PMOS.
 Identifions ensuite les différents ports du transistor : la \textit{grille},
 la \textit{source} et le \textit{drain}. La grille est facile à identifier.
@@ -122,53 +123,68 @@ Voir exemples dans les slides ou dans le livre...
 
 \section{Exercice 3}
 
-\begin{enumerate}
-	\item Le circuit a une relation linéaire entre le courant d'entrée et la tension de sortie:
-	\[V_{out} = \alpha + \beta I_{in}.\]
-	Cette relation sera démontrée dans les points suivants.
+\paragraph{Remarques préliminaires}
+\begin{itemize}
+	\item Le but d'un convertisseur courant-tension est bien entendu d'avoir une relation
+	linéaire entre le courant et la tension
+	\[ V_{OUT} = \alpha + \beta I_{IN}. \]
+	\item On remarque que Q1 est monté en diode (voir exercice 2). Q1 est donc soit bloqué,
+	soit en saturation ;
+	\item On note $k=k_1=k_2$.
+\end{itemize}
 
-	On peut cependant analyser intuitivement le comportement du circuit: on suppose que les
-	transistors sont en régime de saturation. Dès lors, en partant d'un état donné, si la tension
-	$V_{out}$ augmente, $V_{gs1}$ augmente et $V_{gs2}$ diminue, et donc $I_{ds1}$ augmente tandis
-	que $I_{ds2}$ diminue. Par Kirchoff, $I_{in}$ augmente.
-	On peut appliquer le même raisonnement dans le cas où $V_{out}$ diminue. Par conséquent,
-	$V_{out}$ suit les variations de $I_{in}$.
+\begin{enumerate}
+	\item Pour analyser intuitivement le comportement du circuit: on commence par écrire KCL
+	au noeud situé entre Q1 et Q2
+	\[ I_{IN} + I_2 = I_1. \]
 	
-	\item Tout d'abord, on observe que le transistor Q1 est monté en diode. Il y a donc deux états
-	possibles:
+	On fait ensuite l'hypothèse que Q1 est en saturation. On peut dés lors montré que, pour
+	obtenir une relation linéaire entre $I_{IN}$ et $V_{OUT}$, Q2 doit également être en
+	saturation\footnote{On montre cela en partant de KCL et en écrivant les équations
+	des transistors pour $I_1$ et $I_2$.}.
+	
+	Dès lors, en partant d'un état donné, si la tension
+	$V_{OUT}$ augmente, $V_{GS1}$ augmente et $V_{GS2}$ diminue, et donc $I_1$ augmente tandis
+	que $I_2$ diminue. Par KCL, $I_{IN}$ augmente.
+	On peut appliquer le même raisonnement dans le cas où $V_{OUT}$ diminue. Par conséquent,
+	$V_{OUT}$ suit les variations de $I_{IN}$.
+	
+	\item Comme le transistor Q1 est monté en diode, il y a deux états possibles:
 	\begin{itemize}
-		\item bloqué si $V_{out} < V_{T0,n}$,
-		\item en saturation si $V_{out} > V_{T0,n}$.
+		\item bloqué si $V_{OUT} < V_{T0,n}$,
+		\item en saturation si $V_{OUT} > V_{T0,n}$.
 	\end{itemize}
 
 	Pour Q2:
 	\begin{itemize}
-		\item bloqué si $V_{bias} - V_{out} < V_{T0,n}$,
-		\item en saturation si $V_{bias} - V_{out} > V_{T0,n}$ et $V_{DD} - V_{out} > V_{bias} -
-                    V_{T0,n} - V_{out}$.
-                \item en triode si $V_{bias} - V_{out} > V_{T0,n}$ et $V_{DD} - V_{out} < V_{bias} - V_{T0,n} - V_{out}$.
+		\item bloqué si $V_{BIAS} - V_{OUT} < V_{T0,n}$,
+		\item en saturation si $V_{BIAS} - V_{OUT} > V_{T0,n}$ et $V_{DD} - V_{OUT} > V_{BIAS} -
+        V_{T0,n} - V_{OUT}$.
+       	\item en triode si $V_{BIAS} - V_{OUT} > V_{T0,n}$ et $V_{DD} - V_{OUT} < V_{BIAS} - V_{T0,n} - V_{OUT}$.
 	\end{itemize}
 
-	Dans le cas où $V_{DD} > V_{bias} - V_{T0,n}$, on peut passer de ces conditions sur la tension
-	$V_{out}$ à des conditions sur le courant $I_{in}$ en utilisant les équations des transistors
-	lorsqu'ils sont en saturation (plage de fonctionnement "normal" du circuit).
+	Dans le cas où Q2 est en saturation (i.e. $V_{DD} > V_{BIAS} - V_{T0,n}$), on peut passer de ces conditions
+	sur la tension $V_{OUT}$ à des conditions sur le courant $I_{IN}$ en utilisant les équations des transistors
+	lorsqu'ils sont en saturation (plage de fonctionnement linéaire (et donc désirée) du circuit).
 
 	\begin{align*}
-    	I_1 &= \frac{k}{2}\left(V_{out} - V_{T0,n}\right)^2 \\
-    	I_2 &= \frac{k}{2}\left(V_{bias} - V_{out} - V_{T0,n}\right)^2 \\
-    	I_{1} &= I_{in} + I_{2}
+    	I_1 &= \frac{k}{2}\left(V_{OUT} - V_{T0,n}\right)^2 \\
+    	I_2 &= \frac{k}{2}\left(V_{BIAS} - V_{OUT} - V_{T0,n}\right)^2 \\
+    	I_{1} &= I_{IN} + I_{2}
 	\end{align*}
     
 	En résolvant ces équations, on trouve
-	\[I_{in} = \frac{k}{2}\left(2 V_{T0,n} V_{bias} + (2 V_{bias} - 4 V_{T0,n}) V_{out} - V_{bias}
+	\[I_{IN} = \frac{k}{2}\left(2 V_{T0,n} V_{BIAS} + (2 V_{BIAS} - 4 V_{T0,n}) V_{OUT} - V_{BIAS}
 	^2\right)\]
 
-	En prenant en compte la valeur de $V_{T0,n}$ et $V_{bias} = \SI{4}{V}$, on trouve
-	\[I_{in} = k\left(2 V_{out} - 8\right)\]
+	En prenant en compte la valeur de $V_{T0,n}$ et $V_{BIAS} = \SI{4}{V}$, on trouve
+	\[I_{IN} = k\left(2 V_{OUT} - 4\right)\]
 	et donc
 	\begin{itemize}
-		\item si $I_{in} < -\SI{2}{V^2}k = -\SI{78}{\micro\ampere}$, Q1 est bloqué,
-		\item si $I_{in} > \SI{2}{V^2}k = \SI{78}{\micro\ampere}$, Q2 est bloqué,
+		\item Q1 est bloqué si $V_{OUT} < V_{T0,n}$, c'est à dire si
+		$I_{IN} < -2k = -\SI{78}{\micro\ampere}$ ;
+		\item Q2 est bloqué si $V_{OUT} > V_{BIAS} - V_{T0,n}$, c'est à dire si
+		$I_{IN} > 2k = \SI{78}{\micro\ampere}$ ;
 		\item sinon, les deux transistors sont en saturation.
 	\end{itemize}
 
@@ -181,20 +197,20 @@ Voir exemples dans les slides ou dans le livre...
 
 	Equation de la caractéristique:
 	\begin{itemize}
-    	\item Si $I_{in} < \SI{-78}{\micro\ampere}$, Q1 est bloqué et
-        \[I_{in} = - I_2 = -\frac{k}{2}\left(V_{bias} - V_{out} - V_{T0,n}\right)^2,\]
-        donc \[V_{out} = V_{bias} - V_{T0,n} - \sqrt{\frac{2}{k}I_{in}}\]
-    	\item Si $I_{in} > \SI{78}{\micro\ampere}$, Q2 est bloqué et
-        \[I_{in} = I_1 = \frac{k}{2}\left(V_{out} - V_{T0,n}\right)^2,\]
-        donc \[V_{out} = V_{T0,n} + \sqrt{\frac{2}{k}I_{in}}\]
+    	\item Si $I_{IN} < \SI{-78}{\micro\ampere}$, Q1 est bloqué et
+        \[I_{IN} = - I_2 = -\frac{k}{2}\left(V_{BIAS} - V_{OUT} - V_{T0,n}\right)^2,\]
+        donc \[V_{OUT} = V_{BIAS} - V_{T0,n} - \sqrt{\frac{2}{k}I_{IN}}\]
+    	\item Si $I_{IN} > \SI{78}{\micro\ampere}$, Q2 est bloqué et
+        \[I_{IN} = I_1 = \frac{k}{2}\left(V_{OUT} - V_{T0,n}\right)^2,\]
+        donc \[V_{OUT} = V_{T0,n} + \sqrt{\frac{2}{k}I_{IN}}\]
 	\end{itemize}
 	
 	\item On mesure la plage de fonctionnement linéaire par rapport à la sortie. La plage de
-	fonctionnement linéaire s'étend entre $V_{T0,n}$ et $V_{bias} - V_{T0,n}$. On a donc une plage
-	obtimale pour $V_{bias} = \SI{6}{V}$ (si $V_{bias} > \SI{6}{V}$, Q2 fonctionne en triode, et la
+	fonctionnement linéaire s'étend entre $V_{T0,n}$ et $V_{BIAS} - V_{T0,n}$. On a donc une plage
+	optimale pour $V_{BIAS} = \SI{6}{V}$ (si $V_{BIAS} > \SI{6}{V}$, Q2 fonctionne en triode, et la
 	relation entrée-sortie n'est plus linéaire).
 
-	\item Si $k_1 \neq k_2$, on ne peut plus simplifier les termes en $V_{out}^2$ dans les équations
+	\item Si $k_1 \neq k_2$, on ne peut plus simplifier les termes en $V_{OUT}^2$ dans les équations
 	(voir point 2), la relation entrée-sortie n'est donc plus linéaire.
 \end{enumerate}
 
