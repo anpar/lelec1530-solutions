@@ -7,6 +7,9 @@
 \begin{tikzpicture}
 
 \begin{axis}[%
+width=5.485in,
+height=3.803in,
+at={(0.92in,0.513in)},
 scale only axis,
 separate axis lines,
 every outer x axis line/.append style={black},
@@ -1028,8 +1031,8 @@ axis background/.style={fill=white}
 \end{axis}
 
 \begin{axis}[%
-width=8.489in,
-height=4.444in,
+width=7.078in,
+height=4.667in,
 at={(0in,0in)},
 scale only axis,
 every outer x axis line/.append style={black},
@@ -1044,5 +1047,21 @@ hide axis,
 axis x line*=bottom,
 axis y line*=left
 ]
+\addplot [color=black,solid,forget plot]
+  table[row sep=crcr]{%
+0.485788113695091	0.922809523809525\\
+0.48578811369509	0.10952380952381\\
+};
+\addplot [color=black,solid,forget plot]
+  table[row sep=crcr]{%
+0.75968992248062	0.107142857142857\\
+0.75968992248062	0.921428571428571\\
+};
+\node[below right, align=left, text=black, draw=white]
+at (rel axis cs:0.782,0.564) {cut-off};
+\node[below right, align=left, text=black, draw=white]
+at (rel axis cs:0.577,0.575) {saturation};
+\node[below right, align=left, text=black, draw=white]
+at (rel axis cs:0.273,0.58) {triode};
 \end{axis}
 \end{tikzpicture}%
