@@ -79,9 +79,17 @@ Voir exemples dans les slides ou dans le livre...
 	\paragraph*{Remarque} Un transistor dont le drain est connecté à la grille est en
 	fait toujours soit coupé, soit en saturation. On appelle cela un montage en diode.
 	
-	On trouve ensuite $I$ en résolvant le système	
-	\[ I = \frac{\SI{5}{\volt}-V_{D1}}{\SI{270}{\kilo\ohm}} = \frac{k_n}{2}(V_{GS1} - 1)^2 =
-        \frac{k_n}{2}(V_{D1} - 1)^2.\]	
+	On trouve ensuite $I$ en résolvant le \textbf{système}
+
+	\[
+		\left \{
+			\begin{array}{l @{ = } l}
+    				I & \frac{\SI{5}{\volt}-V_{D1}}{\SI{270}{\kilo\ohm}} \\
+    				I & \frac{k_n}{2}(V_{GS1} - 1)^2 = \frac{k_n}{2}(V_{D1} - 1)^2. \\
+			\end{array}
+		\right.
+	\]	
+	
 	On obtient
 	\[ V_{D1} = \SI{2.29}{\volt} \]
 	et
