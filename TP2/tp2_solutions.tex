@@ -1,0 +1,148 @@
+\documentclass[frenchb,DIV=13]{scrartcl}
+
+\input{../lib.tex}
+
+\titlehead{}
+\subject{LELEC1530}
+\title{Séance 3 - BJT: polarisation et amplificateur}
+\subtitle{Solutions}
+\author{\small Gaëtan \textsc{Cassiers} \and\small Antoine \textsc{Paris}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Exercice 1}
+Chacun des circuits proposés, $|V_{BE}| = \SI{0.7}{\volt}$. Le transistor peut
+donc être en régime actif ou en saturation selon la valeur de $V_{BC}$ ou de
+$V_{CB}$ pour un NPN ou PNP respectivement.
+
+Dans tous les cas, considérer le gain $\beta$ comme très grand revient à considérer
+$I_B$ comme nul et donc à considérer $I_C = I_E$.
+
+\subsection*{Circuit a)} 
+Il s'agit d'un transistor bipolaire de type PNP. La flèche indique l'émetteur et
+on voit que $V_E = \SI{0.7}{\volt}$ tandis que $V_B = \SI{0}{\volt}$.
+Le dernier terminal est le collecteur ($V_C$).
+
+On a
+\[ I_E = I_C = \frac{10.7-0.7}{\SI{10e3}{}} = \SI{1}{\milli\ampere} \]
+et donc
+\[ V_C = \SI{-0.7}{\volt}. \]
+La tension $V_{CB} = \SI{-0.7}{\volt}$ est $< \SI{0.4}{\volt}$ et le transistor
+est donc en mode actif.
+
+\subsection*{Circuit b)}
+Il s'agit d'un transistor bipolaire de type NPN. La flèche indique l'émetteur.
+Comme $I_B$ est nul, il n'y a pas de chute de tension sur la résistance reliant
+la base au collecteur et donc $V_B = V_C \Rightarrow V_{BC} = \SI{0}{\volt} < \SI{0.4}{\volt}$:
+le transistor est donc en mode actif. On a ensuite
+\begin{align*}
+	I_C &= I_E \\
+	\frac{10-V_C}{\SI{10e3}{}} &= \frac{V_E - (-10)}{\SI{10e3}{}} \\
+	10 - (V_E + 0.7) &= V_E + 10 \\
+	V_E &= -\SI{0.35}{\volt}
+\end{align*}
+et donc $V_C = V_B = V_E+0.7 = \SI{0.35}{\volt}$ et $I_E = I_C = \SI{965}{\micro\ampere}$.
+
+\subsection*{Circuit c)}
+Il s'agit d'un transistor bipolaire de type PNP. La flèche indique l'émetteur. On commence
+par calculer la tension à la bas $V_B$
+\begin{align*}
+	\frac{10-V_B}{\SI{180e3}{}} &= \frac{V_B-(-10)}{\SI{300e3}{}} \\
+	V_B & = \SI{2.5}{\volt}.
+\end{align*}
+Le courant dans le branche de gauche vaut donc $\frac{10-2.5}{\SI{300}{e3}} = \SI{41.7}{\micro\ampere}$.
+Comme $V_{EB} = \SI{0.7}{\volt}$, $V_E = \SI{3.2}{\volt}$.
+On a ensuite
+\[ I_E = I_C = \frac{10-3.2}{\SI{6.8e3}{}} = \SI{1}{\milli\ampere}.\]
+Comme $I_C = \frac{V_C-10}{\SI{10e3}{}}$, on trouve finalement $V_C = \SI{0}{\volt}$.
+$V_CB = -\SI{2.5}{\volt < \SI{0.4}{\volt}}$, le transistor est en mode actif.
+
+\section*{Exercice 2}
+\subsection*{$\beta = \infty$}
+Comme pour l'exercice précédent, $\beta = \infty \Rightarrow I_B = 0, I_C = I_E$.
+On a donc directement $I_{B1} = I_{B2} = \SI{0}{\ampere}$ et donc $V_{B1} = \SI{0}{\volt}$.
+
+On procède ensuite de la même façon que pour les circuits impliquants des transistors MOS: on
+fait des hypothèses sur le régime fonctionnement des transistors qu'on vérifie a posteriori.
+
+Pour commencer, penchons-nous sur Q1 (PNP). Si Q1 est coupé (i.e. $V_{EB1} < \SI{0.7}{\volt}$
+et $V_{CB1} < \SI{0.4}{\volt}$), aucun courant ne circule dans la branche de gauche. Dans ce cas,
+il n'y a pas de chute de tension à travers les deux résistances de \SI{9.1}{\kilo\ohm} et donc
+$V_{E1} = \SI{10}{\volt}$ et $V_{C1} = -\SI{10}{\volt}$. On a donc $V_{EB1} = \SI{10}{\volt}$
+ce qui est en contradiction avec l'hyptohèse du mode coupé. Q1 est donc soit en mode actif
+(i.e. $V_{EB1} \approx \SI{0.7}{\volt}$ et $V_{CB1} < \SI{0.4}{\volt}$) soit en mode saturé
+(i.e. $V_{EB1} \approx \SI{0.7}{\volt}$ et $V_{CB1} \approx \SI{0.5}{\volt}$). Dans tous les cas,
+on a $V_{EB1} \approx \SI{0.7}{\volt} \Rightarrow V_{E1} = \SI{0.7}{\volt}$. Ensuite,
+\[ I_{E1} = I_{C1} = \frac{10-0.7}{\SI{9.1e3}{}} = \SI{1.02}{\milli\ampere}, \]
+\[ V_{C1} = \SI{-0.7}{\volt} = V_{B2}. \]
+A ce stade, on a assez d'information pour savoir dans quel mode se trouve le transistor. Comme
+$V_{CB1} = \SI{-0.7}{\volt}$, Q1 est en mode actif. La branche de gauche est maintenant entièrement
+connue, on passe à la branche de droite.
+
+Q2 (NPN) peut-il être coupé (i.e. $V_{BE2} < \SI{0.7}{\volt}$ et $V_{BC2} < \SI{0.4}{\volt}$) ?
+Si c'est le cas, on arrive à une contradiction exactement comme c'était le cas pour Q1.
+Q1 est donc soit en mode actif (i.e. $V_{BE2} \approx \SI{0.7}{\volt}$ et $V_{BC2} < \SI{0.4}{\volt}$)
+soit en mode saturé (i.e. $V_{BE2} \approx \SI{0.7}{\volt}$ et $V_{BC2} \approx \SI{0.5}{\volt}$). Dans
+tous les cas, $V_{BE2} \approx \SI{0.7}{\volt}$. Or on sait que $V_{B2} = -\SI{0.7}{\volt}$, donc
+$V_{E2} = -\SI{1.4}{\volt}$. Ensuite,
+\[ I_{E2} = I_{C2} = \frac{-1.4-(-10)}{\SI{4.3e3}{}} = \SI{2}{\milli\ampere}, \]
+\[ V_{C2} = -\SI{0.2}{\volt}. \]
+Comme $V_{BC2} = -\SI{0.5}{\volt}$, Q2 et en mode actif. 
+
+\subsection*{$\beta = 100$}
+Cette fois, $\beta$ n'étant plus infini, on ne peut plus négliger $I_B$ et on a
+\[ I_E = I_B + I_C. \]
+
+On peut utiliser la même raisonnement que dans le cas précédent pour montrer que Q1
+ne peut pas être coupé. On sait donc que $V_{EB1} \approx \SI{0.7}{\volt}$ mais,
+contrairement au cas précédent, cette information seule ne permet pas de calculer
+quoique ce soit de plus. Il faut donc faire une hypothèse de plus. On suppose ici que
+Q1 est en mode actif (i.e. $V_{CB1} < \SI{0.4}{\volt}$). Dans ce cas, on a deux équations
+de plus liant les courants qui nous permettent d'aller plus loin
+\begin{align*}
+	I_C &= \beta I_B & I_E &= (\beta+1)I_B.
+\end{align*}
+La dernière équation nous permet d'écrire
+\[ \frac{10-V_{E1}}{\SI{9.1e3}{}} = (\beta+1)\frac{V_{B1}}{\SI{100e3}{}} \]
+or, comme $V_{EB1} = V_{E1}-V_{B1} = \SI{0.7}{\volt}$, on peut réecrire cette
+équation
+\[ \frac{10-V_{E1}}{\SI{9.1e3}{}} = (\beta+1)\frac{V_{E1}-0.7}{\SI{100e3}{}}. \]
+On trouve $V_{E1} = \SI{1.61}{\volt}$, et donc $V_{B1} = \SI{0.91}{\volt}$. Quand aux
+courants, $I_{E1} = \SI{922}{\micro\ampere}$, $I_{B1} = \SI{9.12}{\micro\ampere}$ et
+donc $I_{C1} = \SI{912}{\micro\ampere}$.
+
+On suppose ensuite que Q2 est également en mode actif (i.e. $V_{BE2} \approx \SI{0.7}{\volt}$
+et $V_{CE2} < \SI{0.4}{\volt}$. Ensuite, on utilise $I_E = (\beta+1)I_B$
+\[ \frac{V_{E2}-(-10)}{\SI{4.3e10}{}} = (\beta+1)I_{B2}. \]
+On a une seule équation et deux inconnues, il faut donc trouver unr autre équation. On
+peut écrire KCL en $C1 = B2$
+\[ I_{B2} = I_{C1} - \frac{V_{C1}-(-10)}{\SI{9.1e3}{}}. \]
+Or comme $V_{C1} = V_{B2}$ et que, par hypothèse du mode actif, $V_{B2} = 0.7 + V_{E2}$,
+on a finalement
+\[ I_{B2} = I_{C1} - \frac{10.7 + V_{E2}}{\SI{9.1e3}{}}\]
+que l'on peut injecter dans notre équation à 2 inconnues.
+On touve finalement
+\begin{align*}
+	V_{E2} &= -\SI{2.55}{\volt} & V_{B2} &= V_{C1} = -\SI{1.85}{\volt}
+\end{align*}
+et
+\begin{align*}
+	I_{E2} &= \SI{1.73}{\milli\ampere} & I_{B2} &= -\SI{17.5}{\micro\ampere} & I_{C2} &=
+	\SI{1.71}{\milli\ampere}
+\end{align*}
+et finalement
+\[ V_{C2} = \SI{1.26}{\volt}. \]
+On peut finalement vérifier les hypothèses de mode actif faites précédemment:
+\begin{enumerate}
+	\item $V_{CB1} = -\SI{2.76}{\volt} < \SI{0.4}{\volt}$ : OK.
+	\item $V_{BC2} = -\SI{3.11}{\volt} < \SI{0.4}{\volt}$ : OK.
+\end{enumerate}
+ 
+\subsection*{$\beta = 10$}
+Raisonnement identique au cas précédent.
+
+\section*{Exercice 3}
+
+\end{document}
