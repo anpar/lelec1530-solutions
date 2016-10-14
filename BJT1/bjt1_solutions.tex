@@ -6,7 +6,8 @@
 \subject{LELEC1530}
 \title{Séance 3 - BJT: polarisation et amplificateur}
 \subtitle{Solutions}
-\author{\small Gaëtan \textsc{Cassiers} \and\small Antoine \textsc{Paris}}
+\author{\small Gaëtan \textsc{Cassiers} \and\small Antoine \textsc{Paris} \and\small Maxime
+\textsc{Schramme}}
 \date{}
 
 \begin{document}
@@ -144,6 +145,91 @@ On peut finalement vérifier les hypothèses de mode actif faites précédemment
 Raisonnement identique au cas précédent.
 
 \section*{Exercice 3}
+
+\subsection*{Trouvez les quantités instantanées $i_B(t)$, $i_C(t)$ et $v_C(t)$}
+Avec les données disponibles, nous pouvons d'abord calculer le courant de collecteur $I_C$
+(courant DC):
+\begin{equation}
+	I_C = \dfrac{V_C}{R_C} = \SI{4}{\milli\ampere}.
+\end{equation}
+
+\subsubsection*{Calcul de $i_C(t)$}
+
+Le courant de collecteur total $i_C(t)$ peut être exprimé ainsi:
+\begin{equation}
+	i_C(t) = I_s ~ \exp\left(\dfrac{v_{EB}(t)}{V_T}\right).\label{eq:ic}
+\end{equation}
+
+Il faut remarquer que $v_{EB}(t)$ comprend une partie statique $V_{EB}$ et une partie
+variationnelle $v_{eb}(t) = 0.004~\sin\left(\omega t\right)$, telles que:
+\begin{equation}
+	v_{EB}(t) = V_{EB} + v_{eb}(t) = V_{EB} + 0.004~\sin\left(\omega t\right).\label{eq:veb}
+\end{equation}
+
+En introduisant \eqref{eq:veb} dans \eqref{eq:ic}, nous obtenons:
+\begin{eqnarray}
+	i_C(t) &=& I_s ~ \exp\left(\dfrac{V_{EB} + v_{eb}(t)}{V_T}\right) = I_s ~ \exp\left(\dfrac{V_{EB}}{V_T}\right) ~\exp\left(\dfrac{v_{eb}(t)}{V_T}\right)\\
+	&=& I_C~ \exp\left(\dfrac{v_{eb}(t)}{V_T}\right).
+\end{eqnarray}
+
+En développant en série de Taylor\footnote{Pour rappel, le développement en série de Taylor d'une fonction
+$f$ (indéfiniment dérivable) autour d'un point $a$ est défini comme suit:
+\begin{eqnarray}
+f(x) &=& f(a) + \dfrac{f'(a)}{1!}(x-a) + \dfrac{f"(a)}{2!}(x-a)^2 + \dfrac{f^{(3)}(a)}{3!}(x-a)^3 + ... \\&=& \sum_{n=0}^{+\infty} \dfrac{f^{(n)}(a)}{n!}(x-a)^n.
+\end{eqnarray}
+} autour de 0, $i_C(t)$ devient:
+\begin{eqnarray}
+	i_C(t) &=& I_C ~ \left[ 1 + \dfrac{v_{eb}(t)}{V_T} + \frac{1}{2}\left(\dfrac{v_{eb}(t)}{V_T}\right)^2 + ...\right].
+\end{eqnarray}
+
+Comme $v_{eb}(t)$ a une amplitude vraiment inférieure à $V_T = 26~\mbox{mV}$, les termes d'ordre supérieur
+à 1 sont négligeables et sont écartés. Nous avons donc:
+\begin{eqnarray}
+	i_C(t) &=& I_C ~ \left(1 + \dfrac{v_{eb}(t)}{V_T}\right) = I_C ~ \left(1 + \dfrac{0.004}{V_T}~\sin\left(\omega t\right)\right) \\
+	&=& \left[4 + 0.615~\sin\left(\omega t\right)\right] ~\mbox{[mA]}.
+\end{eqnarray}
+
+\textbf{Remarque 1 :} bien remarquer que $i_C(t)$ contient deux termes: le premier est statique (DC)
+alors que le second est variationnel.\\
+
+\textbf{Remarque 2 :} l'utilisation de développement en série de Taylor limité é l'ordre 1 est courante et
+constitue la base du calcul en petit signal (voir cours sur les transistors MOS et Bipolaires).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Calcul de $i_B(t)$}
+Le courant total de base $i_B(t)$ vaut simplement:
+\begin{equation}
+	i_B(t) = \dfrac{i_C(t)}{\beta} ~\mbox{[A]}.
+\end{equation}
+
+La valeur de $\beta$ n'est pas spécifiée à ce stade. Tout comme pour $i_C(t)$, $i_B(t)$ contient un
+terme statique (DC) et un terme variationnel (visibles en développant un peu plus l'équation pour
+$i_B(t)$).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Calcul de $v_C(t)$}
+Par la loi d'Ohm, nous avons:
+\begin{equation}
+	v_C(t) = R_C~i_C(t) = R_C~I_C ~ \left(1 + \dfrac{v_{eb}(t)}{V_T}\right) = \left[8 + 1.23~\sin\left(\omega t\right)\right] \mbox{[V]}.\label{eq:vc}
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Que vaut le gain en tension?}
+
+Le gain en tension est donné par:
+\begin{equation}
+	A_v = \left.\dfrac{dv_{C}}{dv_{EB}}\right|_{v_{EB} = V_{EB}}.
+\end{equation}
+
+En utilisant \eqref{eq:vc} et \eqref{eq:ic}, cela nous donne:
+\begin{equation}
+	A_v = \dfrac{R_C~I_C}{V_T} = 307.69~\mbox{[V/V]}.
+\end{equation}
+
+\textbf{Remarque 3 :} bien remarquer que cela correspond bien au gain qui aurait été obtenu en
+utilisant l'approche petit-signal ($A_v = g_mR_C$ et $g_m = I_C/V_T$).
+
+\section*{Exercice 3 - solution alternative}
 
 \subsection*{Grand signal}
 
