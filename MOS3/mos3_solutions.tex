@@ -89,5 +89,61 @@ Ci-dessous le diagramme de Bode (en prenant $C_S = \SI{100}{\micro\farad}$).
 En DC, $\omega = 0$:
 \[H(0) = -\frac{10}{7} = -1.43\]
 
+\section*{Exercice 2}
+
+\subsection*{Point de polarisation}
+
+Sachant que (en supposant que le transistor est en saturation)
+\begin{align*}
+    I_D &= k_n \frac{W}{L} \frac{\left(V_G - V_S - V_{T0}\right)^2}{2} \\
+    V_G &= \frac{V_{DD}}{2} \\
+    V_S &= R_4 I_D, \\
+\end{align*}
+
+on trouve \[\frac{W}{L} = 2.\]
+
+On a aussi $V_{OUT} = V_{DD} - R_3 I_D = \SI{2.5}{V}$, donc $R_3 = \SI{2.5}{k\ohm}$.
+
+Comme $V_{OV} = \SI{0.5}{V} > 0$ et $V_{DS} = \SI{1.5}{V} > V_{OV}$, le transistor
+est saturé; l'équation utilisée ci-dessus est donc correct.
+
+\subsection*{Gain et impédances d'entrée et de sortie en bande passante}
+\begin{figure}[h]
+    \centering
+        \begin{tikzpicture}
+            \draw
+            (0, 4) to[cI_=$g_m v_{gs}$] (0, 2)
+            (0, 0) to[V=$v_{in}$] (0, 2)
+            (0, 0) node[ground] {}
+            (0, 4) -- (1, 4) to[R=$r_0$] (1, 2) to [short, -*] (0, 2)
+            (1, 2) to[R=$R_4$] (1, 0) -- (0, 0)
+            (1, 4) -- (2.5, 4) to[R=$R_3$] (2.5, 0) -- (1, 0)
+            (2.5, 4) to[short, -o] (3, 4) node[anchor=west] {$v_{out}$}
+            ;
+        \end{tikzpicture}
+    \caption{Modèle petit-signal du circuit dans la bande passante ($v_{gs} = -v_{in}$)}
+    \label{fig:pt-signal2}
+\end{figure}
+Sur le modèle petit-signal,
+\begin{align*}
+    g_m &= \frac{2I_D}{V_{OV}} = \SI{4}{mA/V} \\
+    r_0 &= \frac{1}{\lambda I_D} = \SI{50}{k\ohm}.
+\end{align*}
+
+En se basant sur le schéma petit-signal (figure~\ref{fig:pt-signal2}),
+trouve le gain (par exemple via un équivalent de Thévenin de la source de courant
+et de $r_0$):
+\[A_v = \frac{v_{out}}{v_{in}} = (1+g_m r_0) \frac{R_3}{r_0 + R_3}\]
+
+La résistance d'entrée s'obtient en laissant la sortie en circuit ouvert.
+On trouve alors
+\[i_{in} = \left(\frac{1}{R_4} + \frac{1+r_0 g_m}{r_0 + R_3}\right) v_{in}\]
+D'où
+\[R_{in} = \frac{R_4 (r_0 + R_3)}{r_0 + R_3 + R_4 (1+r_0 g_m)}\]
+
+La résistance de sortie s'obtient en imposant $v_{in} = 0$:
+\[R_{out} = R_3 \parallelsum r_0\]
+
+\subsection*{Bande passante}
 \end{document}
 
