@@ -1,0 +1,93 @@
+\documentclass[frenchb]{scrartcl}
+
+\input{lib.tex}
+
+\titlehead{}
+\subject{LELEC1530}
+\title{Séance 3 - BJT: polarisation et amplificateur}
+\subtitle{Solutions}
+\author{\small Gaëtan \textsc{Cassiers} \and\small Antoine \textsc{Paris}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Exercice 1}
+
+Le modèle petit-signal (en négligeant $r_0$) est donné à la figure~\ref{fig:pt-signal1}.
+
+\begin{figure}[h]
+    \centering
+    \subfloat[Circuit complet]{%
+        \begin{tikzpicture}
+            \draw (0, 0) to [R=$R_S$] (0, 2)
+            (0, 4) to[cI=$g_m v_{gs}$] (0, 2)
+            (0, 2) -- (1, 2) to[C=$C_S$] (1, 0) -- (0, 0)
+            (0, 4) -- (2.5, 4) to[R=$R_D$] (2.5, 0) -- (1, 0)
+            (2.5, 4) to[short, -o] (3, 4) node[anchor=west] {$v_{out}$}
+            (-1, 4) to [short, -o] (-1.5, 4) to[open, v=$v_{gs}$] (-1.5, 2) to[short, o-] (0, 2)
+            (0, 0) node[ground] {};
+        \end{tikzpicture}
+        \label{fig:pt-signal1-full}}
+    \subfloat[Circuit dans la bande passante]{%
+        \begin{circuitikz}
+            \draw (0, 0) to[open] (0, 2)
+            (0, 4) to[cI=$g_m v_{gs}$] (0, 2)
+            (0, 2) -- (1, 2) to[short] (1, 0) -- (0, 0)
+            (0, 4) -- (2.5, 4) to[R=$R_D$] (2.5, 0) -- (1, 0)
+            (2.5, 4) to[short, -o] (3, 4) node[anchor=west] {$v_{out}$}
+            (-1, 4) to [short, -o] (-1.5, 4) to[open, v=$v_{gs}$] (-1.5, 2) to[short, o-] (0, 2)
+            (0, 0) node[ground] {};
+        \end{circuitikz}
+        \label{fig:pt-signal1-bp}}
+    \caption{Modèle petit-signal du circuit}
+    \label{fig:pt-signal1}
+\end{figure}
+
+\subsection*{Gain en bande passante}
+
+Dans la bande passante, la fréquence suffisamment grande pour que
+l'admittance $1/R_S$ soit négligeable par rapport à l'admittance
+$j\omega C_S$. On peut donc simplifier le schéma petit signal pour trouver
+le circuit de la figure~\ref{fig:pt-signal1-bp}.
+
+On touve alors:
+\[v_{out} = -R_D i_d = -R_D g_m v_{gs} = -R_D g_m v_{in}\]
+et donc le gain vaut
+\[A_v = \frac{v_{out}}{v_{in}} = -R_D g_m.\]
+
+\subsection*{Fonction de transfert}
+
+On se base sur la figure~\ref{fig:pt-signal1-full} pour trouver les équations du circuit:
+\begin{align*}
+    v_{out} &= -R_D i_d \\
+    i_d &= g_m v_{gs} \\
+    v_{gs} &= v_{in} - \frac{1}{\frac{1}{R_S} + sC_S} i_d \\
+\end{align*}
+
+À partir de ces équations, on trouve
+\begin{align*}
+    v_s &= \frac{g_m}{g_m + \frac{1}{R_S} + s C_S} v_{in} \\
+    v_{out} &= -R_D g_m \left(v_{in} - v_s\right) \\
+\end{align*}
+et
+\begin{align*}
+    H(s) &= \frac{v_{out}}{v_{in}}
+        = -g_m R_D\frac{1 + s C_S R_S}{1 + g_m R_S + s C_S R_S} \\
+        &= -10\frac{1 + s C_S R_S}{7 + s C_S R_S}. \\
+\end{align*}
+
+\subsection*{Diagramme de Bode}
+
+Ci-dessous le diagramme de Bode (en prenant $C_S = \SI{100}{\micro\farad}$).
+\begin{center}
+    \includegraphics[width=0.7\textwidth,height=0.3\textwidth]{figures/bode1.tikz}
+    \includegraphics[width=0.7\textwidth,height=0.3\textwidth]{figures/bode2.tikz}
+\end{center}
+
+\subsection*{Gain DC}
+En DC, $\omega = 0$:
+\[H(0) = -\frac{10}{7} = -1.43\]
+
+\end{document}
+

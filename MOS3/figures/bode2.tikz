@@ -1,0 +1,22 @@
+% This file was created by matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+%
+\begin{tikzpicture}
+\begin{axis}[%
+separate axis lines,
+xmode=log,
+xmin=0.1,
+xmax=1000,
+xminorticks=true,
+ymin=179.4,
+ymax=240.6,
+ytick={180, 210, 240},
+xlabel={Frequency (rad/s)},
+ylabel={Phase (deg)},
+axis background/.style={fill=white}
+]
+\addplot [color=mycolor1,solid,forget plot]
+  table[]{figdata/bode1-2.tsv};
+\end{axis}
+\end{tikzpicture}%
