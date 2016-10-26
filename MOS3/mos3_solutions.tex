@@ -1,10 +1,10 @@
-\documentclass[frenchb]{scrartcl}
+\documentclass[frenchb,DIV=14]{scrartcl}
 
 \input{lib.tex}
 
 \titlehead{}
 \subject{LELEC1530}
-\title{Séance 3 - BJT: polarisation et amplificateur}
+\title{Séance 5 - MOSFET: analyse fréquentielle}
 \subtitle{Solutions}
 \author{\small Gaëtan \textsc{Cassiers} \and\small Antoine \textsc{Paris}}
 \date{}
@@ -16,6 +16,8 @@
 
 Le modèle petit-signal (en négligeant $r_0$) est donné à la figure~\ref{fig:pt-signal1}.
 
+% Note, ce serait mieux d'utiliser ls schéma en T comme dans le cas général la source
+% n'est pas à la masse en petit signal.
 \begin{figure}[h]
     \centering
     \subfloat[Circuit complet]{%
@@ -46,7 +48,7 @@ Le modèle petit-signal (en négligeant $r_0$) est donné à la figure~\ref{fig:
 
 \subsection*{Gain en bande passante}
 
-Dans la bande passante, la fréquence suffisamment grande pour que
+Dans la bande passante, la fréquence est suffisamment grande pour que
 l'admittance $1/R_S$ soit négligeable par rapport à l'admittance
 $j\omega C_S$. On peut donc simplifier le schéma petit signal pour trouver
 le circuit de la figure~\ref{fig:pt-signal1-bp}.
@@ -54,7 +56,13 @@ le circuit de la figure~\ref{fig:pt-signal1-bp}.
 On touve alors:
 \[v_{out} = -R_D i_d = -R_D g_m v_{gs} = -R_D g_m v_{in}\]
 et donc le gain vaut
-\[A_v = \frac{v_{out}}{v_{in}} = -R_D g_m.\]
+\[A_v = \frac{v_{out}}{v_{in}} = -R_D g_m = -10.\]
+
+\paragraph{Remarque}
+$C_s$ est ce qu'on appelle un \emph{bypass capacitor}. Il permet ici d'amener
+la source à la masse en petit signal, ce qui augmente le gain $A_v$. En effet,
+sans $C_s$, on obtient
+\[A'_v = -\frac{-R_D g_m}{1+g_m R_s} = -1.43.\]
 
 \subsection*{Fonction de transfert}
 
@@ -71,9 +79,10 @@ On se base sur la figure~\ref{fig:pt-signal1-full} pour trouver les équations d
     v_{out} &= -R_D g_m \left(v_{in} - v_s\right) \\
 \end{align*}
 et
+% TODO: voir si c'est mieux de noter A_v ou A'_v dans cette équation
 \begin{align*}
-    H(s) &= \frac{v_{out}}{v_{in}}
-        = -g_m R_D\frac{1 + s C_S R_S}{1 + g_m R_S + s C_S R_S} \\
+    H(s) = \frac{v_{out}}{v_{in}}
+        &= \overbrace{-g_m R_D}^{A_v}\frac{1 + s C_S R_S}{1 + g_m R_S + s C_S R_S} \\
         &= -10\frac{1 + s C_S R_S}{7 + s C_S R_S}. \\
 \end{align*}
 
@@ -84,6 +93,9 @@ Ci-dessous le diagramme de Bode (en prenant $C_S = \SI{100}{\micro\farad}$).
     \includegraphics[width=0.7\textwidth,height=0.3\textwidth]{figures/bode1.tikz}
     \includegraphics[width=0.7\textwidth,height=0.3\textwidth]{figures/bode2.tikz}
 \end{center}
+
+% TODO: très petit rappel sur comment plotter ça à la main? (remise sous la bonne forme,
+% passage en log, et brève explication?).
 
 \subsection*{Gain DC}
 En DC, $\omega = 0$:
@@ -99,7 +111,6 @@ Sachant que (en supposant que le transistor est en saturation)
     V_G &= \frac{V_{DD}}{2} \\
     V_S &= R_4 I_D, \\
 \end{align*}
-
 on trouve \[\frac{W}{L} = 2.\]
 
 On a aussi $V_{OUT} = V_{DD} - R_3 I_D = \SI{2.5}{V}$, donc $R_3 = \SI{2.5}{k\ohm}$.
@@ -130,20 +141,129 @@ Sur le modèle petit-signal,
     r_0 &= \frac{1}{\lambda I_D} = \SI{50}{k\ohm}.
 \end{align*}
 
-En se basant sur le schéma petit-signal (figure~\ref{fig:pt-signal2}),
+En se basant sur le schéma petit-signal (figure~\ref{fig:pt-signal2}), on
 trouve le gain (par exemple via un équivalent de Thévenin de la source de courant
-et de $r_0$):
+et de $r_0$, ou via KCL au noeud de sortie):
 \[A_v = \frac{v_{out}}{v_{in}} = (1+g_m r_0) \frac{R_3}{r_0 + R_3}\]
 
 La résistance d'entrée s'obtient en laissant la sortie en circuit ouvert.
 On trouve alors
-\[i_{in} = \left(\frac{1}{R_4} + \frac{1+r_0 g_m}{r_0 + R_3}\right) v_{in}\]
+\[i_{in} = \left(\frac{1}{R_4} + \frac{1+r_0 g_m}{r_0 + R_3}\right) v_{in}.\]
 D'où
-\[R_{in} = \frac{R_4 (r_0 + R_3)}{r_0 + R_3 + R_4 (1+r_0 g_m)}\]
+\[R_{in} = \frac{R_4 (r_0 + R_3)}{r_0 + R_3 + R_4 (1+r_0 g_m)}.\]
 
 La résistance de sortie s'obtient en imposant $v_{in} = 0$:
-\[R_{out} = R_3 \parallelsum r_0\]
+\[R_{out} = R_3 \parallelsum r_0.\]
 
 \subsection*{Bande passante}
+Le modèle petit signal complet est donné à la figure~\ref{fig:pt-signal3}.
+
+\begin{figure}[h]
+    \centering
+        \begin{tikzpicture}
+            \draw
+            (0, 4) to[cI_=$g_m v_{gs}$] (0, 2)
+            (0, 0) to[V=$v_{in}$] (0, 2)
+            (0, 0) node[ground] {}
+            (0, 4) -- (1, 4) to[R=$r_0$] (1, 2) to [short, -*] (0, 2)
+            (1, 2) to[R=$R_4$] (1, 0) -- (0, 0)
+            (1, 4) -- (2.5, 4) to[R=$R_3$] (2.5, 0) -- (1, 0)
+            (2.5, 4) to[short, -o] (4.5, 4) node[anchor=west] {$v_{out}$}
+            (0, 2) -- (-2,2) to[C] node[anchor=east] {$C_{GS}$} (-2,0) to [short] (0,0)
+            (4, 4) to[C=$C_{GD}$] (4,0) to [short] (2.5, 0)
+            ;
+        \end{tikzpicture}
+    \caption{Modèle petit-signal complet du circuit}
+    \label{fig:pt-signal3}
+\end{figure}
+
+On peut réecrire ce circuit de manière à mieux faire apparaître l'effet Miller
+(figure~\ref{fig:pt-signal4}).
+
+\begin{figure}[h]
+	\centering
+		\begin{tikzpicture}
+			\draw
+			(2,0) -- (0,0) to[V=$v_{in}$] (0,2) -- (2,2)
+			(4,0) -- (2,0) to[R=$R_4$] (2,2) -- (4,2)
+			(2,0) node[ground] {}
+			(4,0) to[C=$C_{GS}$] (4,2)
+			(4,2) -- (5,2)
+			(5,2) -- (5,3) to[R=$r_0$] (7,3) -- (7,2)
+			(7,2) -- (7,1) to[cI=$g_m v_{gs}$] (5,1) -- (5,2)
+			(7,2) -- (8,2) to[R=$R_3$] (8,0)
+			(8,2) -- (10,2) to[C=$C_{GS}$] (10,0) -- (8,0) 
+			(9,0) node[ground] {}
+			(10,2) to[short, -o] (11,2) node[anchor=west] {$v_{out}$}
+			;
+		\end{tikzpicture}
+	\caption{Modèle petit signal complet du circuit réécrit. La résistance $r_0$
+	entre l'entrée et la sortie cause l'effet Miller.}
+	\label{fig:pt-signal4}
+\end{figure}
+
+On applique ensuite le théorème de Miller sur le circuit de la figure~\ref{fig:pt-signal4}
+pour obtenir le circuit de la figure~\ref{fig:pt-signal5}.
+Si $K$ est le gain entre $v_{in}$ et $v_{out}$, le théorème de Miller nous dit
+\begin{align*}
+	r_1 &= r_0(1-K) & r_2 &= r_0(1-\frac{1}{K}).
+\end{align*}
+
+\begin{figure}[h]
+	\centering
+		\begin{tikzpicture}
+			\draw
+			(2,0) -- (0,0) to[V=$v_{in}$] (0,2) -- (2,2)
+			(4,0) -- (2,0) to[R=$R_4$] (2,2) -- (4,2)
+			(6,0) -- (4,0) to[C=$C_{GS}$] (4,2) -- (6,2)
+			(6,0) to[R=$r_1$] (6,2)
+			(3,0) node[ground] {}
+			(8,2) to[cI=$g_m v_{gs}$] (6,2)
+			(8,2) to[R=$r_2$] (8,0)
+			(8,0) -- (10,0) to[R=$R_3$] (10,2) -- (8,2)
+			(10,2) -- (12,2) to[C=$C_{GS}$] (12,0) -- (10,0) 
+			(10,0) node[ground] {}
+			(12,2) to[short, -o] (13,2) node[anchor=west] {$v_{out}$}
+			;
+		\end{tikzpicture}
+	\caption{Modèle petit signal complet du circuit équivalent en utilisant le
+	théorème de Miller.}
+	\label{fig:pt-signal5}
+\end{figure}
+
+Enfin, on peut encore transformer le circuit de la figure~\ref{fig:pt-signal5}
+en se rendant compte que l'effet de la source de courant commandée sur le circuit
+se retrouve bien également sur le circuit de la figure~\ref{fig:pt-signal6}.
+
+\begin{figure}[h]
+	\centering
+		\begin{tikzpicture}[scale=0.95]
+			\draw
+			(2,0) -- (0,0) to[V=$v_{in}$] (0,2) -- (2,2)
+			(4,0) -- (2,0) to[R=$R_4$] (2,2) -- (4,2)
+			(6,0) -- (4,0) to[C=$C_{GS}$] (4,2) -- (6,2)
+			(8,0) -- (6,0) to[R=$r_1$] (6,2) -- (8,2)
+			(8,0) to[R=$1/g_m$] (8,2)
+			(4,0) node[ground] {}
+			
+			(12,0) -- (10,0) to[cI=$g_m v_{in}$] (10,2) -- (12,2)
+			(14,0) -- (12,0) to[R=$r_2$] (12,2) -- (14,2)
+			(16,0) -- (14,0) to[R=$R_3$] (14,2) -- (16,2)
+			(16,0) to[C=$C_{GS}$] (16,2) 
+			(14,0) node[ground] {}
+			(16,2) to[short, -o] (17,2) node[anchor=west] {$v_{out}$}
+			;
+		\end{tikzpicture}
+	\caption{Modèle petit signal complet du circuit équivalent final.}
+	\label{fig:pt-signal6}
+\end{figure}
+
+La fonction de transfert entre $v_{in}$ et $v_{out}$ est maintenant beaucoup
+plus facileà obtenir qu'initialement
+\[ v_{out} = g_m v_{in} (r_2 \parallelsum R_3 \parallelsum C_{GD}) \]
+où
+\[ r_2 = r_0\left(1-\frac{g_3+g_d}{g_m+g_d}\right) \]
+avec $g_3 = 1/R_3$, $g_d = 1/r_0$.
+
 \end{document}
 
