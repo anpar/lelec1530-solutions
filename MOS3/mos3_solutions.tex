@@ -194,7 +194,7 @@ On peut réecrire ce circuit de manière à mieux faire apparaître l'effet Mill
 			(7,2) -- (8,2) to[R=$R_3$] (8,0)
 			(8,2) -- (10,2) to[C=$C_{GS}$] (10,0) -- (8,0) 
 			(9,0) node[ground] {}
-			(10,2) to[short, -o] (11,2) node[anchor=west] {$v_{out}$}
+			(10,2) to[short, -o] (10.5,2) node[anchor=west] {$v_{out}$}
 			;
 		\end{tikzpicture}
 	\caption{Modèle petit signal complet du circuit réécrit. La résistance $r_0$
@@ -223,7 +223,7 @@ Si $K$ est le gain entre $v_{in}$ et $v_{out}$, le théorème de Miller nous dit
 			(8,0) -- (10,0) to[R=$R_3$] (10,2) -- (8,2)
 			(10,2) -- (12,2) to[C=$C_{GS}$] (12,0) -- (10,0) 
 			(10,0) node[ground] {}
-			(12,2) to[short, -o] (13,2) node[anchor=west] {$v_{out}$}
+			(12,2) to[short, -o] (12.5,2) node[anchor=west] {$v_{out}$}
 			;
 		\end{tikzpicture}
 	\caption{Modèle petit signal complet du circuit équivalent en utilisant le
@@ -237,7 +237,7 @@ se retrouve bien également sur le circuit de la figure~\ref{fig:pt-signal6}.
 
 \begin{figure}[h]
 	\centering
-		\begin{tikzpicture}[scale=0.95]
+		\begin{tikzpicture}[scale=0.92]
 			\draw
 			(2,0) -- (0,0) to[V=$v_{in}$] (0,2) -- (2,2)
 			(4,0) -- (2,0) to[R=$R_4$] (2,2) -- (4,2)
@@ -251,7 +251,7 @@ se retrouve bien également sur le circuit de la figure~\ref{fig:pt-signal6}.
 			(16,0) -- (14,0) to[R=$R_3$] (14,2) -- (16,2)
 			(16,0) to[C=$C_{GS}$] (16,2) 
 			(14,0) node[ground] {}
-			(16,2) to[short, -o] (17,2) node[anchor=west] {$v_{out}$}
+			(16,2) to[short, -o] (16.5,2) node[anchor=west] {$v_{out}$}
 			;
 		\end{tikzpicture}
 	\caption{Modèle petit signal complet du circuit équivalent final.}
@@ -268,6 +268,64 @@ La fonction de transfert est alors donnée par
 \[ H(s) = \frac{v_{out}}{v_{in}} = \frac{g_m}{g_2 + g_3 + sC_{GD}}. \]
 
 \section*{Exercice 3}
+\subsection*{Gain en bande passante}
+Le circuit petit signal est donné à la figure~\ref{fig:pt-signal7}.
+\begin{figure}[h]
+	\centering
+		\begin{tikzpicture}[scale=0.92]
+			\draw
+			(0, 2) to[cI=$g_m v_{in}$] (0,0)
+			(0,2) -- (2.5,2) to[R=$r_0$] (2.5,0) -- (0,0)
+			(1.5,0) node[ground]{}
+			(2.5,2) -- (4.5,2) node[anchor=south] {$v_{s2}$}
+			(4.5,2) to[cI=$g_m v_{s2}$] (4.5,0)
+			(4.5,2) -- (7,2) to[R=$r_0$] (7,0) -- (4.5,0)
+			(7,0) to[R=$r_0$] (7,-2)
+			(7,-2) node[ground]{}
+			(7,0) to[short, -o] (8, 0) node[anchor=west] {$v_{out}$}
+			;
+		\end{tikzpicture}
+	\caption{Modèle petit signal de l'amplificateur cascode replié}
+	\label{fig:pt-signal7}
+\end{figure}
+
+On écrit ensuite KCL au noeud de sortie
+\[ g_m v_{s2} = \frac{v_{out}-v_{s2}}{r_0} + \frac{v_{out}}{r_0}.\]
+Avec $v_{s2} = -g_m v_{in} r_0$, on trouve finalement
+\[ \frac{v_{out}}{v_{in}} = -0.5g_m r_0(1+g_mr_0). \]
+% TODO: différence par rapport à l'énoncé?
+
+\subsection*{Pôle haute fréquence}
+On tient cette fois compte de la capacité de charge $C_L$ en sortie du montage,
+le schéma petit signal complet est donné la figure~\ref{fig:pt-signal8}.
+
+\begin{figure}[h]
+	\centering
+		\begin{tikzpicture}[scale=0.92]
+			\draw
+			(0, 2) to[cI=$g_m v_{in}$] (0,0)
+			(0,2) -- (2.5,2) to[R=$r_0$] (2.5,0) -- (0,0)
+			(1.5,0) node[ground]{}
+			(2.5,2) -- (4.5,2) node[anchor=south] {$v_{s2}$}
+			(4.5,2) to[cI=$g_m v_{s2}$] (4.5,0)
+			(4.5,2) -- (7,2) to[R=$r_0$] (7,0) -- (4.5,0)
+			(7,0) to[R=$r_0$] (7,-2)
+			(8,-2) node[ground]{}
+			(7,0) to[short, -o] (10, 0) node[anchor=west] {$v_{out}$}
+			(9,0) to[C=$C_L$] (9,-2) -- (7,-2)
+			;
+		\end{tikzpicture}
+	\caption{Modèle petit signal de l'amplificateur cascode replié avec la capacité
+	de charge.}
+	\label{fig:pt-signal8}
+\end{figure}
+
+On réecrit KCL au noeud de sortie
+\[ g_m v_{s2} = \frac{v_{out}-v_{s2}}{r_0} + \frac{v_{out}}{r_0} + v_{out}sC_L. \]
+En utilisant $v_{s2} = -g_m v_{in} r_0$, on obtient finalement
+\[ H(s) = \frac{v_{out}}{v_{in}} = -\frac{g_mr_0}{2}\frac{1+g_mr_0}{1+s\frac{r_0C_L}{2}}\]
+et donc
+\[ \omega_H = \frac{2}{r_0C_L} \]
+est bien un pôle haute fréquence.
 
 \end{document}
-
