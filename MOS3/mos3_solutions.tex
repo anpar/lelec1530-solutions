@@ -24,7 +24,7 @@ Le modèle petit-signal (en négligeant $r_0$) est donné à la figure~\ref{fig:
         \begin{tikzpicture}
             \draw (0, 0) to [R=$R_S$] (0, 2)
             (0, 4) to[cI=$g_m v_{gs}$] (0, 2)
-            (0, 2) -- (1, 2) to[C=$C_S$] (1, 0) -- (0, 0)
+            (0, 2) to[short,*-] (1, 2) to[C=$C_S$] (1, 0) -- (0, 0)
             (0, 4) -- (2.5, 4) to[R=$R_D$] (2.5, 0) -- (1, 0)
             (2.5, 4) to[short, -o] (3, 4) node[anchor=west] {$v_{out}$}
             (-1, 4) to [short, -o] (-1.5, 4) to[open, v=$v_{gs}$] (-1.5, 2) to[short, o-] (0, 2)
@@ -126,7 +126,7 @@ est saturé; l'équation utilisée ci-dessus est donc correct.
             (0, 4) to[cI_=$g_m v_{gs}$] (0, 2)
             (0, 0) to[V=$v_{in}$] (0, 2)
             (0, 0) node[ground] {}
-            (0, 4) -- (1, 4) to[R=$r_0$] (1, 2) to [short, -*] (0, 2)
+            (0, 4) -- (1, 4) to[R=$r_0$] (1, 2) to [short] (0, 2)
             (1, 2) to[R=$R_4$] (1, 0) -- (0, 0)
             (1, 4) -- (2.5, 4) to[R=$R_3$] (2.5, 0) -- (1, 0)
             (2.5, 4) to[short, -o] (3, 4) node[anchor=west] {$v_{out}$}
@@ -162,7 +162,7 @@ Le modèle petit signal complet est donné à la figure~\ref{fig:pt-signal3}.
     \centering
         \begin{tikzpicture}
             \draw
-            (0, 4) to[cI_=$g_m v_{gs}$] (0, 2)
+            (0, 4) to[cI_=$-g_m v_{in}$] (0, 2)
             (0, 0) to[V=$v_{in}$] (0, 2)
             (0, 0) node[ground] {}
             (0, 4) -- (1, 4) to[R=$r_0$] (1, 2) to [short, -*] (0, 2)
@@ -190,7 +190,7 @@ On peut réecrire ce circuit de manière à mieux faire apparaître l'effet Mill
 			(4,0) to[C=$C_{GS}$] (4,2)
 			(4,2) -- (5,2)
 			(5,2) -- (5,3) to[R=$r_0$] (7,3) -- (7,2)
-			(7,2) -- (7,1) to[cI=$g_m v_{gs}$] (5,1) -- (5,2)
+			(7,2) -- (7,1) to[cI=$-g_m v_{in}$] (5,1) -- (5,2)
 			(7,2) -- (8,2) to[R=$R_3$] (8,0)
 			(8,2) -- (10,2) to[C=$C_{GS}$] (10,0) -- (8,0) 
 			(9,0) node[ground] {}
@@ -218,7 +218,7 @@ Si $K$ est le gain entre $v_{in}$ et $v_{out}$, le théorème de Miller nous dit
 			(6,0) -- (4,0) to[C=$C_{GS}$] (4,2) -- (6,2)
 			(6,0) to[R=$r_1$] (6,2)
 			(3,0) node[ground] {}
-			(8,2) to[cI=$g_m v_{gs}$] (6,2)
+			(8,2) to[cI=$-g_m v_{in}$] (6,2)
 			(8,2) to[R=$r_2$] (8,0)
 			(8,0) -- (10,0) to[R=$R_3$] (10,2) -- (8,2)
 			(10,2) -- (12,2) to[C=$C_{GS}$] (12,0) -- (10,0) 
@@ -237,21 +237,21 @@ se retrouve bien également sur le circuit de la figure~\ref{fig:pt-signal6}.
 
 \begin{figure}[h]
 	\centering
-		\begin{tikzpicture}[scale=0.92]
+		\begin{tikzpicture}
 			\draw
-			(2,0) -- (0,0) to[V=$v_{in}$] (0,2) -- (2,2)
+			(2,0) -- (0.5,0) to[V=$v_{in}$] (0.5,2) -- (2,2)
 			(4,0) -- (2,0) to[R=$R_4$] (2,2) -- (4,2)
 			(6,0) -- (4,0) to[C=$C_{GS}$] (4,2) -- (6,2)
-			(8,0) -- (6,0) to[R=$r_1$] (6,2) -- (8,2)
-			(8,0) to[R=$1/g_m$] (8,2)
+			(7.5,0) -- (6,0) to[R=$r_1$] (6,2) -- (7.5,2)
+			(7.5,0) to[R=$1/g_m$] (7.5,2)
 			(4,0) node[ground] {}
 			
-			(12,0) -- (10,0) to[cI=$g_m v_{in}$] (10,2) -- (12,2)
-			(14,0) -- (12,0) to[R=$r_2$] (12,2) -- (14,2)
-			(16,0) -- (14,0) to[R=$R_3$] (14,2) -- (16,2)
-			(16,0) to[C=$C_{GS}$] (16,2) 
-			(14,0) node[ground] {}
-			(16,2) to[short, -o] (16.5,2) node[anchor=west] {$v_{out}$}
+			(11.5,0) -- (10,0) to[cI=$g_m v_{in}$] (10,2) -- (11.5,2)
+			(13,0) -- (11.5,0) to[R=$r_2$] (11.5,2) -- (13,2)
+			(14.5,0) -- (13,0) to[R=$R_3$] (13,2) -- (14.5,2)
+			(14.5,0) to[C,l_=$C_{GS}$] (14.5,2) 
+			(13,0) node[ground] {}
+			(14.5,2) to[short, -o] (15,2) node[anchor=west] {$v_{out}$}
 			;
 		\end{tikzpicture}
 	\caption{Modèle petit signal complet du circuit équivalent final.}
@@ -259,11 +259,11 @@ se retrouve bien également sur le circuit de la figure~\ref{fig:pt-signal6}.
 \end{figure}
 
 La fonction de transfert entre $v_{in}$ et $v_{out}$ est maintenant beaucoup
-plus facileà obtenir qu'initialement
+plus facile à obtenir qu'initialement
 \[ v_{out} = g_m v_{in} (r_2 \parallelsum R_3 \parallelsum C_{GD}) \]
 où
 \[ r_2 = r_0\left(1-\frac{g_3+g_d}{g_m+g_d}\right) \]
-avec $g_3 = 1/R_3$, $g_d = 1/r_0$.
+avec $g_2 = 1/R_2$, $g_3 = 1/R_3$, $g_d = 1/r_0$.
 La fonction de transfert est alors donnée par
 \[ H(s) = \frac{v_{out}}{v_{in}} = \frac{g_m}{g_2 + g_3 + sC_{GD}}. \]
 
@@ -277,10 +277,10 @@ Le circuit petit signal est donné à la figure~\ref{fig:pt-signal7}.
 			(0, 2) to[cI=$g_m v_{in}$] (0,0)
 			(0,2) -- (2.5,2) to[R=$r_0$] (2.5,0) -- (0,0)
 			(1.5,0) node[ground]{}
-			(2.5,2) -- (4.5,2) node[anchor=south] {$v_{s2}$}
+                        (2.5,2) to[short,-*] (4.5,2) node[anchor=south] {$v_{s2}$}
 			(4.5,2) to[cI=$g_m v_{s2}$] (4.5,0)
-			(4.5,2) -- (7,2) to[R=$r_0$] (7,0) -- (4.5,0)
-			(7,0) to[R=$r_0$] (7,-2)
+                        (4.5,2) -- (7,2) to[R=$r_0$] (7,0) to[short,*-] (4.5,0)
+			(7,0) to[R=$R_{out}$] (7,-2)
 			(7,-2) node[ground]{}
 			(7,0) to[short, -o] (8, 0) node[anchor=west] {$v_{out}$}
 			;
@@ -289,43 +289,66 @@ Le circuit petit signal est donné à la figure~\ref{fig:pt-signal7}.
 	\label{fig:pt-signal7}
 \end{figure}
 
-On écrit ensuite KCL au noeud de sortie
-\[ g_m v_{s2} = \frac{v_{out}-v_{s2}}{r_0} + \frac{v_{out}}{r_0}.\]
-Avec $v_{s2} = -g_m v_{in} r_0$, on trouve finalement
-\[ \frac{v_{out}}{v_{in}} = -0.5g_m r_0(1+g_mr_0). \]
-% TODO: différence par rapport à l'énoncé?
+On remplace l'amplificateur (càd tout le circuit sauf la source $I_{BIAS,2}$ et $C_L$)
+par un circuit équivalent de type source de tension et résistance.
+La résistance est égale (par définition) à $R_{out}$.
 
-\subsection*{Pôle haute fréquence}
-On tient cette fois compte de la capacité de charge $C_L$ en sortie du montage,
-le schéma petit signal complet est donné la figure~\ref{fig:pt-signal8}.
+Pour évaluer la source de tension, on considère que le courant de sortie de
+l'amplificateur est nul, ce qui donne le schéma petit-signal de la figure~\ref{fig:pt-sig-3-ampl}.
 
 \begin{figure}[h]
 	\centering
-		\begin{tikzpicture}[scale=0.92]
+		\begin{tikzpicture}
 			\draw
-			(0, 2) to[cI=$g_m v_{in}$] (0,0)
-			(0,2) -- (2.5,2) to[R=$r_0$] (2.5,0) -- (0,0)
-			(1.5,0) node[ground]{}
-			(2.5,2) -- (4.5,2) node[anchor=south] {$v_{s2}$}
-			(4.5,2) to[cI=$g_m v_{s2}$] (4.5,0)
-			(4.5,2) -- (7,2) to[R=$r_0$] (7,0) -- (4.5,0)
-			(7,0) to[R=$r_0$] (7,-2)
-			(8,-2) node[ground]{}
-			(7,0) to[short, -o] (10, 0) node[anchor=west] {$v_{out}$}
-			(9,0) to[C=$C_L$] (9,-2) -- (7,-2)
+			(0, 2) to[cI,l_=$g_m v_{in}$] (0,0)
+                        (0,2) to[short, -*] (1.5,2) node[anchor=west] {$v_{s2}$} to[R=$r_0$] (1.5,0) -- (0,0)
+			(0.75,0) node[ground]{}
+			(0, 2) to[cI=$g_m v_{s2}$] (0,4)
+			(1.5,2) to[R,l_=$r_0$] (1.5,4) -- (0,4)
+                        (1.5, 4) to[short, -o] (2,4) node[anchor=west] {$v_{out}$}
 			;
 		\end{tikzpicture}
-	\caption{Modèle petit signal de l'amplificateur cascode replié avec la capacité
-	de charge.}
-	\label{fig:pt-signal8}
+        \caption{Modèle petit signal de l'amplificateur, pour $i_{out} = 0$}
+	\label{fig:pt-sig-3-ampl}
 \end{figure}
 
-On réecrit KCL au noeud de sortie
-\[ g_m v_{s2} = \frac{v_{out}-v_{s2}}{r_0} + \frac{v_{out}}{r_0} + v_{out}sC_L. \]
-En utilisant $v_{s2} = -g_m v_{in} r_0$, on obtient finalement
-\[ H(s) = \frac{v_{out}}{v_{in}} = -\frac{g_mr_0}{2}\frac{1+g_mr_0}{1+s\frac{r_0C_L}{2}}\]
-et donc
-\[ \omega_H = \frac{2}{r_0C_L} \]
-est bien un pôle haute fréquence.
+On trouve alors (via KCL ou des équivalents de Thévenin)
+\[\left.v_{out}\right|_{i_{out}=0} = (g_m r_0 + g_m^2 r_0^2)v_{in}.\]
+
+Cela donne le circuit équivalent
+\begin{center}
+    \begin{tikzpicture}
+        \draw
+        (0, 0) to[cV,l^=$A_{v0}v_{in}$] (0, 2) to[R=$R_{out}$] (2, 2) to[R=$R_{out}$] (2, 0) -- (0, 0)
+        (1, 0) node[ground]{}
+        ;
+    \end{tikzpicture}
+\end{center}
+
+On a donc \[A_v = \frac{A_{v0}}{2} = \frac{g_mr_0(1+g_mr_0)}{2}.\]
+
+\subsection*{Pôle haute fréquence}
+On tient cette fois compte de la capacité de charge $C_L$ en sortie du montage
+(comme on ne connait pas la capacité $C_{GD}$ de Q2, on néglige cette capacité).
+
+Le schéma petit signal est donné ci-dessous.
+\begin{center}
+    \begin{tikzpicture}
+        \draw
+        (0, 0) to[cV,l^=$A_{v0}v_{in}$] (0, 2) to[R=$R_{out}$] (2, 2) to[R=$R_{out}$] (2, 0) -- (0, 0)
+        (2, 2) -- (4, 2) to[C=$C_L$] (4, 0) -- (2, 0)
+        (2, 0) node[ground]{}
+        ;
+    \end{tikzpicture}
+\end{center}
+
+Pour $v_{in} = 0$, on a un pôle en
+\[\omega_H = \frac{1}{\frac{R_{out}}{2}C_L} = \frac{2}{R_{out}C_L}.\]
+
+Pour calculer le pôle, il faut cette fois calculer la valeur de $R_{out}$.
+On le fait en reprenant le circuit de la figure~\ref{fig:pt-sig-3-ampl} et
+en mettant $v_{in} = 0$. On trouve alors (via un équivalent de Thévenin
+ou KCL)
+\[R_{out} = 2r_0 + g_m r_0^2.\]
 
 \end{document}
