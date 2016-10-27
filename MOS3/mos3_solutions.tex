@@ -279,13 +279,13 @@ Le circuit petit signal est donné à la figure~\ref{fig:pt-signal7}.
 			\draw
 			(0, 2) to[cI=$g_m v_{in}$] (0,0)
 			(0,2) -- (2.5,2) to[R=$r_0$] (2.5,0) -- (0,0)
-			(1.5,0) node[ground]{}
+			(1.25,0) node[ground]{}
                         (2.5,2) to[short,-*] (4.5,2) node[anchor=south] {$v_{s2}$}
 			(4.5,2) to[cI=$g_m v_{s2}$] (4.5,0)
                         (4.5,2) -- (7,2) to[R=$r_0$] (7,0) to[short,*-] (4.5,0)
-			(7,0) to[R=$R_{out}$] (7,-2)
-			(7,-2) node[ground]{}
-			(7,0) to[short, -o] (8, 0) node[anchor=west] {$v_{out}$}
+			(7,0) to[short, i=$i_{out}$] (8,0) to[R=$R_{out}$] (8,-2)
+			(8,-2) node[ground]{}
+			(8,0) to[short, -o] (9, 0) node[anchor=west] {$v_{out}$}
 			;
 		\end{tikzpicture}
 	\caption{Modèle petit signal de l'amplificateur cascode replié}
