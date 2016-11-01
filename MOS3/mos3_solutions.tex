@@ -346,6 +346,7 @@ On a alors obtenu les paramètres du circuit équivalent:
     \begin{tikzpicture}
         \draw
         (0, 0) to[cV,l^=$A_{v0}v_{in}$] (0, 2) to[R=$R_{x}$] (2, 2) to[R=$R_{x}$] (2, 0) -- (0, 0)
+        (2, 2) to[short,-o] (2.5, 2) node[anchor=west] {$v_{out}$}
         (1, 0) node[ground]{}
         ;
     \end{tikzpicture}
@@ -365,6 +366,7 @@ Le schéma petit signal est donné ci-dessous.
         \draw
         (0, 0) to[cV,l^=$A_{v0}v_{in}$] (0, 2) to[R=$R_{x}$] (2, 2) to[R=$R_{x}$] (2, 0) -- (0, 0)
         (2, 2) -- (4, 2) to[C=$C_L$] (4, 0) -- (2, 0)
+        (4, 2) to[short, -o] (4.5, 2) node[anchor=west] {$v_{out}$}
         (2, 0) node[ground]{}
         ;
     \end{tikzpicture}
