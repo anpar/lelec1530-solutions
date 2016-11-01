@@ -306,8 +306,8 @@ est nul.
 
 On a alors (via KCL)
 \begin{gather*}
-    g_m v_{in} + \frac{v_{s2}}{r_0} + g_m v_{s2} + frac{v_{s2} - v_{out}}{r_0} = 0 \\
-    g_m v_{s2} + frac{v_{s2} - v_{out}}{r_0} = i_x = 0
+    g_m v_{in} + \frac{v_{s2}}{r_0} + g_m v_{s2} + \frac{v_{s2} - v_{out}}{r_0} = 0 \\
+    g_m v_{s2} + \frac{v_{s2} - v_{out}}{r_0} = i_x = 0
 \end{gather*}
 et donc
 \begin{align*}
@@ -319,7 +319,7 @@ Finalement
 
 Pour évaluer $R_{x}$\footnote{
     Cela n'est pas utile pour calculer le gain de circuit, mais bien pour
-    évaluer les limites de la bande passante},
+    évaluer les limites de la bande passante.},
 on impose $v_{in} = 0$. On cherche alors la résistance de sortie du circuit suivant:
 \begin{center}
     \begin{tikzpicture}
