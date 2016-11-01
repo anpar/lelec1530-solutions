@@ -277,7 +277,6 @@ pour obtenir
 \subsection*{Gain en bande passante}
 Le circuit petit signal est donné à la figure~\ref{fig:pt-signal7}.
 
-% TODO: définir i_out sur le schéma
 \begin{figure}[h]
 	\centering
 		\begin{tikzpicture}[scale=0.92]
@@ -321,7 +320,7 @@ l'amplificateur est nul, ce qui donne le schéma petit-signal de la figure~\ref{
 \end{figure}
 
 On trouve alors (via KCL ou des équivalents de Thévenin)
-\[\left.v_{out}\right|_{i_{out}=0} = (g_m r_0 + g_m^2 r_0^2)v_{in}.\]
+\[\left.v_{out}\right|_{i_{out}=0} = -(g_m r_0 + g_m^2 r_0^2)v_{in}.\]
 
 Cela donne le circuit équivalent
 \begin{center}
@@ -333,7 +332,7 @@ Cela donne le circuit équivalent
     \end{tikzpicture}
 \end{center}
 
-On a donc \[A_v = \frac{A_{v0}}{2} = \frac{g_mr_0(1+g_mr_0)}{2}.\]
+On a donc \[A_v = \frac{A_{v0}}{2} = -\frac{g_mr_0(1+g_mr_0)}{2}.\]
 
 \subsection*{Pôle haute fréquence}
 % Note: pas de pôle à l'entrée car Rsig = 0.
