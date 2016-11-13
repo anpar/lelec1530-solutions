@@ -12,7 +12,74 @@
 \begin{document}
 \maketitle
 
-\section*{Exercice 1}
+\section*{Exercice 1 : modèles digitaux}
+\paragraph{NMOS}
+Si initialement $V_{IN} = \SI{0}{\volt}$, on suppose que la capacité de charge,
+$C_L$, est chargée à $V_{DD}$ (sinon, pas de transition à la sortie quand $V_{IN}$
+passe à $V_{DD}$). En utilisant le modèle digital simple du MOSFET avec les
+capacités parasites (section 10.1 du Baker), on obtient le circuit suivant.
+
+\begin{center}
+	\begin{tikzpicture}
+		\draw
+    	(0, 2) node[anchor=east] {$V_{IN}$} to [short, o-] (1, 2)
+    	(1, 2) to [C=$\frac{3}{2}C_{ox}$] (1, 0)
+    	(1, 0) -- (4, 0)
+    	(4, 0) to [R=$R_n$] (4, 2)
+    	(4, 2) to [switch] (6,2)
+    	(6, 2) to [C=$C_{ox}$] (6,0) -- (4, 0)
+    	(6, 2) -- (8, 2) to [C=$C_L$] (8,0) -- (6, 0)
+    	(8, 2) to [short, -o] (9,2) node[anchor=west] {$V_{OUT}$}
+    	(4, 0) node[ground] {};
+	\end{tikzpicture}
+\end{center}
+
+Toujours selon ce même modèle digital simple du MOSFET, le switch se ferme
+quand $V_G = V_{IN} > \frac{V_{DD}}{2}$.
+Soit $C_{tot} = C_L + C_{ox}$ la mise en parallèle de $C_L$ et $C_{ox}$. Le
+circuit, une fois le switch fermé, se résumé à un simple circuit RC.
+
+\begin{center}
+	\begin{tikzpicture}
+		\draw
+    	(0, 0) to [R=$R_n$] (0, 2)
+    	(0, 0) -- (2, 0)
+    	(2, 0) to [C=$C_{tot}$] (2, 2) -- (0, 2)
+    	(2, 2) to [short, -o] (3,2) node[anchor=west] {$V_{OUT}$}
+    	(1, 0) node[ground] {};
+	\end{tikzpicture}
+\end{center}
+
+La tension $V_{OUT}$ évolue selon l'équation différentielle
+\[ \fdif{V_{OUT}}{t} + \frac{V_{OUT}}{R_nC_{tot}} = 0 \]
+dont la solution est une exponentielle de constante de temps $\tau = R_nC_{tot}$
+\[ V_{OUT}(t) = V_{DD}\exp\left(-t/\tau\right).\]
+Soit $t_{PHL}$ le délai de propagation à 50\% de $V_{DD}$ (high) à \SI{0}{\volt} (low)
+\footnote{Ce délai et les autres sont définit dans la section 10.1.3 du Baker.}.
+$t_{PHL}$ est donné par
+\[ V_{OUT}(t_{PHL}) = V_{DD}\exp\left(-t_{PHL}/\tau\right) = \frac{V_{DD}}{2} \]
+et donc
+\[ t_{PHL} = \ln(2)\cdot R_n\cdot C_{tot} \approx 0.7\cdot R_n\cdot C_{tot}. \]
+\`{A} l'avenir, on utilisera directement cette approximation sans repasser par le calcul
+complet (mais faire une fois ce calcul permet de voir d'où elle vient).
+
+La résistance $R'_n$ donnée dans l'énoncé doit encore être divisée par $W$ pour
+obtenir $R_n$
+\[ R_n = \frac{R'_n}{W}. \]
+Cette formule n'est cependant valable que pour $L=1$ (notons que $L=1$ veut
+dire que la longueur du transistor est de \SI{50}{\nano\meter}, comme le
+scale factor est de \SI{50}{\nano\meter}). Ici, la longueur du transistor
+est de $\SI{1}{\micro\meter}$, soit $L=20$, on a donc finalement
+\[ R_n = \SI{34}{\kilo\ohm\micro\meter}\frac{20}{\SI{10}{\micro\meter}} =
+\SI{68}{\kilo\ohm}. \]
+Ensuite, pour obtenir $C_{ox}$, il faut multiplier $C'_{ox}$ par la surface du
+transistor $WL$
+\[ C_{ox} = C'_{ox}\cdot(WL) = \SI{625}{\atto\farad}. \]
+Enfin, le délai est donné par
+\[ t_{PHL} = \SI{2.41}{\nano\second}. \]
+
+\paragraph{PMOS}
+Pour le PMOS, le raisonnement est exactement identique.
 
 \section*{Exercice 2}
 
@@ -151,7 +218,36 @@ Finalement,
 \subsection*{Question 4: Scaling de la technologie CMOS}
 
 \[R_{eq} = k R_{lin} = \frac{k}{k_n (V_{DD} - V_t)} = TODO\]
-\section*{Exercice 3}
+
+\section*{Exercice 3 : logique de passage}
+\subsection*{Niveaux logiques}
+\paragraph{MUX1: transmission gate} 
+Ce multiplexeur est composé de deux transmission gates (TG).
+Une TG combine un transistor NMOS et un transistor PMOS de façon à se débarasser
+de leurs défauts lorsque ces transistors sont utilisés individuellement dans une
+simple pass gate (PG). En effet, on sait qu'un NMOS passe bien un "0" mais ne passe
+pas bien à "1". Au contraire, un PMOS passe bien un "1" mais ne passe pas bien un "0".
+Dans une TG, les "1" et "0" passent tous les deux bien grâce à l'association PMOS/NMOS.
+On a donc
+\begin{align*}
+	V_{OL} &= \SI{0}{\volt} & V_{OH} &= V_{DD}.
+\end{align*}
+
+\paragraph{MUX2: pass gate} 
+\`{A} l'inverse du MUX1, MUX2 utilise de simple pass gates NMOS.
+Comme expliqué précédemment, un NMOS ne passe pas bien à "1". Ici, on a donc
+\begin{align*}
+	V_{OL} &= \SI{0}{\volt} & V_{OH} &= V_{DD}-V_{t0,n}.
+\end{align*}
+
+\paragraph{MUX3: static CMOS gate}
+Ici, on constate que les NMOS ne font passer que des "0" et que les PMOS ne
+font passer que des "1". On se retrouve donc à nouveau avec
+\begin{align*}
+	V_{OL} &= \SI{0}{\volt} & V_{OH} &= V_{DD}.
+\end{align*}
+
+\subsection*{Temps de décharge}
 
 \end{document}
 
