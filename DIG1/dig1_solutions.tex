@@ -1,0 +1,157 @@
+\documentclass[frenchb,DIV=14]{scrartcl}
+
+\input{lib.tex}
+
+\titlehead{}
+\subject{LELEC1530}
+\title{Séance 7 - Logique digitale de base}
+\subtitle{Solutions}
+\author{\small Gaëtan \textsc{Cassiers} \and\small Antoine \textsc{Paris}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Exercice 1}
+
+\section*{Exercice 2}
+
+\subsection*{Question 1: Analyse DC}
+
+\paragraph{Calcul des paramètres}
+\begin{align*}
+    k_n &= \left(\frac{W}{L}\right)_n \mu_n C_{ox} L_{min}^2 = TODO \\
+    k_p &= \left(\frac{W}{L}\right)_p \mu_p C_{ox} L_{min}^2 = TODO \\
+\end{align*}
+
+\og Transition infiniment lente\fg signifie que l'on analyse ce qu'il se passe
+en DC, pour différentes valeurs de l'entrée (ce que fait SPICE pour une analyse
+\texttt{.DC}).
+
+On est en DC, en grand signal, le courant de sortie est donc nul (la sortie est
+connectée à des capacités).
+
+\paragraph{$V_{IN} < V_{t0,n}$}
+M1 est bloqué et M2 est passant.
+Comme $I_{OUT} \neq 0$, le M2 ne peut pas être en saturation,
+donc il est en triode:
+\[I_{OUT} = k_p \left(V_{OV,M2} - \frac{1}{2} V_{SD,M2}\right)V_{SD,M2} = \SI{0}{A}\]
+On a donc $V_{SD,M2} = \SI{0}{V}$, et donc $V_{OUT} = V_{DD}$.
+
+\paragraph{$V_{IN} > V_{DD} - \left|V_{t0,p}\right|$}
+M2 est bloqué et M1 passant. Par un raisonnement similaire à ci-dessus,
+on trouve $V_{OUT} = \SI{0}{V}$.
+
+\paragraph{$V_{t_0,n} < V_{IN} < V_{DD} - \left|V_{t0,p}\right|$}
+Les deux transistors sont passants.
+
+En partant de $V_{IN} = V_{DD} - \left|V_{t0,p}\right|$,
+si on diminue $V_{IN}$, M1 reste en triode et M2 devient passant
+(en saturation car $V_{SD} \approx V_{DD}$, alors que $V_{OV} \approx \SI{0}{V}$).
+
+On a donc
+\begin{align*}
+    I_{M1} &= \frac{k_n}{2} (V_{IN} - V_{t0,n})^2 \\
+    I_{M2} &= k_p \left(V_{OV,M2}-\frac{1}{2}V_{SD,M2}\right)V_{SD,M2} \\
+    I_{M1} &= I_{M2} \\
+\end{align*}
+
+On peut donc résoudre ce système pour trouver $V_{OUT}$ en fonction
+de $V_{IN}$.
+
+La limite de ce régime de fonctionnement est atteinte quand
+$V_{OV,M2} = V_{SD,M2}$, donc $\frac{k_p}{2}V_{OV,M2}^2 = \frac{k_n}{2}V_{OV,M1}^2$.
+
+Au-delà, on rentre dans une zone où les deux transistors sont en saturation.
+Sans connaitre les paramètres de l'effet Early, on ne peut pas calculer
+$V_{OUT}$ en fonction de $V_{IN}$ (si on néglige l'effet Early, on
+obtient une caractéristique $V_{OUT}(V_{IN})$ verticale pour cette région,
+ce qui n'a pas pas de sens physique).
+
+Quand $V_{IN}$ est suffisament grand, on arrive dans une région où
+M1 est en saturation et M2 en triode.
+Les équations sont alors
+\begin{align*}
+    I_{M1} &= k_n \left(V_{OV,M1}-\frac{1}{2}V_{DS,M1}\right)V_{DS,M1} \\
+    I_{M2} &= \frac{k_p}{2} V_{OV,M2}^2 \\
+    I_{M1} &= I_{M2} \\
+\end{align*}
+
+\todo{Ajouter courbe $V_out(vin))$}
+
+\subsection*{Question 2: Délai de propagation: calcul complet}
+
+Comme $v_{IN} = V_{DD}$ sur toute la période considérée, M2 est tout le temps
+bloqué. Pour M1, $v_{OV} = v_{IN} - V_{t0,n} = \SI{1.3}{V}$.
+Comme on s'intéresse au délai à 50\%, $V_{DD}/2 < v_{OUT} < V_{DD}$.
+
+M1 est donc d'abord en saturation
+($v_{OUT}: V_{DD} \rightarrow v_{OV}$), puis en triode
+($v_{OUT}: v_{OV} \rightarrow V_DD/2$).
+
+\paragraph{Saturation}
+
+Les équations du circuit sont
+\begin{align*}
+    i_{M1} &= \frac{k_n}{2}(v_{IN} - V_{t0,n})^2 \\
+    i_C &= C_{rout}\fpart{v_{OUT}}{t} \\
+    i_C &= -i_{M1} \\
+\end{align*}
+
+On a donc $\Delta v_{OUT} = v_{OV} - V_{DD} = \SI{-0.5}{V}$ et
+$i_{M1} = TODO$.
+Dès lors, $t_{SAT} = C_{rout}\frac{\Delta v_{OUT}}{-i_{M1}} = TODO$.
+
+\paragraph{Triode}
+
+Les équations du circuit sont alors
+\begin{align*}
+    i_{M1} &= k_n (v_{OV} - \frac{1}{2}v_{OUT})v_{OUT} \\
+    i_C &= C_{rout}\fpart{v_{OUT}}{t} \\
+    i_C &= -i_{M1} \\
+\end{align*}
+
+On a donc
+\[C_{rout}\fpart{v_{OUT}}{t} = - k_n (v_{OV} - \frac{1}{2}v_{OUT})v_{OUT}.\]
+Il faut résoudre cette équation différentielle (EDO du premier ordre) pour
+la condition initiale $v_{OUT}(t_{SAT}) = V_{OV}$, et trouver ensuite
+$t^* > t_{SAT}$ tel que $v_{OUT}(t^*) = V_{DD}/2$.
+
+Pour simplifier les calculs, on va négliger le terme quadratique dans
+l'équation, ce qui donne
+\[\fpart{v_{OUT}}{t} = - \frac{k_n}{C_{rout}} v_{OV} v_{OUT}.\]
+La solution est donc du type
+\[v_{OUT}(t) = \alpha\exp^{-t/\tau},\]
+avec $\tau = C_{rout} / k_n / v_{OV}$ et $\alpha$ tel que
+\[v_{OUT}(t_{SAT}) =  v_{OV}.\]
+On trouve donc
+\begin{align*}
+    \tau &= TODO \\
+    \alpha &= TODO \\
+    t^* &= TODO \\
+\end{align*}
+
+\subparagraph{Sans simplification.} On peut aussi résoudre l'équation
+par des méthodes numériques, ce qui donne TODO.
+
+\subsection*{Question 3: Délai de propagation: simplification}
+
+Si on remplace le transistor par $R_{eq}$, on a l'équation
+\[v_{OUT}(t) = V_{DD} \exp^{-t/(R_{eq}C_{rout}},\]
+donc \[\frac{t^*}{R_{eq}C_{rout}} = \ln 2.\]
+On trouve $R_{eq} = TODO$.
+
+Dans la zone linéaire (approximation linéaire du régime triode),
+on avait $\tau = C_{rout} / (k_n v_{OV})$. Par conséquent,
+$R_{lin} = 1 / (k_n v_{OV}) = TODO$.
+
+Finalement,
+\[k = \frac{R_{eq}}{R_{lin}} = TODO.\]
+
+\subsection*{Question 4: Scaling de la technologie CMOS}
+
+\[R_{eq} = k R_{lin} = \frac{k}{k_n (V_{DD} - V_t)} = TODO\]
+\section*{Exercice 3}
+
+\end{document}
+
