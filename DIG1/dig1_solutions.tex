@@ -133,7 +133,7 @@ de charge, on a même $t_{PHL} = t_{PLH}$). Cependant, cela a aussi pour effet
 d'augmenter la capacité d'entrée $C_{in} = \frac{3}{2}C_{ox}$ du circuit avec
 le PMOS.
 
-\section*{Exercice 2}
+\section*{Exercice 2: inverseur CMOS}
 
 \subsection*{Question 1: Analyse DC}
 
@@ -211,7 +211,7 @@ Comme on s'intéresse au délai à 50\%, $V_{DD}/2 < v_{OUT} < V_{DD}$.
 
 M1 est donc d'abord en saturation
 ($v_{OUT}: V_{DD} \rightarrow v_{OV}$), puis en triode
-($v_{OUT}: v_{OV} \rightarrow V_DD/2$).
+($v_{OUT}: v_{OV} \rightarrow V_{DD}/2$).
 
 \paragraph{Saturation}
 
@@ -223,8 +223,8 @@ Les équations du circuit sont
 \end{align*}
 
 On a donc $\Delta v_{OUT} = v_{OV} - V_{DD} = \SI{-0.5}{V}$ et
-$i_{M1} = TODO$.
-Dès lors, $t_{SAT} = C_{rout}\frac{\Delta v_{OUT}}{-i_{M1}} = TODO$.
+$i_{M1} = \SI{169}{\micro\ampere}$.
+Dès lors, $t_{SAT} = C_{rout}\frac{\Delta v_{OUT}}{-i_{M1}} = \SI{29.58}{\pico\second}$.
 
 \paragraph{Triode}
 
@@ -250,31 +250,32 @@ avec $\tau = C_{rout} / k_n / v_{OV}$ et $\alpha$ tel que
 \[v_{OUT}(t_{SAT}) =  v_{OV}.\]
 On trouve donc
 \begin{align*}
-    \tau &= TODO \\
-    \alpha &= TODO \\
-    t^* &= TODO \\
+    \tau &= \SI{65}{\pico\second} \\
+    \alpha &= \SI{2.05}{\volt} \\
+    t^* &= \SI{53.48}{\pico\second}. \\
 \end{align*}
 
-\subparagraph{Sans simplification.} On peut aussi résoudre l'équation
+\subparagraph{Sans simplification} On peut aussi résoudre l'équation
 par des méthodes numériques, ce qui donne TODO.
 
 \subsection*{Question 3: Délai de propagation: simplification}
 
 Si on remplace le transistor par $R_{eq}$, on a l'équation
-\[v_{OUT}(t) = V_{DD} \exp^{-t/(R_{eq}C_{rout}},\]
+\[v_{OUT}(t) = V_{DD} \exp^{-t/(R_{eq}C_{rout})},\]
 donc \[\frac{t^*}{R_{eq}C_{rout}} = \ln 2.\]
-On trouve $R_{eq} = TODO$.
+On trouve $R_{eq} = \SI{7.715}{\kilo\ohm}$.
 
 Dans la zone linéaire (approximation linéaire du régime triode),
 on avait $\tau = C_{rout} / (k_n v_{OV})$. Par conséquent,
-$R_{lin} = 1 / (k_n v_{OV}) = TODO$.
+$R_{lin} = 1 / (k_n v_{OV}) = \SI{3.846}{\kilo\ohm}$.
 
 Finalement,
-\[k = \frac{R_{eq}}{R_{lin}} = TODO.\]
+\[k = \frac{R_{eq}}{R_{lin}} = 2.006 \approx 2.\]
 
 \subsection*{Question 4: Scaling de la technologie CMOS}
 
-\[R_{eq} = k R_{lin} = \frac{k}{k_n (V_{DD} - V_t)} = TODO\]
+\[R_{eq} = k R_{lin} = \frac{k}{k_n (V_{DD} - V_t)} = \SI{7.164}{\kilo\ohm} \]
+\[t_{PHL} = \SI{10}{\pico\second} \]
 
 \section*{Exercice 3 : logique de passage}
 \subsection*{Niveaux logiques}
