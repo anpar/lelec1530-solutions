@@ -22,22 +22,22 @@ capacités parasites (section 10.1 du Baker), on obtient le circuit suivant.
 \begin{center}
 	\begin{tikzpicture}
 		\draw
-    	(0, 2) node[anchor=east] {$V_{IN}$} to [short, o-] (1, 2)
-    	(1, 2) to [C=$\frac{3}{2}C_{ox}$] (1, 0)
-    	(1, 0) -- (4, 0)
+    	%(0, 2) node[anchor=east] {$V_{IN}$} to [short, o-] (1, 2)
+    	%(1, 2) to [C=$\frac{3}{2}C_{ox}$] (1, 0)
+    	%(1, 0) -- (4, 0)
     	(4, 0) to [R=$R_n$] (4, 2)
     	(4, 2) to [switch] (6,2)
     	(6, 2) to [C=$C_{ox}$] (6,0) -- (4, 0)
     	(6, 2) -- (8, 2) to [C=$C_L$] (8,0) -- (6, 0)
     	(8, 2) to [short, -o] (9,2) node[anchor=west] {$V_{OUT}$}
-    	(4, 0) node[ground] {};
+    	(6, 0) node[ground] {};
 	\end{tikzpicture}
 \end{center}
 
 Toujours selon ce même modèle digital simple du MOSFET, le switch se ferme
-quand $V_G = V_{IN} > \frac{V_{DD}}{2}$.
+quand $V_{GS} = V_{IN} > \frac{V_{DD}}{2}$.
 Soit $C_{tot} = C_L + C_{ox}$ la mise en parallèle de $C_L$ et $C_{ox}$. Le
-circuit, une fois le switch fermé, se résumé à un simple circuit RC.
+circuit, une fois le switch fermé, se résume à un simple circuit RC.
 
 \begin{center}
 	\begin{tikzpicture}
@@ -75,11 +75,63 @@ est de $\SI{1}{\micro\meter}$, soit $L=20$, on a donc finalement
 Ensuite, pour obtenir $C_{ox}$, il faut multiplier $C'_{ox}$ par la surface du
 transistor $WL$
 \[ C_{ox} = C'_{ox}\cdot(WL) = \SI{625}{\atto\farad}. \]
+Comme $C_L$ n'est pas donnée dans l'énoncé, on suppose $C_L = \SI{50}{\femto\farad}$.
 Enfin, le délai est donné par
 \[ t_{PHL} = \SI{2.41}{\nano\second}. \]
 
 \paragraph{PMOS}
-Pour le PMOS, le raisonnement est exactement identique.
+Pour le PMOS, le raisonnement est exactement identique. On suppose cette fois que la
+capacité de charge $C_L$ est initialement chargée à \SI{0}{\volt}. Le modèle digital
+simple du MOSFET appliqué au PMOS nous donne le circuit suivant.
+
+\begin{center}
+	\begin{tikzpicture}
+		\draw
+    	(0, 4) node[vcc] {$V_{DD}$} to [R=$R_p$] (0, 2)
+    	(0, 2) to [switch] (3, 2)
+    	(3, 2) to [C=$C_{ox}$] (3, 4) node[vcc] {$V_{DD}$}
+    	(3, 2) -- (4, 2) to [C=$C_L$] (4,0) node[ground] {}
+    	(4, 2) to [short, -o] (5, 2) node[anchor=west] {$V_{OUT}$};
+	\end{tikzpicture}
+\end{center}
+
+Le switch se ferme cette fois dès que $V_{SG} = V_{DD} - V_{IN} > \frac{V_{DD}}{2}$.
+Une fois ce switch fermé, le circuit se résume à nouveau à un simple circuit RC.
+
+\begin{center}
+	\begin{tikzpicture}
+		\draw
+    	(0, 4) node[vcc] {$V_{DD}$} to [R=$R_p$] (0, 2)
+    	(0, 2) -- (3, 2)
+    	(3, 2) to [C=$C_{ox}$] (3, 4) node[vcc] {$V_{DD}$}
+    	(3, 2) -- (4, 2) to [C=$C_L$] (4,0) node[ground] {}
+    	(4, 2) to [short, -o] (5, 2) node[anchor=west] {$V_{OUT}$};
+	\end{tikzpicture}
+\end{center}
+
+Soit $C_{tot} = C_L + C_{ox}$. L'équation différentielle régissant la variation
+de $V_{OUT}$ est donnée par
+\[ \fdif{V_{OUT}}{t} + \frac{V_{OUT}}{R_pC_{tot}} = \frac{V_{DD}}{R_pC_{tot}} \]
+et donc, en notant $\tau = R_nC_{tot}$,
+\[ V_{OUT}(t) = V_{DD}\left(1 - \exp\left(-t/\tau\right)\right). \]
+Le délai $t_{PLH}$ est donné par
+\[ V_{OUT}(t_{PLH}) = V_{DD}\left(1 - \exp\left(-t_{PLH}/\tau\right)\right) = \frac{V_{DD}}{2} \]
+et donc
+\[ t_{PLH} = \ln(2)\cdot R_p\cdot C_{tot} \approx 0.7\cdot R_p\cdot C_{tot}. \]
+De la même manière que pour le NMOS,
+\[ R_p = \SI{68}{\kilo\ohm\micro\meter}\frac{20}{\SI{20}{\micro\meter}} =
+\SI{68}{\kilo\ohm}. \]
+Ensuite,
+\[ C_{ox} = C'_{ox}\cdot(WL) = \SI{1.25}{\femto\farad}. \]
+Finalement,
+\[ t_{PLH} = \SI{2.44}{\nano\second}. \]
+
+\paragraph{Remarque} On voit donc que dimensionner le PMOS en choisissant une
+largeur deux fois plus grande que pour le NMOS permet d'avoir $t_{PHL} \approx
+t_{PLH}$ (en négligeant les capacités parasites par rapport à la capacité
+de charge, on a même $t_{PHL} = t_{PLH}$). Cependant, cela a aussi pour effet
+d'augmenter la capacité d'entrée $C_{in} = \frac{3}{2}C_{ox}$ du circuit avec
+le PMOS.
 
 \section*{Exercice 2}
 
@@ -226,7 +278,7 @@ Ce multiplexeur est composé de deux transmission gates (TG).
 Une TG combine un transistor NMOS et un transistor PMOS de façon à se débarasser
 de leurs défauts lorsque ces transistors sont utilisés individuellement dans une
 simple pass gate (PG). En effet, on sait qu'un NMOS passe bien un "0" mais ne passe
-pas bien à "1". Au contraire, un PMOS passe bien un "1" mais ne passe pas bien un "0".
+pas bien un "1". Au contraire, un PMOS passe bien un "1" mais ne passe pas bien un "0".
 Dans une TG, les "1" et "0" passent tous les deux bien grâce à l'association PMOS/NMOS.
 On a donc
 \begin{align*}
@@ -235,7 +287,7 @@ On a donc
 
 \paragraph{MUX2: pass gate} 
 \`{A} l'inverse du MUX1, MUX2 utilise de simple pass gates NMOS.
-Comme expliqué précédemment, un NMOS ne passe pas bien à "1". Ici, on a donc
+Comme expliqué précédemment, un NMOS ne passe pas bien un "1". Ici, on a donc
 \begin{align*}
 	V_{OL} &= \SI{0}{\volt} & V_{OH} &= V_{DD}-V_{t0,n}.
 \end{align*}
