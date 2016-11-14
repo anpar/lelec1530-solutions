@@ -148,11 +148,12 @@ en DC, pour différentes valeurs de l'entrée (ce que fait SPICE pour une analys
 \texttt{.DC}).
 
 On est en DC, en grand signal, le courant de sortie est donc nul (la sortie est
-connectée à des capacités).
+connectée à des capacités). Les courants dans les deux transistors sont donc
+égaux.
 
 \paragraph{Pour $V_{IN} < V_{t0,n}$:}
 M1 est bloqué et M2 est passant.
-Comme $I_{OUT} \neq 0$, le M2 ne peut pas être en saturation,
+Comme $I_{2} = 0$, le M2 ne peut pas être en saturation,
 donc il est en triode:
 \[I_{OUT} = k_p \left(V_{OV,M2} - \frac{1}{2} V_{SD,M2}\right)V_{SD,M2} = \SI{0}{A}\]
 On a donc $V_{SD,M2} = \SI{0}{V}$, et donc $V_{OUT} = V_{DD}$.
@@ -189,7 +190,7 @@ $V_{OUT}$ en fonction de $V_{IN}$ (si on néglige l'effet Early, on
 obtient une caractéristique $V_{OUT}(V_{IN})$ verticale pour cette région,
 ce qui n'a pas pas de sens physique).
 
-Quand $V_{IN}$ est suffisament grand, on arrive dans une région où
+Quand $V_{IN}$ est suffisament petit, on arrive dans une région où
 M1 est en saturation et M2 en triode.
 Les équations sont alors
 \begin{align*}
