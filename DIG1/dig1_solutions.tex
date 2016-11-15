@@ -1,6 +1,10 @@
 \documentclass[frenchb,DIV=14]{scrartcl}
 
 \input{lib.tex}
+\usetikzlibrary{intersections}
+\usepgfplotslibrary{fillbetween}
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
 
 \titlehead{}
 \subject{LELEC1530}
@@ -133,10 +137,11 @@ de charge, on a même $t_{PHL} = t_{PLH}$). Cependant, cela a aussi pour effet
 d'augmenter la capacité d'entrée $C_{in} = \frac{3}{2}C_{ox}$ du circuit avec
 le PMOS.
 
+\newpage
 \section*{Exercice 2: inverseur CMOS}
 
 \subsection*{Question 1: Analyse DC}
-
+\subsubsection*{Approche mathématique rigoureuse}
 \paragraph{Calcul des paramètres}
 \begin{align*}
     k_n &= \left(\frac{W}{L}\right)_n \mu_n C_{ox} = \SI{200}{\micro A/V^2} \\
@@ -199,10 +204,228 @@ Les équations sont alors
     I_{M1} &= I_{M2} \\
 \end{align*}
 
-On peut alors tracer la courbe DC de l'inverseur CMOS:
-\begin{center}
-\includegraphics[width=0.7\textwidth,height=0.5\textwidth]{figures/ex2_1.tikz}
-\end{center}
+On peut alors tracer la courbe DC de l'inverseur CMOS (voir figure~\ref{fig:dc-inv}).
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth,height=0.5\textwidth]{figures/ex2_1.tikz}
+	\caption{Caractéristique entrée-sortie de l'inverseur CMOS.}
+	\label{fig:dc-inv}
+\end{figure}
+
+\subsubsection*{Approche via diagramme de Jespers}
+Un diagramme de Jespers permet d'obtenir de façon visuelle les différents régimes
+de fonctionnement d'un ou plusieurs transistors en fonction des tensions $V_G$
+(qu'on indique sur l'axe des $y$) et $V_D$ et $V_S$ (qu'on indique sur l'axe des $x$).
+Même sans faire aucun calcul, on sait que la caractéristique entrée sortie de l'inverseur
+CMOS aura une allure similaire à celle présente sur la figure~\ref{fig:dc-inv}. Grâce à
+cela et au fait que $I_{M1} = I_{M2}$, on va pouvoir utilser un diagramme de Jespers
+pour trouver les régimes de fonctionnement de M1 et M2 selon $V_{IN}$. Avant tout, on note
+que $V_{IN} = V_{G1} = V_{G2} = V_G$ et $V_{OUT} = V_{D1} = V_{D2} = V_D$.
+
+Dans le diagramme de Jespers, le courant traversant M1 est donnée par l'aire de la
+surface comprise entre les droites $y = V_G$, $x = V_{S1}$, $x = V_D$ au dessus de 
+$y=V_{t0,n}+x$ (au facteur $k_n$ près) tandis que le courant traversant M2 est donnée par
+l'aire de la surface comprise entre les droites $y = V_G$, $x = V_{S2}$, $x = V_D$ en
+dessous de $y=-|V_{t0,p}|+x$ (au facteur $k_p$ près). Si cette surface est un triangle, on est
+en saturation. Si cette surface est un trapèze, on est en triode. Dans tous les cas,
+comme $I_{M1} = I_{M2}$, ces deux surfaces doivent être égales.
+
+Dans le cas où $V_{IN} < V_{t0,n}$ (figure~\ref{fig:jsp1}), M1 est clairement bloqué (pas de
+surface au dessus de $y=V_{t0,n}+x$). On a aussi (via la caractéristique entrée-sortie)
+$V_{OUT} = V_{DD}$. La surface comprise entre $y = V_G$, $x = V_{S2}$, $x = V_D$
+en dessous de $y=-|V_{t0,p}|+x$  est dans ce cas un trapèze de hauteur nulle.
+On peut donc déjà dire que pour $V_{IN} \in [0, V_{t0,n}[$, M1 est coupé alors que
+M2 est en triode.
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+		%% Compared to the statements, everything is multiplied by 4
+		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
+		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		
+		%% Threshold voltages
+		\draw[dashed] (0,0) node[left]{$V_{S1} = 0$} --(9,9);
+		\draw[thick,red] (0,2) node[left]{$V_{t0,n}$} --(7,9);
+		\draw[thick,red] (0,-2) node[left]{$-|V_{t0,p}|$} --(9,7);
+
+		%% VDD
+		\draw[thick] (7.2,0) node[below]{$V_{S2} = V_{DD}$} --(7.2,9);
+		\draw[thick] (0,7.2) node[left]{$V_{DD}$} -- (9,7.2);
+		
+		% Off limits for M1 and M2
+		\draw[dashed] (0,2) -- (9,2) node[right]
+		{$\uparrow$ M1 ON car $V_{GS1} > V_{t0,n}$};
+		\draw[dashed] (0,5.2) node[left]{$V_{DD}-|V_{t0,p}|$} -- (9,5.2) node[right]
+		{$\downarrow$ M2 ON car $V_{SG2} > |V_{t0,P}|$};
+		
+		% VIN, VOUT
+		\draw[thick, green] (0,1) node[left] {$V_{IN}$} -- (9,1);
+		\draw[thick, green] (7.2,0) node[above, right, yshift=0.4cm] {$V_{OUT}$} -- (7.2,9);
+	\end{tikzpicture}
+	\caption{Diagramme de Jespers pour $V_{IN} < V_{t0,n}$. M1 est off tandis que M2
+	est en triode (la surface représentant le courant est un trapèze de hauteur nulle).}
+	\label{fig:jsp1}
+\end{figure}
+
+Si $V_{IN}$ devient maintenant $> V_{t0,n}$ (figure~\ref{fig:jps2}), M1 devient passant et en saturation
+tandis que M2 reste en triode. Ce sera le cas jusqu'à ce que M2 passe aussi en
+saturation. M2 passera en saturation quand la tension $V_{OUT}$ sera assez éloignée de $V_{DD}$
+pour que la surface représentant le courant traversant M2 soit un triangle. Cela se produit
+pour $V_{IN} = V_{DD}/2$. Donc, pour $V_{IN} \in [V_{t0,n}; V_{DD}/2[$,
+M1 est en saturation tandis que M2 est en triode.
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+		%% Compared to the statements, everything is multiplied by 4
+		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
+		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		
+		%% Threshold voltages
+		\draw[thick,red] (0,2) node[left]{$V_{t0,n}$} --(7,9);
+		\draw[thick,red] (0,-2) node[left]{$-|V_{t0,p}|$} --(9,7);
+
+		%% VDD
+		\draw[dashed] (0,0) node[left]{$V_{S1} = 0$} --(9,9);
+		\draw[thick] (7.2,0) node[below]{$V_{S2} = V_{DD}$} --(7.2,9);
+		\draw[thick] (0,7.2) node[left]{$V_{DD}$} -- (9,7.2);
+		
+		% Off limits for M1 and M2
+		\draw[dashed] (0,2) -- (9,2) node[right]
+		{$\uparrow$ M1 ON car $V_{GS1} > V_{t0,n}$};
+		\draw[dashed] (0,5.2) node[left]{$V_{DD}-|V_{t0,p}|$} -- (9,5.2) node[right]
+		{$\downarrow$ M2 ON car $V_{SG2} > |V_{t0,P}|$};
+		
+		% VIN, VOUT
+		\draw[thick, green] (0,2.5) node[left] {$V_{IN}$} -- (9,2.5);
+		\draw[thick, green] (7,0) node[above, left, yshift=0.4cm] {$V_{OUT}$} -- (7,9);
+		
+		\draw[fill=gray!50] (0,2) -- (0,2.5) -- (0.5,2.5) -- cycle;
+		\draw[fill=gray!50] (7,2.5) -- (7,5) -- (7.2, 5.2) -- (7.2,2.5) -- cycle;
+	\end{tikzpicture}
+	\caption{Diagramme de Jespers pour $V_{IN} \in [V_{t0,n}, V_{DD/2}[$. M1 est en
+	saturation tandis que M2 est en triode. Note: les surfaces grises ont, en théorie,
+	une surface égale. Ce n'est pas forcément le cas sur cette figure par imprécision.}
+	\label{fig:jps2}
+\end{figure}
+
+Le diagramme de Jespers pour $V_{IN} = V_{DD}/2$ est repris à la figure~\ref{fig:jsp3}, on
+voit bien que les deux transistors sont ici en saturation.
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+		%% Compared to the statements, everything is multiplied by 4
+		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
+		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		
+		%% Threshold voltages
+		\draw[thick,red] (0,2) node[left]{$V_{t0,n}$} --(7,9);
+		\draw[thick,red] (0,-2) node[left]{$-|V_{t0,p}|$} --(9,7);
+
+		%% VDD
+		\draw[dashed] (0,0) node[left]{$V_{S1} = 0$} --(9,9);
+		\draw[thick] (7.2,0) node[below]{$V_{S2} = V_{DD}$} --(7.2,9);
+		\draw[thick] (0,7.2) node[left]{$V_{DD}$} -- (9,7.2);
+		
+		% Off limits for M1 and M2
+		\draw[dashed] (0,2) -- (9,2) node[right]
+		{$\uparrow$ M1 ON car $V_{GS1} > V_{t0,n}$};
+		\draw[dashed] (0,5.2) node[left]{$V_{DD}-|V_{t0,p}|$} -- (9,5.2) node[right]
+		{$\downarrow$ M2 ON car $V_{SG2} > |V_{t0,P}|$};
+		
+		% VIN, VOUT
+		\draw[thick, green] (0,3.6) node[left] {$V_{IN}$} -- (9,3.6);
+		\draw[thick, green] (3.6,0) node[below] {$V_{OUT}$} -- (3.6,9);
+		
+		\draw[fill=gray!50] (0,2) -- (0,3.6) -- (1.6,3.6) -- cycle;
+		\draw[fill=gray!50] (5.6,3.6) -- (7.2,5.2) -- (7.2, 3.6) -- cycle;
+	\end{tikzpicture}
+	\caption{Diagramme de Jespers pour $V_{IN} = V_{DD}/2$. M1 et M2 sont en saturation.
+	On voit que c'est le cas pour toute une gamme de valeurs de $V_{OUT}$, cela correspond
+	bien à la pente infinie en $V_{IN} = V_{DD}/2$ obtenue sur la caractéristique entrée-sortie
+	de la figure~\ref{fig:dc-inv}.}
+	\label{fig:jsp3}
+\end{figure}
+
+Pour $V_{IN} > V_{DD}/2$ (figure~\ref{fig:jsp4}), M1 passe en régime triode tandis
+que M2 reste en saturation.
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+		%% Compared to the statements, everything is multiplied by 4
+		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
+		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		
+		%% Threshold voltages
+		\draw[thick,red] (0,2) node[left]{$V_{t0,n}$} --(7,9);
+		\draw[thick,red] (0,-2) node[left]{$-|V_{t0,p}|$} --(9,7);
+
+		%% VDD
+		\draw[dashed] (0,0) node[left]{$V_{S1} = 0$} --(9,9);
+		\draw[thick] (7.2,0) node[below]{$V_{S2} = V_{DD}$} --(7.2,9);
+		\draw[thick] (0,7.2) node[left]{$V_{DD}$} -- (9,7.2);
+		
+		% Off limits for M1 and M2
+		\draw[dashed] (0,2) -- (9,2) node[right]
+		{$\uparrow$ M1 ON car $V_{GS1} > V_{t0,n}$};
+		\draw[dashed] (0,5.2) node[left]{$V_{DD}-|V_{t0,p}|$} -- (9,5.2) node[right]
+		{$\downarrow$ M2 ON car $V_{SG2} > |V_{t0,P}|$};
+		
+		% VIN, VOUT
+		\draw[thick, green] (0,4) node[left] {$V_{IN}$} -- (9,4);
+		\draw[thick, green] (0.8,0) node[below] {$V_{OUT}$} -- (0.8,9);
+		
+		\draw[fill=gray!50] (0,2) -- (0,4) -- (0.8,4) -- (0.8,2.8) -- cycle;
+		\draw[fill=gray!50] (6,4) -- (7.2,5.2) -- (7.2, 4) -- cycle;
+	\end{tikzpicture}
+	\caption{Diagramme de Jespers pour $V_{IN} \in ]V_{DD}/2, V_{DD}-|V_{t0,p}|[$.
+	M1 est en triode, M2 en saturation.}
+	\label{fig:jsp4}
+\end{figure}
+
+Enfin, pour $V_{IN} > V_{DD}-|V_{t0,n}|$ (figure ~\ref{fig:jsp5}), M1 est en triode
+mais est traversé par un courant nul (trapèze de hauteur nulle dans le diagramme de
+Jespers) tandis que M2 est off.
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+		%% Compared to the statements, everything is multiplied by 4
+		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
+		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		
+		%% Threshold voltages
+		\draw[thick,red] (0,2) node[left]{$V_{t0,n}$} --(7,9);
+		\draw[thick,red] (0,-2) node[left]{$-|V_{t0,p}|$} --(9,7);
+
+		%% VDD
+		\draw[dashed] (0,0) node[left]{$V_{S1} = 0$} --(9,9);
+		\draw[thick] (7.2,0) node[below]{$V_{S2} = V_{DD}$} --(7.2,9);
+		\draw[thick] (0,7.2) node[left]{$V_{DD}$} -- (9,7.2);
+		
+		% Off limits for M1 and M2
+		\draw[dashed] (0,2) -- (9,2) node[right]
+		{$\uparrow$ M1 ON car $V_{GS1} > V_{t0,n}$};
+		\draw[dashed] (0,5.2) node[left]{$V_{DD}-|V_{t0,p}|$} -- (9,5.2) node[right]
+		{$\downarrow$ M2 ON car $V_{SG2} > |V_{t0,P}|$};
+		
+		% VIN, VOUT
+		\draw[thick, green] (0,6) node[left] {$V_{IN}$} -- (9,6);
+		\draw[thick, green] (0,0) node[below, right, yshift=-0.4cm] {$V_{OUT}$} -- (0,9);
+	\end{tikzpicture}
+	\caption{Diagramme de Jespers pour $V_{IN} \in [V_{DD}-|V_{t0,p}|, V_{DD}]$.
+	M1 est en triode mais est traversé par un courant nulle (trapèze de hauteur nulle),
+	M2 en off.}
+	\label{fig:jsp5}
+\end{figure}
 
 \subsection*{Question 2: Délai de propagation: calcul complet}
 
@@ -288,6 +511,7 @@ On suppose que la valeur calculée pour $k$ ne dépend pas de la technologie:
 \[R_{eq} = k R_{lin} = \frac{k}{k_n (V_{DD} - V_t)} = \SI{7.14}{\kilo\ohm} \]
 \[t_{PHL} = \SI{49.5}{\pico\second} \]
 
+\newpage
 \section*{Exercice 3 : logique de passage}
 \subsection*{Niveaux logiques}
 \paragraph{MUX1: transmission gate} 
