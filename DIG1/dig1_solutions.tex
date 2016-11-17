@@ -17,6 +17,22 @@
 \maketitle
 
 \section*{Exercice 1 : modèles digitaux}
+
+\begin{figure}[!htbp]
+   	\centering
+   	\includegraphics[width=10cm]{figures/fig7-1.png}
+   	\caption{Exercice 1}
+   	\label{fig7-1}
+\end{figure}
+
+Calculez les délais à 50\% des transitions symbolisées sur la figure~\ref{fig7-1}
+pour des transistors à canaux court en technologie 50nm avec \cox=62.5aF/$\mu m^2$,
+$R_n$=34k$\Omega\mu$m et $R_p$=68k$\Omega\mu$m.
+Les tailles des NMOS valent $W=10\mu$m et $L=1\mu$m tandis que celles des PMOS valent
+$W=20\mu$m et $L=1\mu$m.
+
+\hspace{1cm}\hrule
+
 \paragraph{NMOS}
 Si initialement $V_{IN} = \SI{0}{\volt}$, on suppose que la capacité de charge,
 $C_L$, est chargée à $V_{DD}$ (sinon, pas de transition à la sortie quand $V_{IN}$
@@ -513,6 +529,41 @@ On suppose que la valeur calculée pour $k$ ne dépend pas de la technologie:
 
 \newpage
 \section*{Exercice 3 : logique de passage}
+On considère les 3 implémentations d'un multiplexeur 2 vers 1 de la figure~\ref{fig7-3} :
+transmission gate, pass gate et static CMOS gate. La fonction logique associée est :
+Y = (Sel.A) + ($\overline{Sel}$.B) et la technologie considérée est une technologie
+0.18 $\mu$m avec les paramètres suivants:
+
+\begin{center}
+$
+	\begin{array}{l l l}
+		L_{min} = 0.18 \mu m 	& V_{DD} = 1.8 V 		& V_{t0,n} = |V_{t0,p} | = 0.5 V \\
+		\mu_n = 0.04 m^2/Vs 	& \mu_p = 0.02 m^2/Vs	& C_{ox} = 5 fF/\mu m^2 \\
+		C_{rout} = 10fF			&						& \\
+	\end{array}
+$
+\end{center}
+
+\begin{figure}[!htbp]
+   \centering
+   \includegraphics[width=9cm]{figures/fig7-3-1.png}
+	 \includegraphics[width=9cm]{figures/fig7-3-2.png}
+	 \includegraphics[width=9cm]{figures/fig7-3-3.png}
+   \caption{Exercice 1}
+   \label{fig7-3}
+\end{figure}
+
+\begin{enumerate}
+	\item Déterminer les tensions des niveaux logiques haut ($V_{OH}$) et bas ($V_{OL}$) de
+	la sortie Y pour chacun de ces multiplexeurs.
+	\item Calculez le temps de décharge à 50\% ($t_{PHL}$) de la capacité $C_{load}$ par
+	l'inverseur de l'étage suivant, suite à un flanc montant à la sortie Y. Considérez une
+	résistance équivalente pour les transistors passant du régime saturé au linéaire de
+	$R_{eq}$ = 2.5 $R_{lin}$ et négliger toutes les capacités parasites.
+\end{enumerate}
+
+\hspace{1cm}\hrule
+
 \subsection*{Niveaux logiques}
 \paragraph{MUX1: transmission gate} 
 Ce multiplexeur est composé de deux transmission gates (TG).
