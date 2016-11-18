@@ -26,7 +26,7 @@
 \end{figure}
 
 Calculez les délais à 50\% des transitions symbolisées sur la figure~\ref{fig7-1}
-pour des transistors à canaux court en technologie 50nm avec \cox=62.5aF/$\mu m^2$,
+pour des transistors à canaux court en technologie 50nm avec $C_{ox}$=62.5aF/$\mu m^2$,
 $R_n$=34k$\Omega\mu$m et $R_p$=68k$\Omega\mu$m.
 Les tailles des NMOS valent $W=10\mu$m et $L=1\mu$m tandis que celles des PMOS valent
 $W=20\mu$m et $L=1\mu$m.
@@ -58,6 +58,8 @@ Toujours selon ce même modèle digital simple du MOSFET, le switch se ferme
 quand $V_{GS} = V_{IN} > \frac{V_{DD}}{2}$.
 Soit $C_{tot} = C_L + C_{ox}$ la mise en parallèle de $C_L$ et $C_{ox}$. Le
 circuit, une fois le switch fermé, se résume à un simple circuit RC.
+Notons que la capacité $C_{ox}$ vient du théorème de Miller appliqué
+à $C_{GD}$ où $C_{GD}$ est grossièrement approximée par $C_{ox}/2$.
 
 \begin{center}
 	\begin{tikzpicture}
@@ -155,6 +157,70 @@ le PMOS.
 
 \newpage
 \section*{Exercice 2: inverseur CMOS}
+
+On considère une chaîne d'inverseurs CMOS identiques avec ses pistes d'interconnexion
+en technologie 0.18$\mu$m, comme représenté à la figure~\ref{fig7-2}. Voici les paramètres
+technologiques :
+
+\begin{center}
+$
+	\begin{array}{l l l}
+		L_{min} = 0.18 \mu m 	& V_{DD} = 1.8 V 		& V_{t0,n} = |V_{t0,p} | = 0.5 V \\
+		\mu_n = 0.04 m^2/Vs 	& \mu_p = 0.02 m^2/Vs	& C_{ox} = 5 fF/\mu m^2 \\
+		C_{rout} = 10fF			&						& \\
+	\end{array}
+$
+\end{center}
+
+\begin{figure}[!htbp]
+   \centering
+   \includegraphics[width=10cm]{figures/fig7-2.png}
+   \caption{Exercice 1}
+   \label{fig7-2}
+\end{figure}
+
+\emph{Analyse DC}
+\begin{enumerate}
+	\item Pour une transition infiniment lente à l'entrée de I1, déterminez le régime de
+	fonctionnement de M1 et M2 ainsi que la tension $V_{OUT}$ en fonction de $V_{IN}$.
+\end{enumerate}
+
+\emph{Délai de propagation}
+\begin{enumerate}
+	\setcounter{enumi}{1}
+	\item Comme estimation du délai de propagation ($t_p$) de I1, on vous demande de
+	calculer le temps de descente de $V_{OUT}$ à 50\% lors d'un flanc montant sur $V_{IN}$
+	($t_{PHL}$) sachant que $R'_n =13.8$k$\Omega\mu$m.
+	%\item Comme estimation du délai de propagation ($t_p$) de I1, on vous demande de
+	%calculer le temps de descente de \vout à 50\% lors d'un flanc montant sur \vin
+	%($t_{PHL}$). Pour ce faire, remplacer M1 et M2 par des éléments plus simples
+	%(résistance, sources) en fonction du régime de fonctionnement. On suppose que
+	%le flanc sur \vin est idéal et on néglige les capacités parasites.
+	%\item On souhaite simplifier le calcul du délai de propagation en remplaçant M1
+	%par une résistance équivalente $R_{eq}$ qui donne la même valeur de délai que
+	%celle trouvée précédemment. Pour ce faire, on vous demande de trouver un facteur
+	%de fitting k pour exprimer $R_{eq}$ en fonction de la résistance en mode linéaire
+	%:\\ $R_{eq}$ = k $R_{lin}$ .
+\end{enumerate}
+
+\emph{Scaling de la technologie CMOS}
+\begin{enumerate}
+	\setcounter{enumi}{2}
+	\item Répeter le point précédent pour les paramètres ci-dessous en sachant que
+	$R_n = 464$k$\Omega\mu$m.
+	%\item On considère cette fois une technologie 65nm avec les paramètres ci-dessous.
+	%Calculer le délai sur base de la formule obtenue au point c). Négliger les capacités parasites.
+
+	\begin{center}
+	$
+		\begin{array}{l l l}
+			L_{min} = 65 nm 		& V_{DD} = 1.2V 		&V_{t0,n} = |V_{t0,p}| = 0.4V \\
+			\mu_n = 0.05 m^2/Vs 	& \mu_p= 0.025 m^2/Vs	& C_{ox} = 7 fF/\mu m^2 \\
+			C_{rout} = 2fF			&						& \\
+		\end{array}
+	$
+	\end{center}
+\end{enumerate}
 
 \subsection*{Question 1: Analyse DC}
 \subsubsection*{Approche mathématique rigoureuse}
@@ -443,85 +509,9 @@ Jespers) tandis que M2 est off.
 	\label{fig:jsp5}
 \end{figure}
 
-\subsection*{Question 2: Délai de propagation: calcul complet}
+\subsection*{Question 2: Délai de propagation}
 
-Comme $v_{IN} = V_{DD}$ sur toute la période considérée, M2 est tout le temps
-bloqué. Pour M1, $v_{OV} = v_{IN} - V_{t0,n} = \SI{1.3}{V}$.
-Comme on s'intéresse au délai à 50\%, $V_{DD}/2 < v_{OUT} < V_{DD}$.
-
-M1 est donc d'abord en saturation
-($v_{OUT}: V_{DD} \rightarrow v_{OV}$), puis en triode
-($v_{OUT}: v_{OV} \rightarrow V_{DD}/2$).
-
-\paragraph{Saturation}
-
-Les équations du circuit sont
-\begin{align*}
-    i_{M1} &= \frac{k_n}{2}(v_{IN} - V_{t0,n})^2 \\
-    i_C &= C_{rout}\fpart{v_{OUT}}{t} \\
-    i_C &= -i_{M1} \\
-\end{align*}
-
-On a donc $\Delta v_{OUT} = v_{OV} - V_{DD} = \SI{-0.5}{V}$ et
-$i_{M1} = \SI{169}{\micro\ampere}$.
-Dès lors, $t_{SAT} = C_{rout}\frac{\Delta v_{OUT}}{-i_{M1}} = \SI{29.58}{\pico\second}$.
-
-\paragraph{Triode}
-
-Les équations du circuit sont alors
-\begin{align*}
-    i_{M1} &= k_n (v_{OV} - \frac{1}{2}v_{OUT})v_{OUT} \\
-    i_C &= C_{rout}\fpart{v_{OUT}}{t} \\
-    i_C &= -i_{M1} \\
-\end{align*}
-
-On a donc
-\[C_{rout}\fpart{v_{OUT}}{t} = - k_n (v_{OV} - \frac{1}{2}v_{OUT})v_{OUT}.\]
-Il faut résoudre cette équation différentielle (EDO du premier ordre) pour
-la condition initiale $v_{OUT}(t_{SAT}) = V_{OV}$, et trouver ensuite
-$t^* > t_{SAT}$ tel que $v_{OUT}(t^*) = V_{DD}/2$.
-
-Pour simplifier les calculs, on va remplacer le terme quadratique
-de l'équation par sont développement de Taylor au premier ordre.
-Comme on résout l'équation pour $v_{OUT}\in [\SI{0.5}{V}, \SI{1.3}{V}]$,
-on va faire le développement autour de \SI{0.9}{V}:
-\[v_{OUT}^2 \approx 0.9^2 + 2\cdot 0.9(v_{OUT}-0.9)
-= -0.9^2 + 2\cdot 0.9\cdot v_{OUT}.\]
-Cela donne:
-\[\fpart{v_{OUT}}{t} = - \frac{k_n}{C_{rout}} (v_{OV}-0.9) v_{OUT} - \frac{0.9^2}{2}\frac{k_n}{C_{rout}}.\]
-La solution est donc du type
-\[v_{OUT}(t) = \tau\left(\beta - \alpha\exp^{-t/\tau}\right)\]
-avec $\tau = C_{rout} / k_n / (v_{OV}-0.9)$, $\beta = -0.9^2/2\cdot k_n/C_{rout}$ et $\alpha$ tel que
-\[v_{OUT}(t_{SAT}) =  v_{OV}.\]
-On trouve donc
-\begin{align*}
-    \tau &= \SI{125}{\pico\second} \\
-    \alpha &= \left(\beta-\frac{v_{OV}}{\tau}\right)\exp^{t_{SAT}/\tau} = \SI{-2.34e10}{V/s} \\
-    t^* &= -\tau\ln\left(\frac{\frac{V_{DD}/2}{\tau}-\beta}{\alpha}\right) = \SI{53.3}{ps} \\
-\end{align*}
-
-\subparagraph{Sans simplification} On peut aussi intégrer l'EDO numériquement,
-ce qui donne $t^* = \SI{54.1}{ps}$.
-\begin{center}
-    \includegraphics[width=0.7\textwidth,height=0.4\textwidth]{figures/delai.tikz}
-\end{center}
-On constate que l'approximation était assez bonne (2\% d'erreur sur $t^*$).
-
-\subsection*{Question 3: Délai de propagation: simplification}
-
-Si on remplace le transistor par $R_{eq}$, on a l'équation
-\[v_{OUT}(t) = V_{DD} \exp^{-t/(R_{eq}C_{rout})},\]
-donc \[\frac{t^*}{R_{eq}C_{rout}} = \ln 2.\]
-On trouve $R_{eq} = \SI{7.69}{\kilo\ohm}$.
-
-Dans la zone linéaire (approximation linéaire du régime triode),
-on avait $\tau = C_{rout} / (k_n v_{OV})$. Par conséquent,
-$R_{lin} = 1 / (k_n v_{OV}) = \SI{3.85}{\kilo\ohm}$.
-
-Finalement,
-\[k = \frac{R_{eq}}{R_{lin}} = 2.00.\]
-
-\subsection*{Question 4: Scaling de la technologie CMOS}
+\subsection*{Question 3: Scaling de la technologie CMOS}
 
 On suppose que la valeur calculée pour $k$ ne dépend pas de la technologie:
 \[R_{eq} = k R_{lin} = \frac{k}{k_n (V_{DD} - V_t)} = \SI{7.14}{\kilo\ohm} \]
