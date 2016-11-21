@@ -511,11 +511,19 @@ Jespers) tandis que M2 est off.
 
 \subsection*{Question 2: Délai de propagation}
 
+Comme on s'intéresse à un flanc montant sur l'entrée, en $t=0^+$ l'entrée
+est à 1. Par conséquent, le PMOS est bloqué, on revient donc dans la
+situation de l'exercice 1.
+\[R_n = \frac{R_n'}{W} = \frac{R_n'}{W/L}L = TODO,\]
+sachant que $L = L_{min}$.
+Comme on néglique les capacité parasites, on a
+\[t_{PHL} = R_n C_{rout} \ln 2 = TODO.\]
+
 \subsection*{Question 3: Scaling de la technologie CMOS}
 
-On suppose que la valeur calculée pour $k$ ne dépend pas de la technologie:
-\[R_{eq} = k R_{lin} = \frac{k}{k_n (V_{DD} - V_t)} = \SI{7.14}{\kilo\ohm} \]
-\[t_{PHL} = \SI{49.5}{\pico\second} \]
+De même:
+\[R_n = \frac{R_n'}{W} = \frac{R_n'}{W/L}L_{min} = TODO,\]
+\[t_{PHL} = R_n C_{rout} \ln 2 = TODO.\]
 
 \newpage
 \section*{Exercice 3 : logique de passage}
