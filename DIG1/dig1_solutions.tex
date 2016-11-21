@@ -190,7 +190,7 @@ $
 	\setcounter{enumi}{1}
 	\item Comme estimation du délai de propagation ($t_p$) de I1, on vous demande de
 	calculer le temps de descente de $V_{OUT}$ à 50\% lors d'un flanc montant sur $V_{IN}$
-	($t_{PHL}$) sachant que $R'_n =13.8$k$\Omega\mu$m.
+        ($t_{PHL}$) sachant que $R'_n =\SI{13.8}{k\ohm\micro m}$.
 	%\item Comme estimation du délai de propagation ($t_p$) de I1, on vous demande de
 	%calculer le temps de descente de \vout à 50\% lors d'un flanc montant sur \vin
 	%($t_{PHL}$). Pour ce faire, remplacer M1 et M2 par des éléments plus simples
@@ -201,25 +201,6 @@ $
 	%celle trouvée précédemment. Pour ce faire, on vous demande de trouver un facteur
 	%de fitting k pour exprimer $R_{eq}$ en fonction de la résistance en mode linéaire
 	%:\\ $R_{eq}$ = k $R_{lin}$ .
-\end{enumerate}
-
-\emph{Scaling de la technologie CMOS}
-\begin{enumerate}
-	\setcounter{enumi}{2}
-	\item Répeter le point précédent pour les paramètres ci-dessous en sachant que
-	$R_n = 464$k$\Omega\mu$m.
-	%\item On considère cette fois une technologie 65nm avec les paramètres ci-dessous.
-	%Calculer le délai sur base de la formule obtenue au point c). Négliger les capacités parasites.
-
-	\begin{center}
-	$
-		\begin{array}{l l l}
-			L_{min} = 65 nm 		& V_{DD} = 1.2V 		&V_{t0,n} = |V_{t0,p}| = 0.4V \\
-			\mu_n = 0.05 m^2/Vs 	& \mu_p= 0.025 m^2/Vs	& C_{ox} = 7 fF/\mu m^2 \\
-			C_{rout} = 2fF			&						& \\
-		\end{array}
-	$
-	\end{center}
 \end{enumerate}
 
 \subsection*{Question 1: Analyse DC}
@@ -514,33 +495,18 @@ Jespers) tandis que M2 est off.
 Comme on s'intéresse à un flanc montant sur l'entrée, en $t=0^+$ l'entrée
 est à 1. Par conséquent, le PMOS est bloqué, on revient donc dans la
 situation de l'exercice 1.
-\[R_n = \frac{R_n'}{W} = \frac{R_n'}{W/L}L = TODO,\]
+\[R_n = \frac{R_n'}{W} = \frac{R_n'}{W/L}\frac{1}{L} = \SI{767}{\ohm},\]
 sachant que $L = L_{min}$.
 Comme on néglique les capacité parasites, on a
-\[t_{PHL} = R_n C_{rout} \ln 2 = TODO.\]
+\[t_{PHL} = R_n C_{rout} \ln 2 = \SI{5.31}{ps}.\]
 
-\subsection*{Question 3: Scaling de la technologie CMOS}
-
-De même:
-\[R_n = \frac{R_n'}{W} = \frac{R_n'}{W/L}L_{min} = TODO,\]
-\[t_{PHL} = R_n C_{rout} \ln 2 = TODO.\]
 
 \newpage
 \section*{Exercice 3 : logique de passage}
 On considère les 3 implémentations d'un multiplexeur 2 vers 1 de la figure~\ref{fig7-3} :
 transmission gate, pass gate et static CMOS gate. La fonction logique associée est :
-Y = (Sel.A) + ($\overline{Sel}$.B) et la technologie considérée est une technologie
-0.18 $\mu$m avec les paramètres suivants:
-
-\begin{center}
-$
-	\begin{array}{l l l}
-		L_{min} = 0.18 \mu m 	& V_{DD} = 1.8 V 		& V_{t0,n} = |V_{t0,p} | = 0.5 V \\
-		\mu_n = 0.04 m^2/Vs 	& \mu_p = 0.02 m^2/Vs	& C_{ox} = 5 fF/\mu m^2 \\
-		C_{rout} = 10fF			&						& \\
-	\end{array}
-$
-\end{center}
+$Y = (Sel.A) + (\overline{Sel}.B)$ et la technologie considérée est une technologie
+\SI{0.18}{\micro m} avec $R_n' = \SI{13.8}{k\ohm}$.
 
 \begin{figure}[!htbp]
    \centering
@@ -554,10 +520,9 @@ $
 \begin{enumerate}
 	\item Déterminer les tensions des niveaux logiques haut ($V_{OH}$) et bas ($V_{OL}$) de
 	la sortie Y pour chacun de ces multiplexeurs.
-	\item Calculez le temps de décharge à 50\% ($t_{PHL}$) de la capacité $C_{load}$ par
-	l'inverseur de l'étage suivant, suite à un flanc montant à la sortie Y. Considérez une
-	résistance équivalente pour les transistors passant du régime saturé au linéaire de
-	$R_{eq}$ = 2.5 $R_{lin}$ et négliger toutes les capacités parasites.
+    \item Calculez le temps de décharge à 50\% ($t_{PHL}$) de la capacité $C_{load} = \SI{50}{fF}$ par
+	l'inverseur de l'étage suivant, suite à un flanc montant à la sortie Y. Négligez
+        toutes les capacités parasites.
 \end{enumerate}
 
 \hspace{1cm}\hrule
@@ -590,9 +555,8 @@ font passer que des "1". On se retrouve donc à nouveau avec
 \end{align*}
 
 \subsection*{Temps de décharge}
-Voir l'exercice 2.4.
-\[R_{eq} = k R_{lin} = \frac{k}{k_n (V_{DD} - V_t)} = \SI{9.62}{\kilo\ohm} \]
-\[t_{PHL} = \SI{66.6}{\pico\second} \]
-
+Voir l'exercice 2.2.
+\[R_n = \SI{767}{\ohm}\]
+\[t_{PHL} = C_{load}R_n\ln2 = \SI{26.6}{ps}\]
 \end{document}
 
