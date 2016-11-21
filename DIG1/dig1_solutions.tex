@@ -155,7 +155,7 @@ de charge, on a même $t_{PHL} = t_{PLH}$). Cependant, cela a aussi pour effet
 d'augmenter la capacité d'entrée $C_{in} = \frac{3}{2}C_{ox}$ du circuit avec
 le PMOS.
 
-\newpage
+\clearpage
 \section*{Exercice 2: inverseur CMOS}
 
 On considère une chaîne d'inverseurs CMOS identiques avec ses pistes d'interconnexion
@@ -302,7 +302,7 @@ en dessous de $y=-|V_{t0,p}|+x$  est dans ce cas un trapèze de hauteur nulle.
 On peut donc déjà dire que pour $V_{IN} \in [0, V_{t0,n}[$, M1 est coupé alors que
 M2 est en triode.
 
-\begin{figure}[ht]
+\begin{figure}
 	\centering
 	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
@@ -341,7 +341,7 @@ pour que la surface représentant le courant traversant M2 soit un triangle. Cel
 pour $V_{IN} = V_{DD}/2$. Donc, pour $V_{IN} \in [V_{t0,n}; V_{DD}/2[$,
 M1 est en saturation tandis que M2 est en triode.
 
-\begin{figure}[ht]
+\begin{figure}
 	\centering
 	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
@@ -380,7 +380,7 @@ M1 est en saturation tandis que M2 est en triode.
 Le diagramme de Jespers pour $V_{IN} = V_{DD}/2$ est repris à la figure~\ref{fig:jsp3}, on
 voit bien que les deux transistors sont ici en saturation.
 
-\begin{figure}[ht]
+\begin{figure}
 	\centering
 	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
@@ -420,7 +420,7 @@ voit bien que les deux transistors sont ici en saturation.
 Pour $V_{IN} > V_{DD}/2$ (figure~\ref{fig:jsp4}), M1 passe en régime triode tandis
 que M2 reste en saturation.
 
-\begin{figure}[ht]
+\begin{figure}
 	\centering
 	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
@@ -459,7 +459,7 @@ Enfin, pour $V_{IN} > V_{DD}-|V_{t0,n}|$ (figure ~\ref{fig:jsp5}), M1 est en tri
 mais est traversé par un courant nul (trapèze de hauteur nulle dans le diagramme de
 Jespers) tandis que M2 est off.
 
-\begin{figure}[ht]
+\begin{figure}
 	\centering
 	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
@@ -501,7 +501,7 @@ sachant que $L = L_{min}$.
 Comme on néglique les capacité parasites, on a
 \[t_{PHL} = R_n C_{rout} \ln 2 = \SI{5.31}{ps}.\]
 
-\newpage
+\clearpage
 \section*{Exercice 3 : logique de passage}
 On considère les 3 implémentations d'un multiplexeur 2 vers 1 de la figure~\ref{fig7-3} :
 transmission gate, pass gate et static CMOS gate. La fonction logique associée est :
