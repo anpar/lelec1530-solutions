@@ -207,7 +207,7 @@ $
 \begin{enumerate}
 	\setcounter{enumi}{2}
 	\item Répeter le point précédent pour les paramètres ci-dessous en sachant que
-	$R_n = 464$k$\Omega\mu$m.
+	$R'_n = 464$k$\Omega\mu$m.
 	%\item On considère cette fois une technologie 65nm avec les paramètres ci-dessous.
 	%Calculer le délai sur base de la formule obtenue au point c). Négliger les capacités parasites.
 
@@ -221,6 +221,8 @@ $
 	$
 	\end{center}
 \end{enumerate}
+
+\hspace{1cm}\hrule
 
 \subsection*{Question 1: Analyse DC}
 \subsubsection*{Approche mathématique rigoureuse}
@@ -321,11 +323,11 @@ M2 est en triode.
 
 \begin{figure}[ht]
 	\centering
-	\begin{tikzpicture}
+	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
-		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[help lines, color=gray!30, dashed] (0,-3) grid (9,9);
 		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
-		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		\draw[->,ultra thick] (0,-3)--(0,9) node[above]{$V_G$};
 		
 		%% Threshold voltages
 		\draw[dashed] (0,0) node[left]{$V_{S1} = 0$} --(9,9);
@@ -360,11 +362,11 @@ M1 est en saturation tandis que M2 est en triode.
 
 \begin{figure}[ht]
 	\centering
-	\begin{tikzpicture}
+	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
-		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[help lines, color=gray!30, dashed] (0,-3) grid (9,9);
 		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
-		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		\draw[->,ultra thick] (0,-3)--(0,9) node[above]{$V_G$};
 		
 		%% Threshold voltages
 		\draw[thick,red] (0,2) node[left]{$V_{t0,n}$} --(7,9);
@@ -382,7 +384,7 @@ M1 est en saturation tandis que M2 est en triode.
 		{$\downarrow$ M2 ON car $V_{SG2} > |V_{t0,P}|$};
 		
 		% VIN, VOUT
-		\draw[thick, green] (0,2.5) node[left] {$V_{IN}$} -- (9,2.5);
+		\draw[thick, green] (0,2.5) node[left, yshift=0.4cm] {$V_{IN}$} -- (9,2.5);
 		\draw[thick, green] (7,0) node[above, left, yshift=0.4cm] {$V_{OUT}$} -- (7,9);
 		
 		\draw[fill=gray!50] (0,2) -- (0,2.5) -- (0.5,2.5) -- cycle;
@@ -399,11 +401,11 @@ voit bien que les deux transistors sont ici en saturation.
 
 \begin{figure}[ht]
 	\centering
-	\begin{tikzpicture}
+	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
-		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[help lines, color=gray!30, dashed] (0,-3) grid (9,9);
 		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
-		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		\draw[->,ultra thick] (0,-3)--(0,9) node[above]{$V_G$};
 		
 		%% Threshold voltages
 		\draw[thick,red] (0,2) node[left]{$V_{t0,n}$} --(7,9);
@@ -439,11 +441,11 @@ que M2 reste en saturation.
 
 \begin{figure}[ht]
 	\centering
-	\begin{tikzpicture}
+	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
-		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[help lines, color=gray!30, dashed] (0,-3) grid (9,9);
 		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
-		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		\draw[->,ultra thick] (0,-3)--(0,9) node[above]{$V_G$};
 		
 		%% Threshold voltages
 		\draw[thick,red] (0,2) node[left]{$V_{t0,n}$} --(7,9);
@@ -478,11 +480,11 @@ Jespers) tandis que M2 est off.
 
 \begin{figure}[ht]
 	\centering
-	\begin{tikzpicture}
+	\begin{tikzpicture}[scale=0.5]
 		%% Compared to the statements, everything is multiplied by 4
-		\draw[help lines, color=gray!30, dashed] (0,-4) grid (9,9);
+		\draw[help lines, color=gray!30, dashed] (0,-3) grid (9,9);
 		\draw[->,ultra thick] (0,0)--(9,0) node[right]{$V_D, V_S$};
-		\draw[->,ultra thick] (0,-4)--(0,9) node[above]{$V_G$};
+		\draw[->,ultra thick] (0,-3)--(0,9) node[above]{$V_G$};
 		
 		%% Threshold voltages
 		\draw[thick,red] (0,2) node[left]{$V_{t0,n}$} --(7,9);
@@ -510,12 +512,10 @@ Jespers) tandis que M2 est off.
 \end{figure}
 
 \subsection*{Question 2: Délai de propagation}
+$t_{PHL} \approx 0.7R_nC_{tot} = $
 
 \subsection*{Question 3: Scaling de la technologie CMOS}
-
-On suppose que la valeur calculée pour $k$ ne dépend pas de la technologie:
-\[R_{eq} = k R_{lin} = \frac{k}{k_n (V_{DD} - V_t)} = \SI{7.14}{\kilo\ohm} \]
-\[t_{PHL} = \SI{49.5}{\pico\second} \]
+$t_{PHL} \approx 0.7R_nC_{tot} = $
 
 \newpage
 \section*{Exercice 3 : logique de passage}
