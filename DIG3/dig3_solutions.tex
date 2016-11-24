@@ -1,0 +1,61 @@
+\documentclass[frenchb,DIV=14]{scrartcl}
+
+\input{lib.tex}
+\usetikzlibrary{intersections}
+\usepgfplotslibrary{fillbetween}
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
+
+\titlehead{}
+\subject{LELEC1530}
+\title{Séance complémentaire - circuits digitaux}
+\subtitle{Solutions}
+\author{\small Gaëtan \textsc{Cassiers} \and\small Antoine \textsc{Paris}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\emph{Cette séance est basée sur la partie "exercices complémentaires du syllabus"}
+
+\section*{Exercice 6: full adder}
+
+\subsection*{1.}
+
+Logique NP (Zipper logic).
+
+$C_{n+1} = A_n B_n + C_n (A_n + B_n)$
+
+\begin{align*}
+    S_n &= \overline{(\overline{A_n} + \overline{B_n} + \overline{C_n})(C_{n+1} + \overline{A_n}\cdot\overline{B_n}\cdot\overline{C_n})} \\
+    &=  \overline{\overline{A_n}+\overline{B_n}+\overline{C_n}} + \overline{C_{n+1} + \overline{A_n}\cdot\overline{B_n}\cdot\overline{C_n}} \\
+    &= A_n B_n C_n + \overline{C_{n+1}}(A_n+B_n+C_n)
+\end{align*}
+
+\subsection*{2. }
+
+Gauche:
+\begin{itemize}
+    \item tous les NMOS: 3
+    \item PMOS phi: 1
+\end{itemize}
+
+Droite:
+\begin{itemize}
+    \item NMOS: 1
+    \item PMOS phi: 1
+    \item PMOS An, Bn, Cn: 5
+    \item PMOS C(n+1): 2 (??)
+\end{itemize}
+
+\subsection*{3.}
+
+Utiliser deux full adders 1 bit, connecter le Cout du premier au Cin du deuxième. 
+
+\subsection*{4.}
+
+Le calcul est effectué en 1 cycle d'horloge => \SI{5}{ns}
+
+Pour 32 bits, le délai est plus grand quand le demi-cycle d'horloge => il faut ralentir l'horloge pour que le montage fonctionne.
+\end{document}
+
