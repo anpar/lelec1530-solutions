@@ -16,46 +16,169 @@
 \begin{document}
 \maketitle
 
-\emph{Cette séance est basée sur la partie "exercices complémentaires du syllabus"}
+\emph{Cette séance est basée sur la partie "exercices complémentaires" du syllabus}
 
 \section*{Exercice 6: full adder}
 
+On considère un additionneur sur 1 bit présenté à la figure \ref{fig9-3} dans
+une technologie \SI{50}{nm}. Voici les paramètres technologiques :
+\begin{align*}
+    L_{min} &= \SI{50}{nm} &
+    C_{ox} &= \SI{62.5}{aF}\cdot W\cdot L &
+    R_N&=\SI{34}{k\ohm}/W &
+    R_P&=\SI{68}{k\ohm}/W 
+\end{align*}
+
+\begin{figure}
+\centering
+\includegraphics[width=13cm]{figures/fig9-3.png}
+\caption{Exercice 1}
+\label{fig9-3}
+\end{figure}
+
+\begin{enumerate}
+\item  Décrivez le type de logique utilisé dans la Figure \ref{fig9-3}.
+Donnez la fonctionnalité logique de chacune des deux portes sous forme d'une
+table de vérité ainsi que la fonctionnalité logique globale.
+\item  Dimensionnez les deux portes logique sur base de l'inverseur
+    unitaire ($L_{min}=\SI{50}{nm}$, $W_{n}=\SI{500}{nm}$, $W_{p}=\SI{1000}{nm}$).
+\item  Implémentez un additionneur prenant en entrée des mots de 2 bits sur
+base de l'additionneur sur 1 bit de la Figure \ref{fig9-3}.
+\item  En considérant un signal d'horologe avec un \emph{duty-cycle} de 50\%,
+quelle est la fréquence maximale de fonctionnement de l'additionneur 2 bits ?
+Quelle est la fréquence maximale si l'architecture implémente une addition sur 2 mots de 32bits ?
+\end{enumerate}
+\hspace{1cm}\hrule
+
 \subsection*{1.}
 
-Logique NP (Zipper logic).
+Logique domino NP (Zipper logic).
 
+\paragraph{Équations logiques}
 $C_{n+1} = A_n B_n + C_n (A_n + B_n)$
-
 \begin{align*}
     S_n &= \overline{(\overline{A_n} + \overline{B_n} + \overline{C_n})(C_{n+1} + \overline{A_n}\cdot\overline{B_n}\cdot\overline{C_n})} \\
     &=  \overline{\overline{A_n}+\overline{B_n}+\overline{C_n}} + \overline{C_{n+1} + \overline{A_n}\cdot\overline{B_n}\cdot\overline{C_n}} \\
     &= A_n B_n C_n + \overline{C_{n+1}}(A_n+B_n+C_n)
 \end{align*}
 
-\subsection*{2. }
+\paragraph{Table de vérité}
 
-Gauche:
+\begin{center}
+    \begin{tabular}{ccc|cc}
+        $A_n$&$B_n$&$C_n$&$C_{n+1}$&$S_n$\\
+        \hline
+        0&0&0&0&0\\
+        0&0&1&0&1\\
+        0&1&0&0&1\\
+        0&1&1&1&0\\
+        1&0&0&0&1\\
+        1&0&1&1&0\\
+        1&1&0&1&0\\
+        1&1&1&1&1
+    \end{tabular}
+\end{center}
+
+\subsection*{2.}
+
+Largeur de transistors (relative à la largeur du transistor correspondant
+dans l'inverseur unitaire.
+
+Calcul du \emph{carry} (circuit de gauche):
 \begin{itemize}
     \item tous les NMOS: 3
-    \item PMOS phi: 1
+    \item PMOS: 1
 \end{itemize}
 
-Droite:
+Calcul de la somme (circuit de droite):
 \begin{itemize}
     \item NMOS: 1
-    \item PMOS phi: 1
+    \item PMOS phi: 5
     \item PMOS An, Bn, Cn: 5
-    \item PMOS C(n+1): 2 (??)
+    \item PMOS $C_{n+1}$: 3
 \end{itemize}
 
 \subsection*{3.}
 
-Utiliser deux full adders 1 bit, connecter le Cout du premier au Cin du deuxième. 
+Utiliser deux full adders 1 bit ($FA_0$ et $FA_1$), connecter le 
+\emph{carry-out} ($C_1$) du premier adder au \emph{carry-in} du deuxième. 
 
 \subsection*{4.}
 
-Le calcul est effectué en 1 cycle d'horloge => \SI{5}{ns}
+\paragraph{Calcul du délai}
 
-Pour 32 bits, le délai est plus grand quand le demi-cycle d'horloge => il faut ralentir l'horloge pour que le montage fonctionne.
+On considère le délai pour un additionneur 1 bit.
+Pour un additionneur, on peut considérer 3 délais:
+\begin{itemize}
+    \item Délai pour le calcul de $\overline{C_{n+1}}$: $t_0$
+    \item Délai pour le calcul de $C_{n+1}$ (à partir de $\overline{C_{n+1}}$: $t_1$
+    \item Délai pour le calcul de $\overline{S_n}$ (à partir de $\overline{C_{n+1}}$: $t_2$): $t_2$
+    \item Délai pour le calcul de $S_n$ (à partur de $\overline{S_n}$): $t_3$
+\end{itemize}
+
+Pour la suite, on pose $C_{ox} = \SI{62.5}{aF}$
+
+\subparagraph{Calcul de $t_0$}
+Dans le pire cas, chaine de 3 NMOS de largeur 3.
+Capacité du noeud $\overline{C_{n+1}}$:
+\begin{itemize}
+\item Sortie des NMOS: $3/2 C_{ox}$
+\item PMOS (de precharge): $C_{ox}$
+\item Entrée de l'inverseur: $9/2 C_{ox}$
+\item Entrée du PMOS du circuit de la somme: $9 C_{ox}$
+\end{itemize}
+
+Capacité totale: $C_{out0} = 16 C_{ox}$.
+
+On a donc
+\[t_0 = (0.35\cdot 3^2 C_{ox} + 0.7 C_{out0})\SI{34}{k\ohm} = \SI{30.5}{ps}\]
+
+\subparagraph{Calcul de $t_1$}
+Capacité du noeud de sortie $C_{n+1}$: on considère que le carry-out est
+connécté au carry-in d'un full adder.
+\begin{itemize}
+\item Capacité de sortie de l'inverseur $3C_{ox}$
+\item NMOS: $9/2 C_{ox}$
+\item PMOS: $(6 + 15/2) C_{ox}$
+\end{itemize}
+
+Capacité totale: $C_{out1} = 39/2 C_{ox}$.
+
+On a donc
+\[t_1 = 0.7 \cdot \SI{34}{k\ohm} C_{out1} = \SI{29.0}{ps}\]
+
+\subparagraph{Calcul de $t_2$}
+Dans le pire cas, chaine de 5 PMOS de largeur 5.
+Capacité du noeud $\overline{S_n}$:
+\begin{itemize}
+\item NMOS: $C_{ox}/2$
+\item PMOS ($\overline{C_{n+1}}$): $3C_{ox}$
+\item PMOS ($C_n$): $5C_{ox}$
+\item Entrée de l'inverseur: $9/2 C_{ox}$
+\end{itemize}
+Capacité totale: $C_{out2} = 13 C_{ox}$
+
+On a donc
+\[t_2 = (0.35\cdot 5^2\cdot 2 C_{ox} + 0.7 C_{out2})\SI{34}{k\ohm} = \SI{56.5}{ps}\]
+
+\subparagraph{Calcul de $t_3$}
+Sortie d'un inverseur:
+\[t_3 = 0.7 \cdot 3 \cdot C_{ox} \SI{34}{k\ohm} = \SI{4.5}{ps}\]
+
+\subparagraph{Délai total}
+Au total, le délai pour un additionneur de 2 bits est
+\[t_{FA2} = t_0 + t_1 + t_0 + t_2 + t_3 = \SI{151}{ps}\]
+
+\paragraph{Fréquence maximale}
+Comme seulement la moitié de le période d'horloge est disponible pour
+effectuer les calculs (l'autre moitié est utilisée pour le \emph{prefetch}),
+la période d'horloge minimale est \SI{302}{ps}. La fréquence maximale est
+donc \SI{3.31}{GHz}.
+
+\paragraph{Additionneur de 32 bits}
+Le délai est
+\[t_{F32} = 31 (t_0 + t_1) + t_0 + t_2 + t_3 = \SI{1.94}{ns},\]
+donc la période d'horloge minimale est de \SI{3.87}{ns}, donc la
+fréquence maximale est \SI{258}{MHz}.
 \end{document}
 
