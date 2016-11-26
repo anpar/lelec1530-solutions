@@ -16,11 +16,160 @@
 \begin{document}
 \maketitle
 
-\emph{Cette séance est basée sur la partie "exercices complémentaires" du syllabus}
+\emph{Cette séance est basée sur la partie "exercices complémentaires" du syllabus d'exercice.}
+
+\section*{Exercice 4 : Circuit combinatoire}
+Implémentez et dimensionnez la fonction $X = \overline{ABCD} + E$ en logique domino
+et en CMOS sur base de l'inverseur unitaire ($L_{min}=\SI{50}{nm}$, $W_n=\SI{500}{nm}$,
+$W_p=\SI{1000}{nm}$). Comparez la surface de silicium nécessaire à l'implémentation en
+ne comptant que la surface occupée par les transistors.
+
+\hspace{1cm}\hrule\hspace{1cm}
+
+\subsection*{Implémentation en logique CMOS}
+En logique CMOS, une porte logique est constituée d'une partie \emph{pull-up} (en PMOS, car
+les PMOS sont bons pour passer des 1) et d'une partie \emph{pull-down} (en NMOS, car les
+NMOS sont bons pour passer des 0). La sortie $X$ d'un circuit en logique CMOS peut se
+trouver de deux manières :
+\begin{enumerate}
+	\item En passant par le réseau pull-up : $X = f_u(\bar{A}, \bar{B}, \dots)$ ;
+	\item En passant par le réseau pull-down : $X = \overline{f_d(A, B, \dots)}$.
+\end{enumerate}
+En logique CMOS, on a toujours $f_u(\bar{A}, \bar{B}, \dots) = \overline{f_d(A, B, \dots)}$.
+Cela signifie deux choses. Premièrement, la sortie n'est jamais tirée à la fois vers la 
+masse et vers $V_{DD}$. Deuxièmement la sortie n'est jamais flottante (elle est toujours
+tirée soit vers la masse, soit vers $V_{DD}$). \\
+
+Dans cet exercice, $X = \overline{ABCD} + E$. On constate donc qu'il est impossible
+d'écrire $X$ comme une fonction uniquement des compléments $\bar{A}, \bar{B}, \dots$
+ou comme le complément d'une fonction des litéraux $A, B, \dots$. On a donc deux
+possibilités :
+\begin{enumerate}
+	\item On peut réecrire $X = \overline{ABCD\bar{E}}$. La fonction logique peut
+	donc être implémentée en un seul étage avec une NAND à 5 entrées et un inverseur
+	pour obtenir $\bar{E}$ ;
+	\item La fonction logique peut être implémentée en plusieurs étages : une NAND
+	à 4 entrée pour obtenir $\overline{ABCD}$, suivi d'une NOR et puis d'une NOT pour
+	obtenir $X$.
+\end{enumerate}
+
+Si le but est d'optimiser la surface de silicium utilisée, la première solution
+est légèrement préférable. L'implémentation est donnée à la figure~\ref{fig:ex4-cmos}.
+
+\begin{figure}
+	\centering
+	\begin{circuitikz}
+		\draw
+		% 4NAND
+		(2.25,2) node[vcc] {$V_{DD}$}
+		(0,2) -- (4.5,2)
+    	(0,0) to [Tpmos,n=p1] (0,2)
+    	(p1.G) node[anchor=east] {$A$}
+    	(1.5,0) to [Tpmos, n=p2] (1.5,2)
+    	(p2.G) node[anchor=east] {$B$}
+    	(3.0,0) to [Tpmos, n=p3] (3.0,2)
+    	(p3.G) node[anchor=east] {$C$}
+    	(4.5,0) to [Tpmos, n=p4] (4.5,2)
+    	(p4.G) node[anchor=east] {$D$}
+    	(0,0) -- (6,0)
+    	(2.25, -1.5) to [Tnmos, n=n1] (2.25, 0)
+    	(n1.G) node[anchor=east] {$A$}
+    	(2.25, -3.0) to [Tnmos, n=n2] (2.25, -1.5)
+    	(n2.G) node[anchor=east] {$B$}
+    	(2.25, -4.5) to [Tnmos, n=n3] (2.25, -3.0)
+    	(n3.G) node[anchor=east] {$C$}
+    	(2.25, -6) to [Tnmos, n=n4] (2.25, -4.5)
+    	(n4.G) node[anchor=east] {$D$}
+    	(2.25, -6) node[ground] {}
+    	
+    	% 2NOR
+    	(8,2) node[vcc] {$V_{DD}$}
+    	(8, 0.5) to [Tpmos, n=p5] (8,2)
+    	(6,0) -- (6,1.25) -- (p5.G)
+    	(8, -1) to [Tpmos, n=p6] (8,0.5)
+    	(p6.G) node[anchor=east] {$E$}
+    	(7.25,-2.5) to [Tnmos,n=n5] (7.25,-1)
+    	(8.75,-2.5) to [Tnmos, n=n6] (8.75,-1)
+    	(n6.G) node[anchor=east] {$E$}
+    	(6,0) -- (6,-1.75) -- (n5.G)
+    	(7.25, -1) -- (8.75, -1)
+    	(7.25, -2.5) -- (8.75, -2.5)
+    	(8, -2.5) node[ground] {}
+    	
+    	% NOT
+    	(10, -1) node[not port](mynot){}
+    	(8.75, -1) -- (mynot.in)
+    	(mynot.out) node[anchor=west] {$X$}
+    	;
+	\end{circuitikz}
+	\caption{Implémentation CMOS de $X = \overline{ABCD} + E$.}
+	\label{fig:ex4-cmos}
+\end{figure}
+
+\paragraph{Dimensionnement}
+On dimensionne ensuite comme d'habitude par rapport à l'inverseur unitaire.
+\begin{enumerate}
+	\item PMOS de la 4-NAND : $20/1$ ;
+	\item NMOS de la 4-NAND : $40/1$ ;
+	\item PMOS de la 2-NOR : $40/1$ ;
+	\item NMOS de la 2-NOR : $10/1$. 
+\end{enumerate}
+On trouve donc que la surface totate est donnée par $370L_{min}^2$ (l'autre solution
+proposée donne une surface de $380L_{min}^2$).
+
+\subsection*{Implémentation en logique domino}
+
+\paragraph{Dimensionnement}
+
+\section*{Exercice 5: Logique dynamique}
+On considère le circuit en logique dynamique de la figure~\ref{fig9-2} dans une technologie
+\SI{50}{nm}. Voici les paramètres technologiques :
+\begin{center} 
+	$\begin{array}{l l l l}
+		L_{min} = \SI{50}{nm} & C_{ox} = 62.5\cdot WL\text{aF} 
+		& R_N= 34/W k\Omega
+		& R_P= 68/W k\Omega \\ 
+	\end{array}$
+\end{center}
+
+\begin{figure}[]
+   \centering
+   \includegraphics[width=14cm]{figures/fig9-2.png}
+   \caption{Exercice 5, logique dynamique.}
+   \label{fig9-2}
+\end{figure}
+
+\begin{enumerate}
+	\item Quelle est la fonction logique implémentée ?
+	\item Dimensionnez la porte par rapport à l'inverseur unitaire ($L_{min}=\SI{50}{nm}$,
+	$W_n=\SI{500}{nm}$ et $W_p=\SI{1000}{nm}$).
+	\item Calculez le délai $t_{PHL}$ à 50\% lorsque $A_0$=1 et $A_{1->4}$=0 si la sortie
+	est connectée à une capacité de charge $C_L$ de \SI{50}{\femto\farad}.
+\end{enumerate}
+
+\hspace{1cm}\hrule\hspace{1cm}
+
+\paragraph{Fonction logique implémentée}
+La fonction logique implémentée est donnée par
+\[ \text{Out} = \overline{A_0 + A_1A_2 + A_3A_4}.\]
+
+\paragraph{Dimensionnement}
+On dimensionne comme d'habitude par rapport à l'inverseur unitaire.
+\begin{itemize}
+	\item PMOS de pré-charge : $20/1$ ;
+	\item NMOS $A_{1\to4}$ et NMOS d'évaluation : $30/1$ ;
+	\item NMOS $A_0$ : $30/2$. 
+\end{itemize}
+
+\paragraph{Délai}
+Si $A_{1\to4} = 0$, la sortie se décharge uniquement à travers $A_0$
+et le NMOS d'évaluation. Vu le dimensionnement effectuée à la question
+précédente, la résistance équivalente de ce chemin de décharge vaut
+\SI{3.4}{\kilo\ohm}.
 
 \section*{Exercice 6: full adder}
 
-On considère un additionneur sur 1 bit présenté à la figure \ref{fig9-3} dans
+On considère un additionneur sur 1 bit présenté à la figure~\ref{fig9-3} dans
 une technologie \SI{50}{nm}. Voici les paramètres technologiques :
 \begin{align*}
     L_{min} &= \SI{50}{nm} &
@@ -30,24 +179,26 @@ une technologie \SI{50}{nm}. Voici les paramètres technologiques :
 \end{align*}
 
 \begin{figure}
-\centering
-\includegraphics[width=13cm]{figures/fig9-3.png}
-\caption{Exercice 1}
-\label{fig9-3}
+	\centering
+	\includegraphics[width=13cm]{figures/fig9-3.png}
+	\caption{Exercice 6, full adder.}
+	\label{fig9-3}
 \end{figure}
 
 \begin{enumerate}
-\item  Décrivez le type de logique utilisé dans la Figure \ref{fig9-3}.
-Donnez la fonctionnalité logique de chacune des deux portes sous forme d'une
-table de vérité ainsi que la fonctionnalité logique globale.
-\item  Dimensionnez les deux portes logique sur base de l'inverseur
+	\item Décrivez le type de logique utilisé dans la Figure \ref{fig9-3}.
+	Donnez la fonctionnalité logique de chacune des deux portes sous forme d'une
+	table de vérité ainsi que la fonctionnalité logique globale.
+	\item Dimensionnez les deux portes logique sur base de l'inverseur
     unitaire ($L_{min}=\SI{50}{nm}$, $W_{n}=\SI{500}{nm}$, $W_{p}=\SI{1000}{nm}$).
-\item  Implémentez un additionneur prenant en entrée des mots de 2 bits sur
-base de l'additionneur sur 1 bit de la Figure \ref{fig9-3}.
-\item  En considérant un signal d'horologe avec un \emph{duty-cycle} de 50\%,
-quelle est la fréquence maximale de fonctionnement de l'additionneur 2 bits ?
-Quelle est la fréquence maximale si l'architecture implémente une addition sur 2 mots de 32bits ?
+	\item Implémentez un additionneur prenant en entrée des mots de 2 bits sur
+	base de l'additionneur sur 1 bit de la Figure \ref{fig9-3}.
+	\item En considérant un signal d'horologe avec un \emph{duty-cycle} de 50\%,
+	quelle est la fréquence maximale de fonctionnement de l'additionneur 2 bits ?
+	Quelle est la fréquence maximale si l'architecture implémente une addition sur
+	2 mots de 32 bits ?
 \end{enumerate}
+
 \hspace{1cm}\hrule
 
 \subsection*{1.}
