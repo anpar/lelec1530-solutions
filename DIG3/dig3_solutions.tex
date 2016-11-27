@@ -119,9 +119,53 @@ proposée donne une surface de $380L_{min}^2$).
 
 \subsection*{Implémentation en logique domino}
 Une implémentation possible est donnée à la figure~\ref{fig:ex4-domino}.
+Il est impossible, en logique domino, d'implémenter une fonction d'inversion
+sans disposer des compléments des entrées. On suppose donc ici que l'on dispose
+des ces compléments (dans tout les cas, on peut les obtenir via un inverseur).
+
+\begin{figure}
+	\centering
+	\begin{circuitikz}
+		\draw
+		(3,2) to[Tpmos, n=pl] (3,4)
+		(pl.S) node[vcc] {$V_{DD}$}
+		(pl.G) node[anchor=east] {$CLK$}
+		(0,2) -- (6,2)
+		(0,0) to[Tnmos, n=na] (0,2)
+		(na.G) node[anchor=east] {$\bar{A}$}
+		(1.5,0) to[Tnmos, n=nb] (1.5,2)
+		(nb.G) node[anchor=east] {$\bar{B}$}
+		(3.0,0) to[Tnmos, n=nc] (3.0,2)
+		(nc.G) node[anchor=east] {$\bar{C}$}
+		(4.5,0) to[Tnmos, n=nd] (4.5,2)
+		(nd.G) node[anchor=east] {$\bar{D}$}
+		(6.0,0) to[Tnmos, n=ne] (6.0,2)
+		(ne.G) node[anchor=east] {$E$}
+		(0,0) -- (6,0)
+		(3,-2) to[Tnmos, n=pev] (nc.S)
+		(pev.G) node[anchor=east] {$CLK$}
+		(pev.S) node[ground] {}
+		
+		(7,2) node[not port](mynot) {}
+		(6,2) -- (mynot.in)
+    	(mynot.out) node[anchor=west] {$X$}
+    	;
+	\end{circuitikz}
+	\caption{Implémentation en logique domino de $X = \overline{ABCD} + E$.}
+	\label{fig:ex4-domino}
+\end{figure}
 
 \paragraph{Dimensionnement}
+On dimensionne comme d'habitude par rapport à l'inverseur unitaire.
+\begin{itemize}
+	\item PMOS de pré-charge : $20/1$ ;
+	\item NMOS : $20/1$.
+\end{itemize}
+On a donc une surface totale de $290L^2$ (en comptant les 4 inverseurs
+pour obtenir les compléments des entrées), soit 22\% de moins qu'en logique
+CMOS.
 
+\clearpage
 \section*{Exercice 5: Logique dynamique}
 On considère le circuit en logique dynamique de la figure~\ref{fig9-2} dans une technologie
 \SI{50}{nm}. Voici les paramètres technologiques :
@@ -177,10 +221,20 @@ sur ces deux transistors. Cela donne
 et
 \[ C_{oxn,avg} = \frac{1}{2} \cdot \left(62.5\cdot 15 + 62.5\cdot 30)\right)\SI{}{\atto\farad}
 = \SI{2.9125}{\femto\farad}. \]
-Quand à $C_{load}$, on a
-\[ C_{load} = C_L + C_{outp} + (\frac{C_{oxn,avg}}{2} + 2\frac{C_{outn}}{2})
-|| \frac{C_{oxn,avg}}{2}. \]
+Quand à $C_{load}$, en théorie il faut compter $C_L$, la capacité de sortie
+du PMOS d'évaluation $C_{outp}$ et la capacité équivalente du réseau pull-down
+de NMOS. En pratique toute fois, prendre $C_{load} = C_L$ permet de simplifier
+le calcul en ne commettant qu'une faible erreur (ici moins de 5\%, comme
+la formule qu'on utilise n'est quand même précise qu'à un facteur 2, ce n'est
+pas très grave). On trouve donc un délai 
+\[ t_{PHL} \approx \SI{6.93}{\pico\second} + \SI{119}{\pico\second} =
+\SI{125.93}{\pico\second}. \]
+On voit que le terme en $N^2$ aurait également pû être négligé sans une grande
+perte de précision.
+%\[ C_{load} = C_L + C_{outp} + (\frac{C_{oxn,avg}}{2} + 2\frac{C_{outn}}{2})
+%|| \frac{C_{oxn,avg}}{2}. \]
 
+\clearpage
 \section*{Exercice 6: full adder}
 
 On considère un additionneur sur 1 bit présenté à la figure~\ref{fig9-3} dans
