@@ -118,57 +118,7 @@ On trouve donc que la surface totate est donnée par $370L_{min}^2$ (l'autre sol
 proposée donne une surface de $380L_{min}^2$).
 
 \subsection*{Implémentation en logique domino}
-Une implémentation possible est donnée à la figure~\ref{fig:ex4-domino}
-
-\begin{figure}
-	\centering
-	\begin{circuitikz}
-		\draw
-		% 4NAND
-		(2.25,2) node[vcc] {$V_{DD}$}
-		(0,2) -- (4.5,2)
-    	(0,0) to [Tpmos,n=p1] (0,2)
-    	(p1.G) node[anchor=east] {$A$}
-    	(1.5,0) to [Tpmos, n=p2] (1.5,2)
-    	(p2.G) node[anchor=east] {$B$}
-    	(3.0,0) to [Tpmos, n=p3] (3.0,2)
-    	(p3.G) node[anchor=east] {$C$}
-    	(4.5,0) to [Tpmos, n=p4] (4.5,2)
-    	(p4.G) node[anchor=east] {$D$}
-    	(0,0) -- (6,0)
-    	(2.25, -1.5) to [Tnmos, n=n1] (2.25, 0)
-    	(n1.G) node[anchor=east] {$A$}
-    	(2.25, -3.0) to [Tnmos, n=n2] (2.25, -1.5)
-    	(n2.G) node[anchor=east] {$B$}
-    	(2.25, -4.5) to [Tnmos, n=n3] (2.25, -3.0)
-    	(n3.G) node[anchor=east] {$C$}
-    	(2.25, -6) to [Tnmos, n=n4] (2.25, -4.5)
-    	(n4.G) node[anchor=east] {$D$}
-    	(2.25, -6) node[ground] {}
-    	
-    	% 2NOR
-    	(8,2) node[vcc] {$V_{DD}$}
-    	(8, 0.5) to [Tpmos, n=p5] (8,2)
-    	(6,0) -- (6,1.25) -- (p5.G)
-    	(8, -1) to [Tpmos, n=p6] (8,0.5)
-    	(p6.G) node[anchor=east] {$E$}
-    	(7.25,-2.5) to [Tnmos,n=n5] (7.25,-1)
-    	(8.75,-2.5) to [Tnmos, n=n6] (8.75,-1)
-    	(n6.G) node[anchor=east] {$E$}
-    	(6,0) -- (6,-1.75) -- (n5.G)
-    	(7.25, -1) -- (8.75, -1)
-    	(7.25, -2.5) -- (8.75, -2.5)
-    	(8, -2.5) node[ground] {}
-    	
-    	% NOT
-    	(10, -1) node[not port](mynot){}
-    	(8.75, -1) -- (mynot.in)
-    	(mynot.out) node[anchor=west] {$X$}
-    	;
-	\end{circuitikz}
-	\caption{Implémentation CMOS de $X = \overline{ABCD} + E$.}
-	\label{fig:ex4-cmos}
-\end{figure}
+Une implémentation possible est donnée à la figure~\ref{fig:ex4-domino}.
 
 \paragraph{Dimensionnement}
 
