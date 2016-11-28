@@ -335,7 +335,7 @@ Pour un additionneur, on peut considérer 3 délais:
     \item Délai pour le calcul de $S_n$ (à partur de $\overline{S_n}$): $t_3$
 \end{itemize}
 
-Pour la suite, on pose $C_{ox} = \SI{62.5}{aF}$
+Pour la suite, on pose $C_{ox} = \SI{625}{aF}$ (capacité pour le NMOS d'un inverseur unitaire).
 
 \subparagraph{Calcul de $t_0$}
 Dans le pire cas, chaine de 3 NMOS de largeur 3.
@@ -350,7 +350,7 @@ Capacité du noeud $\overline{C_{n+1}}$:
 Capacité totale: $C_{out0} = 16 C_{ox}$.
 
 On a donc
-\[t_0 = (0.35\cdot 3^2 C_{ox} + 0.7 C_{out0})\SI{34}{k\ohm} = \SI{30.5}{ps}\]
+\[t_0 = (0.35\cdot 3^2 C_{ox} + 0.7 C_{out0})\SI{34}{k\ohm} = \SI{305}{ps}\]
 
 \subparagraph{Calcul de $t_1$}
 Capacité du noeud de sortie $C_{n+1}$: on considère que le carry-out est
@@ -364,7 +364,7 @@ connécté au carry-in d'un full adder.
 Capacité totale: $C_{out1} = 39/2 C_{ox}$.
 
 On a donc
-\[t_1 = 0.7 \cdot \SI{34}{k\ohm} C_{out1} = \SI{29.0}{ps}\]
+\[t_1 = 0.7 \cdot \SI{34}{k\ohm} C_{out1} = \SI{290}{ps}\]
 
 \subparagraph{Calcul de $t_2$}
 Dans le pire cas, chaine de 5 PMOS de largeur 5.
@@ -378,26 +378,26 @@ Capacité du noeud $\overline{S_n}$:
 Capacité totale: $C_{out2} = 13 C_{ox}$
 
 On a donc
-\[t_2 = (0.35\cdot 5^2\cdot 2 C_{ox} + 0.7 C_{out2})\SI{34}{k\ohm} = \SI{56.5}{ps}\]
+\[t_2 = (0.35\cdot 5^2\cdot 2 C_{ox} + 0.7 C_{out2})\SI{34}{k\ohm} = \SI{565}{ps}\]
 
 \subparagraph{Calcul de $t_3$}
 Sortie d'un inverseur:
-\[t_3 = 0.7 \cdot 3 \cdot C_{ox} \SI{34}{k\ohm} = \SI{4.5}{ps}\]
+\[t_3 = 0.7 \cdot 3 \cdot C_{ox} \SI{34}{k\ohm} = \SI{44.6}{ps}\]
 
 \subparagraph{Délai total}
 Au total, le délai pour un additionneur de 2 bits est
-\[t_{FA2} = t_0 + t_1 + t_0 + t_2 + t_3 = \SI{151}{ps}\]
+\[t_{FA2} = t_0 + t_1 + t_0 + t_2 + t_3 = \SI{1.51}{ns}\]
 
 \paragraph{Fréquence maximale}
 Comme seulement la moitié de le période d'horloge est disponible pour
 effectuer les calculs (l'autre moitié est utilisée pour le \emph{prefetch}),
-la période d'horloge minimale est \SI{302}{ps}. La fréquence maximale est
-donc \SI{3.31}{GHz}.
+la période d'horloge minimale est \SI{3.02}{ns}. La fréquence maximale est
+donc \SI{331}{MHz}.
 
 \paragraph{Additionneur de 32 bits}
 Le délai est
-\[t_{F32} = 31 (t_0 + t_1) + t_0 + t_2 + t_3 = \SI{1.94}{ns},\]
-donc la période d'horloge minimale est de \SI{3.87}{ns}, donc la
-fréquence maximale est \SI{258}{MHz}.
+\[t_{F32} = 31 (t_0 + t_1) + t_0 + t_2 + t_3 = \SI{19.4}{ns},\]
+donc la période d'horloge minimale est de \SI{38.7}{ns}, donc la
+fréquence maximale est \SI{25.8}{MHz}.
 \end{document}
 
