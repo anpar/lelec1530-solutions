@@ -396,69 +396,80 @@ Pour un additionneur, on peut considérer 3 délais:
     \item Délai pour le calcul de $S_n$ (à partur de $\overline{S_n}$): $t_3$
 \end{itemize}
 
-Pour la suite, on pose $C_{ox} = \SI{625}{aF}$ (capacité pour le NMOS d'un inverseur unitaire).
+Pour la suite, on pose $C_{ox0} = \SI{625}{aF}$ (capacité pour le NMOS d'un inverseur unitaire).
 
 \subparagraph{Calcul de $t_0$}
 Dans le pire cas, chaine de 3 NMOS de largeur 3.
 Capacité du noeud $\overline{C_{n+1}}$:
 \begin{itemize}
-\item Sortie des NMOS: $3/2 C_{ox}$
-\item PMOS (de precharge): $C_{ox}$
-\item Entrée de l'inverseur: $9/2 C_{ox}$
-\item Entrée du PMOS du circuit de la somme: $9 C_{ox}$
+    \item Sortie des NMOS: $3/2 C_{ox0}$ (on prend en compte un seul NMOS, l'autre est déjà pris en compte
+        par le terme en $N^2$ de la formule du délai)
+    \item PMOS (de precharge): $2C_{ox0}$ (car effet Miller)
+    \item Entrée de l'inverseur: $9/2 C_{ox0}$
+    \item Entrée du PMOS du circuit de la somme: $9 C_{ox0}$ (car effet Miller)
 \end{itemize}
 
-Capacité totale: $C_{out0} = 16 C_{ox}$.
+On a donc les paramètres suivants:
+\begin{itemize}
+    \item Capacité totale de sortie: $C_{out0} = 17 C_{ox0}$.
+    \item Capacité de grille des NMOS: $3C_{ox0}$
+    \item Résistance des NMOS: $R_N/30$
+    \item Nombre de NMOS: $N = 3$
+\end{itemize}
 
 On a donc
-\[t_0 = (0.35\cdot 3^2 C_{ox} + 0.7 C_{out0})\SI{34}{k\ohm} = \SI{305}{ps}\]
+\[t_0 = 0.35 N^2 (3C_{ox0}) R_N/30 + 0.7 C_{out0} N R_N/30 = \SI{32}{ps}\]
 
 \subparagraph{Calcul de $t_1$}
 Capacité du noeud de sortie $C_{n+1}$: on considère que le carry-out est
 connécté au carry-in d'un full adder.
 \begin{itemize}
-\item Capacité de sortie de l'inverseur $3C_{ox}$
-\item NMOS: $9/2 C_{ox}$
-\item PMOS: $(6 + 15/2) C_{ox}$
+\item Capacité de sortie de l'inverseur $3C_{ox0}$
+\item NMOS: $9/2 C_{ox0}$ (largeur 3, effet Miller)
+\item PMOS: $2\cdot 5 \cdot 2 \ cdot 3/2 C_{ox0} = 30 C_{ox0}$ (deux PMOS de largeur 5 avec effet Miller)
 \end{itemize}
+Capacité totale: $C_{out1} = 70.5 C_{ox0}$.
 
-Capacité totale: $C_{out1} = 39/2 C_{ox}$.
-
-On a donc
-\[t_1 = 0.7 \cdot \SI{34}{k\ohm} C_{out1} = \SI{290}{ps}\]
+On a un inverseur, donc la résistance équivalente est $R_N/10$. On a donc
+\[t_1 = 0.7 \cdot R_N/10 C_{out1} = \SI{105}{ps}\]
 
 \subparagraph{Calcul de $t_2$}
 Dans le pire cas, chaine de 5 PMOS de largeur 5.
 Capacité du noeud $\overline{S_n}$:
 \begin{itemize}
-\item NMOS: $C_{ox}/2$
-\item PMOS ($\overline{C_{n+1}}$): $3C_{ox}$
-\item PMOS ($C_n$): $5C_{ox}$
-\item Entrée de l'inverseur: $9/2 C_{ox}$
+    \item NMOS: $3C_{ox0}/2$ (car effet Miller)
+    \item PMOS ($\overline{C_{n+1}}$): $3C_{ox0}$ (un seul PMOS de largeur 3)
+    \item Entrée de l'inverseur: $9/2 C_{ox0}$
 \end{itemize}
-Capacité totale: $C_{out2} = 13 C_{ox}$
 
+On a donc les paramètres suivants:
+\begin{itemize}
+    \item Capacité totale de sortie: $C_{out2} = 9 C_{ox0}$.
+    \item Capacité de grille des PMOS: $10 C_{ox0}$
+    \item Résistance des PMOS: $R_P/100$
+    \item Nombre de PMOS: $N = 5$
+\end{itemize}
 On a donc
-\[t_2 = (0.35\cdot 5^2\cdot 2 C_{ox} + 0.7 C_{out2})\SI{34}{k\ohm} = \SI{565}{ps}\]
+\[t_2 = 0.35 N^2 (10C_{ox0}) R_P/100 + 0.7 C_{out2} N R_P/100 = \SI{51}{ps}\]
 
 \subparagraph{Calcul de $t_3$}
 Sortie d'un inverseur:
-\[t_3 = 0.7 \cdot 3 \cdot C_{ox} \SI{34}{k\ohm} = \SI{44.6}{ps}\]
+\[t_3 = 0.7 \cdot 3 \cdot C_{ox0} R_N/10 = \SI{4.5}{ps}\]
 
 \subparagraph{Délai total}
 Au total, le délai pour un additionneur de 2 bits est
-\[t_{FA2} = t_0 + t_1 + t_0 + t_2 + t_3 = \SI{1.51}{ns}\]
+\[t_{FA2} = t_0 + t_1 + t_0 + t_2 + t_3 = \SI{224}{ps}\]
 
 \paragraph{Fréquence maximale}
 Comme seulement la moitié de le période d'horloge est disponible pour
 effectuer les calculs (l'autre moitié est utilisée pour le \emph{prefetch}),
-la période d'horloge minimale est \SI{3.02}{ns}. La fréquence maximale est
-donc \SI{331}{MHz}.
+la période d'horloge minimale est \SI{448}{ps}. La fréquence maximale est
+donc \SI{2.2}{GHz}.
 
 \paragraph{Additionneur de 32 bits}
 Le délai est
-\[t_{F32} = 31 (t_0 + t_1) + t_0 + t_2 + t_3 = \SI{19.4}{ns},\]
-donc la période d'horloge minimale est de \SI{38.7}{ns}, donc la
-fréquence maximale est \SI{25.8}{MHz}.
+\[t_{F32} = 31 (t_0 + t_1) + t_0 + t_2 + t_3 = \SI{4.3}{ns},\]
+donc la période d'horloge minimale est de \SI{8.7}{ns}, donc la
+fréquence maximale est \SI{115}{MHz}.
 \end{document}
 
