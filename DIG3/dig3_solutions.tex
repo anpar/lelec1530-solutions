@@ -155,6 +155,15 @@ des ces compléments (dans tout les cas, on peut les obtenir via un inverseur).
 	\label{fig:ex4-domino}
 \end{figure}
 
+Une autre implémentation est possible en faisant une AND de $A$, $B$, $C$, $D$
+et $\bar{E}$. On pourrait être tenter de dire que cette implémentation occupera
+moins de surface de silicium que celle présentée à la figure~\ref{fig:ex4-domino}
+car on utilise 3 inverseurs de moins. C'est sans compter sur le fait que l'implémentation
+AND compte 6 NMOS en série (5 NMOS avec $A$, $B$, $C$, $D$, $\bar{E}$ et le NMOS
+d'évaluation). Or on sait que, après dimensionnement par rapport à l'inverseur unitaire,
+des NMOS en série sont bien moins avantageux que des NMOS en parallèle en terme
+de surface.
+
 \paragraph{Dimensionnement}
 On dimensionne comme d'habitude par rapport à l'inverseur unitaire.
 \begin{itemize}
@@ -221,18 +230,70 @@ sur ces deux transistors. Cela donne
 et
 \[ C_{oxn,avg} = \frac{1}{2} \cdot \left(62.5\cdot 15 + 62.5\cdot 30)\right)\SI{}{\atto\farad}
 = \SI{2.9125}{\femto\farad}. \]
-Quand à $C_{load}$, en théorie il faut compter $C_L$, la capacité de sortie
-du PMOS d'évaluation $C_{outp}$ et la capacité équivalente du réseau pull-down
-de NMOS. En pratique toute fois, prendre $C_{load} = C_L$ permet de simplifier
-le calcul en ne commettant qu'une faible erreur (ici moins de 5\%, comme
+Quand à $C_{load}$, celle ci comprend la capacité de charge $C_L$ ainsi que
+les capacités parasites des transistors. Il est utile ici de rappeller
+quel modèle de transistor utiliser. Lors de la première séance d'exercices sur
+le MOS en digital, nous avons utilisé le modèle de droite dans la figure~\ref{fig:mos-model}
+pour dériver les formules approximatives de $t_{PHL}$ et $t_{PLH}$.
+Celui-ci a été obtenu du modèle de gauche dans cette même figure en utilisant
+l'effet Miller que l'on peut appliquer lors d'une transition à l'entrée en $G$.
+Il était donc approprié d'utiliser ce modèle dans la première séance puisqu'on
+avait effectivement une transition à l'entrée.
+Dans le circuit de la figure~\ref{fig9-2}, les transistors $A_{1\to 4}$ sont
+bloqués et il n'y a pas de transitions aux entrées. Utiliser le modèle de droite
+de la figure~\ref{fig:mos-model} n'a donc pas de ce sens puisque celui-ci a été
+obtenu dans le cas d'une transition à la grille. Pour prendre en compte les capacités
+parasites, il faut donc utiliser le modèle de gauche dans la figure~\ref{fig:mos-model}
+pour les transistors $A_{1\to 4}$.\\
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}
+		\draw
+		(-3, 0) to[Tnmos, n=n] (-3,2)
+		(n.G) --++(-0.5,0) to[C=$\frac{1}{2}C_{ox}$] ++(0,1) -- (-3,2)
+		(n.G) --++(-0.5,0) to[C,l_=$\frac{1}{2}C_{ox}$] ++(0,-1) -- (-3,0)
+		(n.G) node[anchor=east,xshift=-0.6cm] {$G$}
+		(n.D) node[anchor=west] {$D$}
+		(n.S) node[anchor=west] {$S$}	
+		
+    	(0.5, 2) node[anchor=east] {$G$} to [short, o-] (1, 2)
+    	(1, 2) to [C=$\frac{3}{2}C_{ox}$] (1, 0)
+    	(1, 0) -- (4, 0)
+    	(4, 0) to [R=$R_n$] (4, 2)
+    	(4, 2) to [switch] (6,2)
+    	(6, 2) to [C=$C_{ox}$] (6,0) -- (4, 0)
+    	(6, 2) to [short, -o] (6.5,2) node[anchor=west] {$D$}
+    	(4, 0) to [short, -o] (4,-0.5) node[anchor=north] {$S$};
+    	
+    	\draw [->] (-2,1) -- node[text width=1cm,midway,above] {Miller} (-0.5,1);
+	\end{tikzpicture}
+	\caption{A gauche, le modèle \emph{général} d'un transistor
+	MOSFET avec ses capacités parasites. A droite, ce même modèle
+	transformé via Miller lors d'une \emph{transition} à l'entrée $G$.}
+	\label{fig:mos-model}
+\end{figure}
+
+$C_{load}$ est donc composé de $C_L$, la capacité
+du PMOS d'évaluation $C_{ox,p}/2$ et les capacités $C_{ox,n}/2$ des NMOS
+$A_1$ et $A_3$ qui sont en parallèle. Il ne faut pas compter la capacité
+du transistor par lequel se décharge le noeud (c'est à dire $A_0$).
+On a donc
+\[ C_{load} = C_L + \frac{C_{ox,p}}{2} + C_{ox,n} = \SI{50}{\femto\farad}
++ \frac{1}{2}\cdot\SI{1.25}{\femto\farad} + \SI{1.875}{\femto\farad} = \SI{52.5}{\femto\farad}. \].
+En pratique toute fois, on a souvent $C_L \gg \frac{C_{ox,p}}{2} + C_{ox,n}$
+et donc $C_{load} \approx C_L$.  Dans notre cas, cela permet de simplifier
+le calcul en ne commettant qu'une faible erreur (ici 5\%, comme
 la formule qu'on utilise n'est quand même précise qu'à un facteur 2, ce n'est
-pas très grave). On trouve donc un délai 
-\[ t_{PHL} \approx \SI{6.93}{\pico\second} + \SI{119}{\pico\second} =
-\SI{125.93}{\pico\second}. \]
+pas très grave). On trouve donc un délai
+\[ t_{PHL} = \SI{6.93}{\pico\second} + \SI{124.95}{\pico\second} =
+\SI{131.88}{\pico\second} \]
+sans faire d'approximation et de
+\[ t_{PHL} \approx \SI{6.93}{\pico\second} + \SI{119}{\pico\second}
+= \SI{125.9}{\pico\second} \]
+avec $C_{load} \approx C_L$.
 On voit que le terme en $N^2$ aurait également pû être négligé sans une grande
 perte de précision.
-%\[ C_{load} = C_L + C_{outp} + (\frac{C_{oxn,avg}}{2} + 2\frac{C_{outn}}{2})
-%|| \frac{C_{oxn,avg}}{2}. \]
 
 \clearpage
 \section*{Exercice 6: full adder}
