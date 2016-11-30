@@ -228,8 +228,8 @@ sur ces deux transistors. Cela donne
 \[ R_{n,avg} = \frac{1}{2} \cdot \left(\frac{34}{15} + \frac{34}{30}\right)\SI{}{\kilo\ohm}
 = \SI{1.7}{\kilo\ohm} \]
 et
-\[ C_{oxn,avg} = \frac{1}{2} \cdot \left(62.5\cdot 15 + 62.5\cdot 30)\right)\SI{}{\atto\farad}
-= \SI{2.9125}{\femto\farad}. \]
+\[ C_{oxn,avg} = \frac{1}{2} \cdot \left(62.5\cdot 15 + 62.5\cdot 30\right)\SI{}{\atto\farad}
+= \SI{1.41}{\femto\farad}. \]
 Quand à $C_{load}$, celle ci comprend la capacité de charge $C_L$ ainsi que
 les capacités parasites des transistors. Il est utile ici de rappeller
 quel modèle de transistor utiliser. Lors de la première séance d'exercices sur
@@ -375,7 +375,7 @@ Calcul de la somme (circuit de droite):
     \item NMOS: 1
     \item PMOS phi: 5
     \item PMOS An, Bn, Cn: 5
-    \item PMOS $C_{n+1}$: 3
+    \item PMOS $C_{n+1}$: $5/3$
 \end{itemize}
 
 \subsection*{3. Additionneur 2-bit}
@@ -415,19 +415,19 @@ Capacité du noeud $\overline{C_{n+1}}$:
     déjà pris en compte par le terme en $N^2$ de la formule du délai)
     \item PMOS (de precharge): $2C_{ox}$ (car effet Miller)
     \item Entrée de l'inverseur: $9/2 C_{ox}$
-    \item Entrée du PMOS du circuit de la somme: $9 C_{ox}$ (car effet Miller)
+    \item Entrée du PMOS du circuit de la somme: $5 C_{ox}$ (car effet Miller)
 \end{itemize}
 
 On a donc les paramètres suivants:
 \begin{itemize}
-    \item Capacité totale de sortie: $C_{out0} = 17 C_{ox0}$.
+    \item Capacité totale de sortie: $C_{out0} = 13 C_{ox}$
     \item Capacité de grille des NMOS: $3C_{ox}$
     \item Résistance des NMOS: $R_N/30$
     \item Nombre de NMOS: $N = 3$
 \end{itemize}
 
 On a donc
-\[t_0 = 0.35 N^2 (3C_{ox}) R_N/30 + 0.7 C_{out0} N R_N/30 = \SI{32}{ps}\]
+\[t_0 = 0.35 N^2 (3C_{ox}) R_N/30 + 0.7 C_{out0} N R_N/30 = \SI{26}{ps}\]
 
 \subparagraph{Calcul de $t_1$}
 Capacité du noeud de sortie $C_{n+1}$: on considère que le carry-out est
@@ -435,12 +435,12 @@ connécté au carry-in d'un full adder.
 \begin{itemize}
 \item Capacité de sortie de l'inverseur $3C_{ox}$
 \item NMOS: $9/2 C_{ox}$ (largeur 3, effet Miller)
-\item PMOS: $2\cdot 5 \cdot 2 \ cdot 3/2 C_{ox} = 30 C_{ox}$ (deux PMOS de largeur 5 avec effet Miller)
+\item PMOS: $2\cdot 5 \cdot 3/2 C_{ox,p} = 30 C_{ox}$ (deux PMOS de largeur 5 avec effet Miller)
 \end{itemize}
-Capacité totale: $C_{out1} = 70.5 C_{ox}$.
+Capacité totale: $C_{out1} = 37.5C_{ox}$.
 
 On a un inverseur, donc la résistance équivalente est $R_N/10$. On a donc
-\[t_1 = 0.7 \cdot R_N/10 C_{out1} = \SI{105}{ps}\]
+\[t_1 = 0.7 \cdot R_N/10 C_{out1} = \SI{55.8}{ps}\]
 
 \subparagraph{Calcul de $t_2$}
 Dans le pire cas, chaine de 5 PMOS de largeur 5.
@@ -453,7 +453,7 @@ Capacité du noeud $\overline{S_n}$:
 
 On a donc les paramètres suivants:
 \begin{itemize}
-    \item Capacité totale de sortie: $C_{out2} = 9 C_{ox}$.
+    \item Capacité totale de sortie: $C_{out2} = 9 C_{ox}$
     \item Capacité de grille des PMOS: $10 C_{ox}$
     \item Résistance des PMOS: $R_P/100$
     \item Nombre de PMOS: $N = 5$
@@ -467,18 +467,18 @@ Sortie d'un inverseur:
 
 \subparagraph{Délai total}
 Au total, le délai pour un additionneur de 2 bits est
-\[t_{FA2} = t_0 + t_1 + t_0 + t_2 + t_3 = \SI{224}{ps}\]
+\[t_{FA2} = t_0 + t_1 + t_0 + t_2 + t_3 = \SI{163}{ps}\]
 
 \paragraph{Fréquence maximale}
 Comme seulement la moitié de le période d'horloge est disponible pour
 effectuer les calculs (l'autre moitié est utilisée pour le \emph{prefetch}),
-la période d'horloge minimale est \SI{448}{ps}. La fréquence maximale est
-donc \SI{2.2}{GHz}.
+la période d'horloge minimale est \SI{327}{ps}. La fréquence maximale est
+donc \SI{3.06}{GHz}.
 
 \paragraph{Additionneur de 32 bits}
 Le délai est
-\[t_{F32} = 31 (t_0 + t_1) + t_0 + t_2 + t_3 = \SI{4.3}{ns},\]
-donc la période d'horloge minimale est de \SI{8.7}{ns}, donc la
-fréquence maximale est \SI{115}{MHz}.
+\[t_{F32} = 31 (t_0 + t_1) + t_0 + t_2 + t_3 = \SI{2.62}{ns},\]
+donc la période d'horloge minimale est de \SI{5.23}{ns}, donc la
+fréquence maximale est \SI{191}{MHz}.
 \end{document}
 
