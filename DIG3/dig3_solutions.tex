@@ -391,44 +391,53 @@ On considère le délai pour un additionneur 1 bit.
 Pour un additionneur, on peut considérer 3 délais:
 \begin{itemize}
     \item Délai pour le calcul de $\overline{C_{n+1}}$: $t_0$
-    \item Délai pour le calcul de $C_{n+1}$ (à partir de $\overline{C_{n+1}}$: $t_1$
-    \item Délai pour le calcul de $\overline{S_n}$ (à partir de $\overline{C_{n+1}}$: $t_2$): $t_2$
+    \item Délai pour le calcul de $C_{n+1}$ (à partir de $\overline{C_{n+1}}$): $t_1$
+    \item Délai pour le calcul de $\overline{S_n}$ (à partir de $\overline{C_{n+1}}$): $t_2$
     \item Délai pour le calcul de $S_n$ (à partur de $\overline{S_n}$): $t_3$
 \end{itemize}
 
-Pour la suite, on pose $C_{ox0} = \SI{625}{aF}$ (capacité pour le NMOS d'un inverseur unitaire).
+On note $C_{ox} = C_{ox,n} = \SI{625}{aF}$ (capacité pour le NMOS $10/1$ 
+d'un inverseur unitaire). On a également $C_{ox,p} = 2C_{ox,n} = 2C_{ox}$ (capacité
+pour le PMOS $20/1$ d'un inverseur unitaire). Tout sera
+donc calculé directement en fonction de $C_{ox}$ dans la suite de l'exercice.\\
+
+Au niveau des modèles à utiliser pour chaque transistor, on suppose que les
+entrées $A_n$, $B_n$ et $C_n$ sont fixes lorsque qu'on passe de la phase de
+pré-charge à la phase d'évaluation. On utilise donc le modèle de gauche de la
+figure~\ref{fig:mos-model} pour ces transistors. Pour les autres, il y a une
+transitions à la grille, on utilise donc le modèle de droite de la figure~\ref{fig:mos-model}. 
 
 \subparagraph{Calcul de $t_0$}
 Dans le pire cas, chaine de 3 NMOS de largeur 3.
 Capacité du noeud $\overline{C_{n+1}}$:
 \begin{itemize}
-    \item Sortie des NMOS: $3/2 C_{ox0}$ (on prend en compte un seul NMOS, l'autre est déjà pris en compte
-        par le terme en $N^2$ de la formule du délai)
-    \item PMOS (de precharge): $2C_{ox0}$ (car effet Miller)
-    \item Entrée de l'inverseur: $9/2 C_{ox0}$
-    \item Entrée du PMOS du circuit de la somme: $9 C_{ox0}$ (car effet Miller)
+    \item Sortie des NMOS: $3/2 C_{ox}$ (on prend en compte un seul NMOS, l'autre est
+    déjà pris en compte par le terme en $N^2$ de la formule du délai)
+    \item PMOS (de precharge): $2C_{ox}$ (car effet Miller)
+    \item Entrée de l'inverseur: $9/2 C_{ox}$
+    \item Entrée du PMOS du circuit de la somme: $9 C_{ox}$ (car effet Miller)
 \end{itemize}
 
 On a donc les paramètres suivants:
 \begin{itemize}
     \item Capacité totale de sortie: $C_{out0} = 17 C_{ox0}$.
-    \item Capacité de grille des NMOS: $3C_{ox0}$
+    \item Capacité de grille des NMOS: $3C_{ox}$
     \item Résistance des NMOS: $R_N/30$
     \item Nombre de NMOS: $N = 3$
 \end{itemize}
 
 On a donc
-\[t_0 = 0.35 N^2 (3C_{ox0}) R_N/30 + 0.7 C_{out0} N R_N/30 = \SI{32}{ps}\]
+\[t_0 = 0.35 N^2 (3C_{ox}) R_N/30 + 0.7 C_{out0} N R_N/30 = \SI{32}{ps}\]
 
 \subparagraph{Calcul de $t_1$}
 Capacité du noeud de sortie $C_{n+1}$: on considère que le carry-out est
 connécté au carry-in d'un full adder.
 \begin{itemize}
-\item Capacité de sortie de l'inverseur $3C_{ox0}$
-\item NMOS: $9/2 C_{ox0}$ (largeur 3, effet Miller)
-\item PMOS: $2\cdot 5 \cdot 2 \ cdot 3/2 C_{ox0} = 30 C_{ox0}$ (deux PMOS de largeur 5 avec effet Miller)
+\item Capacité de sortie de l'inverseur $3C_{ox}$
+\item NMOS: $9/2 C_{ox}$ (largeur 3, effet Miller)
+\item PMOS: $2\cdot 5 \cdot 2 \ cdot 3/2 C_{ox} = 30 C_{ox}$ (deux PMOS de largeur 5 avec effet Miller)
 \end{itemize}
-Capacité totale: $C_{out1} = 70.5 C_{ox0}$.
+Capacité totale: $C_{out1} = 70.5 C_{ox}$.
 
 On a un inverseur, donc la résistance équivalente est $R_N/10$. On a donc
 \[t_1 = 0.7 \cdot R_N/10 C_{out1} = \SI{105}{ps}\]
@@ -437,24 +446,24 @@ On a un inverseur, donc la résistance équivalente est $R_N/10$. On a donc
 Dans le pire cas, chaine de 5 PMOS de largeur 5.
 Capacité du noeud $\overline{S_n}$:
 \begin{itemize}
-    \item NMOS: $3C_{ox0}/2$ (car effet Miller)
-    \item PMOS ($\overline{C_{n+1}}$): $3C_{ox0}$ (un seul PMOS de largeur 3)
-    \item Entrée de l'inverseur: $9/2 C_{ox0}$
+    \item NMOS: $C_{ox}$ (car effet Miller)
+    \item PMOS ($\overline{C_{n+1}}$): $3C_{ox}$ (un seul PMOS de largeur 3)
+    \item Entrée de l'inverseur: $9/2 C_{ox}$
 \end{itemize}
 
 On a donc les paramètres suivants:
 \begin{itemize}
-    \item Capacité totale de sortie: $C_{out2} = 9 C_{ox0}$.
-    \item Capacité de grille des PMOS: $10 C_{ox0}$
+    \item Capacité totale de sortie: $C_{out2} = 9 C_{ox}$.
+    \item Capacité de grille des PMOS: $10 C_{ox}$
     \item Résistance des PMOS: $R_P/100$
     \item Nombre de PMOS: $N = 5$
 \end{itemize}
 On a donc
-\[t_2 = 0.35 N^2 (10C_{ox0}) R_P/100 + 0.7 C_{out2} N R_P/100 = \SI{51}{ps}\]
+\[t_2 = 0.35 N^2 (10C_{ox}) R_P/100 + 0.7 C_{out2} N R_P/100 = \SI{51}{ps}\]
 
 \subparagraph{Calcul de $t_3$}
 Sortie d'un inverseur:
-\[t_3 = 0.7 \cdot 3 \cdot C_{ox0} R_N/10 = \SI{4.5}{ps}\]
+\[t_3 = 0.7 \cdot 3 \cdot C_{ox} R_N/10 = \SI{4.5}{ps}\]
 
 \subparagraph{Délai total}
 Au total, le délai pour un additionneur de 2 bits est
