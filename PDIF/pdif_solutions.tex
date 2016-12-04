@@ -44,7 +44,86 @@ On considère la paire différentielle de la Figure \ref{fig11-1} avec :
 
 \hspace{1cm}\hrule\hspace{1cm}
 
-\subsection*{A}
+\subsection*{Analyse DC}
+
+Dans cette partie, on néglige l'effet Early. Le circuit est donc symétrique (les PMOS sont identiques et en miroir de courant, les NMOS sont identiques et leur polarisation est identique).
+On a donc $I_1 = I_2 = I_{ref}/2$ ($I_1$ et $I_2$ sont les courants dans les branches de gauche et de droite, respectivement).
+
+Soit $V_0$ la tension aux sources des NMOS, on a
+\[I_1 = \frac{k_n}{2}\left(V_1-V_0-V_T\right)^2,\]
+donc
+\[V_0 = -\sqrt{\frac{I_{ref}}{k_n}} = \SI{-0.22}{V}.\]
+
+\paragraph{Dynamique de sortie}$V_{OUT}$ doit être telle que les transistors restent
+en régime saturé. Pour le NM0S: $V_{OUT} \ge V_2 - V_T = \SI{0}{V}$.
+
+Pour le PMOS: on calcule la tension de grille des PMOS:
+\[I_1 = \frac{k_p}{2}\left(V_{DD}-V_{G,P}-V_T\right)^2,\]
+donc $V_{G,P} = \SI{3.78}{V}$.
+On a donc $V_{OUT} \le V_{G,P}+V_T = \SI{4.78}{V}$.
+
+\paragraph{Transconductance des transistors d'entrée}
+\[g_m = g_{m,1} = g_{m,2} = \frac{2I_1}{-V_0} = \SI{44.7}{\micro S}\]
+
+\paragraph{Conductance d'Early}
+\[g_{d,1} = g_{d,2} = g_{d,3} = g_{d,4} = \frac{I_1}{V_A} = \SI{100}{nS}\]
+
+\subsection*{Résistance de sortie}
+Schéma petit-signal:
+\begin{center}
+\begin{circuitikz}
+    \draw
+    (1, 4) to[short] (-2, 4) to[R=$1/g_{m,3}$, i=$i_3$] (-2, 2) to[cI=$g_{m}v_1$] (-2, 0)
+    to[short] (4, 0)
+    to[R=$r_0$] (4, 2) to[R=$r_0$] (4, 4) to[short] (1, 4)
+    to[cI=$i_3$] (1, 2) to[cI=$g_{m}v_2$] (1, 0)
+    (1, 2) to[short, -*] (4, 2) to[short, -o] (5, 2) node[anchor=west] {$v_{out}$}
+    (1, 0) node[ground] {}
+    (1, 4) node[ground, yscale=-1] {};
+\end{circuitikz}
+\end{center}
+On néglige l'effet Early du transistor 1. En effet, la tension à son drain est
+pratiquement constante (vu que le courant dans le transistor 3 varie peu).
+De plus, on approxime la conductance du transistor 3 par $g_m$.
+
+On oberve alors que la résistance de sortie est $r_0/2$.
+
+\subsection*{Gain différentiel}
+En considérant $v_1 = -v_2 = v_{id}/2$, on applique le principe de superposition:
+on applique d'abord $v_1$ et on met $v_2$ à zéro:
+\begin{center}
+\begin{circuitikz}
+    \draw
+    (1, 4) to[short] (-2, 4) to[R=$1/g_{m,3}$, i=$i_3$] (-2, 2) to[cI=$g_{m}v_1$] (-2, 0)
+    to[short] (4, 0)
+    to[R=$r_0$] (4, 2) to[R=$r_0$] (4, 4) to[short] (1, 4)
+    to[cI=$i_3$] (1, 2)
+    (1, 2) to[short, -*] (4, 2) to[short, -o] (5, 2) node[anchor=west] {$v_{out}$}
+    (1, 0) node[ground] {}
+    (1, 4) node[ground, yscale=-1] {};
+\end{circuitikz}
+\end{center}
+On a alors un courant $i_3 = g_m v_1$ qui passe dans la
+résistance de sortie pour donner une tension $r_0/2 g_m v_1$.
+
+On applique ensuite $v_2$ et on met $v_1$ à zéro:
+\begin{center}
+\begin{circuitikz}
+    \draw
+    (1, 4) to[short] (-2, 4) to[R=$1/g_{m,3}$, i=$i_3$] (-2, 2) to[open] (-2, 0)
+    to[short] (4, 0)
+    to[R=$r_0$] (4, 2) to[R=$r_0$] (4, 4) to[short] (1, 4)
+    to[cI=$i_3$] (1, 2) to[cI=$g_{m}v_2$] (1, 0)
+    (1, 2) to[short, -*] (4, 2) to[short, -o] (5, 2) node[anchor=west] {$v_{out}$}
+    (1, 0) node[ground] {}
+    (1, 4) node[ground, yscale=-1] {};
+\end{circuitikz}
+\end{center}
+On a alors un courant $-g_m v_2$ qui passe dans la résistance
+de sortie pour donner une tension $-r_0/2 g_m v_2$.
+
+On a donc au total: $v_{out} = r_0/2 g_m (v_1 - v_2) = r_0/2 g_m v_{id}$.
+Le gain différentiel est alors $A_{diff} = r_0 g_m / 2 = 224$.
 
 \section*{Exercice 2 : Paire différentielle complexe}
 
