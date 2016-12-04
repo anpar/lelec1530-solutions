@@ -1,0 +1,66 @@
+\documentclass[frenchb,DIV=14]{scrartcl}
+
+\input{lib.tex}
+\usetikzlibrary{intersections}
+\usepgfplotslibrary{fillbetween}
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
+
+\titlehead{}
+\subject{LELEC1530}
+\title{Séance 10 - Paires différentielles}
+\subtitle{Solutions}
+\author{\small Gaëtan \textsc{Cassiers} \and\small Antoine \textsc{Paris}}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+\section*{Exercice 1: Paire différentielle simple}
+On considère la paire différentielle de la Figure \ref{fig11-1} avec :
+
+\begin{align*}
+    k_n = k_p &= \SI{200}{\micro A/V^2} &
+    V_A &= \SI{50}{V} &
+    V_T &= \SI{1}{V} &
+    V_{DD} &= \SI{5}{V} &
+    V_1 = V_2 &= \SI{0}{V}
+\end{align*}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=5cm]{figures/fig11-1.png}
+    \caption{Exercice 1}
+    \label{fig11-1}
+\end{figure}
+
+\begin{enumerate}
+    \item  Pour $I_{ref}= \SI{10}{\micro A}$, calculez la dynamique de sortie de la paire, la transconductance des transistors d'entrée et la conductance d'Early des 4 transistors.
+    \item  Calculez la résistance de sortie de la paire différentielle
+    \item  Obtenez l'expression et la valeur du gain en tension de la paire par le principe de superposions.
+    \item  Reproduisez les résultats de a, b et c pour $I_{ref}= \SI{100}{\micro A}$.
+\end{enumerate}
+
+\hspace{1cm}\hrule\hspace{1cm}
+
+\subsection*{A}
+
+\section*{Exercice 2 : Paire différentielle complexe}
+
+On considère la paire différentielle complexe de la Figure \ref{fig11-2} dans une technologie canal long 1?$\mu$m. Les paramètres technologiques sont dans la table 9.1 du cours. NMOS : 10/2, PMOS : 20/2. 
+Obtenez l'expression analytique ainsi que la valeur du gain ($V_{out,+}-V_{out,-}$)/($V_{in,+}-V_{in,-}$).
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=10cm]{figures/fig11-2.png}
+    \caption{Exercice 1}
+    \label{fig11-2}
+\end{figure}
+
+
+
+
+
+
+\end{document}
+
