@@ -136,8 +136,48 @@ Obtenez l'expression analytique ainsi que la valeur du gain ($V_{out,+}-V_{out,-
     \label{fig11-2}
 \end{figure}
 
+\hspace{1cm}\hrule\hspace{1cm}
 
+Schéma petit-signal:
+\begin{center}
+    \begin{circuitikz}
+        \draw
+        (0, 4) node[ground, yscale=-1] {}
+        to[R=$1/(2g_m)$, i=$i_0$] (0, 2) to[R=$r_0/2$] (0, 0) node[ground] {}
+        (0, 2) -- (2, 2) to[cI=$g_m v_2$] (2, 0) -- (0, 0)
+        (0, 2) -- (-2, 2) to[cI=$g_m v_1$] (-2, 0) -- (0, 0)
+        (0, 4) -- (4.5, 4) to[cI=$i_0/2$] (4.5, 2) to[cI=$g_m v_2$] (4.5, 0) -- (2, 0)
+        (0, 4) -- (-4.5, 4) to[cI=$i_0/2$] (-4.5, 2) to[cI=$g_m v_1$] (-4.5, 0) -- (2, 0)
+        (4.5, 4) -- (7, 4) to[R=$r_0$] (7, 2) -- (4.5, 2)
+        (-4.5, 4) -- (-7, 4) to[R=$r_0$] (-7, 2) -- (-4.5, 2)
+        (7, 2) to[R=$r_0$] (7, 0) -- (4.5, 0)
+        (-7, 2) to[R=$r_0$] (-7, 0) -- (-4.5, 0)
+        (7, 2) to[-o] (7.5, 2) node[anchor=west] {$v_O+$}
+        (-7, 2) to[-o] (-7.5, 2) node[anchor=east] {$v_O-$}
+        ;
+    \end{circuitikz}
+\end{center}
 
+On applique le principe de superposition: on met $v_2 = \SI{0}{V}$.
+On a alors (diviseur de courant)
+\[i_0 = \frac{2g_m}{2g_m + 2/r_0}g_m v_1.\]
+La tension en sortie est donc
+\[v_O+ = 0;\]
+\[v_O- = \frac{r_0}{2}\left(\frac{i_0}{2} - g_m v_1\right)
+= \frac{r_0}{2}\left(\frac{1}{2}\frac{g_m}{g_m+1/r_0} - 1\right)g_m v_1.\]
+
+On calcule ensuite la tension de sortie avec $v_1 = \SI{0}{V}$ (le calcul est identique):
+\[v_O+ = \frac{r_0}{2}\left(\frac{1}{2}\frac{g_m}{g_m+1/r_0} - 1\right)g_m v_2;\]
+\[v_O- = 0.\]
+
+Il s'ensuit que
+\[v_O+ - v_O- = \frac{r_0}{2}\left(\frac{1}{2}\frac{g_m}{g_m+1/r_0}-1\right)g_m(v_1-v_2),\]
+le gain différentiel est alors
+\[A_{diff} =
+\frac{v_O+ - v_O-}{v_1-v_2} = \frac{r_0}{2}\left(\frac{1}{2}\frac{g_m}{g_m+1/r_0}-1\right)g_m.\]
+
+\paragraph{Remarque} $A_{diff}$ est positif, donc $v_1$ est logiquement nommée $v_{in+}$ et
+$v_2$, $v_{in-}$.
 
 
 
