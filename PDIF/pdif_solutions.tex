@@ -44,32 +44,46 @@ On considère la paire différentielle de la Figure \ref{fig11-1} avec :
 
 \hspace{1cm}\hrule\hspace{1cm}
 
+On note M1 et M2 les NMOS de gauche et droite respectivement, et M3 et M4 les PMOS
+de gauche et droite respectivement.
+
 \subsection*{Analyse DC}
 
-Dans cette partie, on néglige l'effet Early. Le circuit est donc symétrique (les PMOS sont identiques et en miroir de courant, les NMOS sont identiques et leur polarisation est identique).
-On a donc $I_1 = I_2 = I_{ref}/2$ ($I_1$ et $I_2$ sont les courants dans les branches de gauche et de droite, respectivement).
+Dans cette partie, on néglige l'effet Early. Le circuit est donc symétrique (les PMOS
+sont identiques et en miroir de courant, les NMOS sont identiques et leur polarisation
+est identique). On a donc $I_1 = I_2 = I_{ref}/2$ ($I_1$ et $I_2$ sont les courants dans
+les branches de gauche et de droite, respectivement).
 
-Soit $V_0$ la tension aux sources des NMOS, on a
+Soit $V_0$ la tension aux sources des NMOS, $V_{GS1}$ est donc donné
+par $V_1-V_0$ et on a
 \[I_1 = \frac{k_n}{2}\left(V_1-V_0-V_T\right)^2,\]
 donc
-\[V_0 = -\sqrt{\frac{I_{ref}}{k_n}} = \SI{-0.22}{V}.\]
+\[V_{OV1} = V_1-V_0-V_T = \sqrt{\frac{2I_1}{k_n}} = \SI{0.22}{V}.\]
 
-\paragraph{Dynamique de sortie}$V_{OUT}$ doit être telle que les transistors restent
-en régime saturé. Pour le NM0S: $V_{OUT} \ge V_2 - V_T = \SI{0}{V}$.
+\paragraph{Dynamique de sortie}
+$V_{OUT}$ doit être telle que les transistors restent
+en régime saturé. Pour le NM0S: $V_{OUT} = V_{DS2} + V_0$.
+Or, pour être en saturation, il faut $V_{DS2} \ge V_2 - V_0 - V_T$.
+On trouve donc
+\[V_{OUT} \ge V_2 - V_T = \SI{-1}{V}\].
 
 Pour le PMOS: on calcule la tension de grille des PMOS:
-\[I_1 = \frac{k_p}{2}\left(V_{DD}-V_{G,P}-V_T\right)^2,\]
-donc $V_{G,P} = \SI{3.78}{V}$.
-On a donc $V_{OUT} \le V_{G,P}+V_T = \SI{4.78}{V}$.
+\[I_1 = \frac{k_p}{2}\left(V_{DD}-V_{G4}-V_T\right)^2,\]
+donc $V_{G4} = \SI{3.78}{V}$. Pour que le PMOS M4 soit en
+saturation, il faut $V_{DD} - V_{OUT} \ge V_{SG} - V_T$.
+On a donc
+\[V_{OUT} \le V_{G,P}+V_T = \SI{4.78}{V}\].
 
 \paragraph{Transconductance des transistors d'entrée}
-\[g_m = g_{m,1} = g_{m,2} = \frac{2I_1}{-V_0} = \SI{44.7}{\micro S}\]
+\[g_m = g_{m,1} = g_{m,2} = \frac{2I_1}{V_{OV}} = \SI{44.7}{\micro S}\]
 
 \paragraph{Conductance d'Early}
 \[g_{d,1} = g_{d,2} = g_{d,3} = g_{d,4} = \frac{I_1}{V_A} = \SI{100}{nS}\]
 
 \subsection*{Résistance de sortie}
-Schéma petit-signal:
+En se rappellant qu'un transistor de transconductance $g_m$ monté en diode
+(i.e. dont la grille est connectée au drain) est équivalement à une résistance
+de valeur $1/g_m$, on obtient le schéma petit-signal suivant.
 \begin{center}
 \begin{circuitikz}
     \draw
@@ -83,8 +97,8 @@ Schéma petit-signal:
 \end{circuitikz}
 \end{center}
 On néglige l'effet Early du transistor 1. En effet, la tension à son drain est
-pratiquement constante (vu que le courant dans le transistor 3 varie peu).
-De plus, on approxime la conductance du transistor 3 par $g_m$.
+pratiquement constante (vu que le courant dans M3 varie peu).
+De plus, on approxime la conductance de M3 par $g_m$.
 
 On oberve alors que la résistance de sortie est $r_0/2$.
 
