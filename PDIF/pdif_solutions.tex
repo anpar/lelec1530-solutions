@@ -151,7 +151,8 @@ Le gain est alors $A = \frac{r_0}{2}g_m = 224$.
 On considère la paire différentielle complexe de la Figure~\ref{fig11-2} dans une technologie
 canal long 1$\mu$m. Les paramètres technologiques sont dans la table 9.1 du cours. NMOS : 10/2,
 PMOS : 20/2. 
-Obtenez l'expression analytique ainsi que la valeur du gain ($V_{o,+}-V_{o,-}$)/($V_{i,+}-V_{i,-}$).
+Obtenez l'expression analytique ainsi que la valeur du gain AC
+($v_{o+}-v_{o-}$)/($v_{i+}-v_{i-}$).
 \begin{figure}
     \centering
     \includegraphics[width=10cm]{figures/fig11-2.png}
@@ -162,54 +163,93 @@ Obtenez l'expression analytique ainsi que la valeur du gain ($V_{o,+}-V_{o,-}$)/
 \hspace{1cm}\hrule\hspace{1cm}
 
 Comme précédemment, par symétrie du circuit, le courant dans chaque branche est
-identique.
+identique. Cela signifie que tous les NMOS ont la même transconductance $g_{mn}$
+et la même résistance d'Early $r_{0n}$. De même, tous les PMOS ont la même 
+transconductance $g_{mp}$ et la même résistance d'Early $r_{0p}$.
 Le schéma petit signal du circuit s'obtient de la même façon que le précédent.
 A nouveau, on néglige les résistances d'Early des transistors connectés en diodes
-car $\frac{1}{g_m} \ll r_0$.
-\todo[inline]{On peut également négliger les résistances d'Early des 2 NMOS
-car, à nouveau, $\frac{1}{2g_m} \ll \frac{r_0}{2}$.}
+car $\frac{1}{g_{mp}} \ll r_{0p}$. On peut également négliger les résistances d'Early
+des 2 NMOS centraux car, à nouveau, $\frac{1}{g_{mp}} \ll r_{0n}$.
 
 \begin{center}
     \begin{circuitikz}
         \draw
         (0, 4) node[ground, yscale=-1] {}
-        to[R=$1/(2g_m)$, i=$i_0$] (0, 2) to[R=$r_0/2$] (0, 0) node[ground] {}
-        (0, 2) -- (2, 2) to[cI=$g_m v_2$] (2, 0) -- (0, 0)
-        (0, 2) -- (-2, 2) to[cI=$g_m v_1$] (-2, 0) -- (0, 0)
-        (0, 4) -- (4.5, 4) to[cI=$i_0/2$] (4.5, 2) to[cI=$g_m v_2$] (4.5, 0) -- (2, 0)
-        (0, 4) -- (-4.5, 4) to[cI=$i_0/2$] (-4.5, 2) to[cI=$g_m v_1$] (-4.5, 0) -- (2, 0)
-        (4.5, 4) -- (7, 4) to[R=$r_0$] (7, 2) -- (4.5, 2)
-        (-4.5, 4) -- (-7, 4) to[R=$r_0$] (-7, 2) -- (-4.5, 2)
-        (7, 2) to[R=$r_0$] (7, 0) -- (4.5, 0)
-        (-7, 2) to[R=$r_0$] (-7, 0) -- (-4.5, 0)
-        (7, 2) to[-o] (7.5, 2) node[anchor=west] {$v_O+$}
-        (-7, 2) to[-o] (-7.5, 2) node[anchor=east] {$v_O-$}
+        to[R=$1/(2g_{mp})$] (0, 2)
+        	(0, 2) node[anchor=north] {$v_x$}
+        (0, 0) node[ground] {}
+        (0, 2) -- (2, 2) to[cI=$g_{mn} v_{i-}$] (2, 0) -- (0, 0)
+        (0, 2) -- (-2, 2) to[cI=$g_{mn} v_{i+}$] (-2, 0) -- (0, 0)
+        (0, 4) -- (4.5, 4) to[cI=$-g_{mp}v_x$] (4.5, 2) to[cI=$g_{mn} v_{i-}$] (4.5, 0) -- (2, 0)
+        (0, 4) -- (-4.5, 4) to[cI=$-g_{mp}v_x$] (-4.5, 2) to[cI=$g_{mn} v_{i+}$] (-4.5, 0) -- (2, 0)
+        (4.5, 4) -- (7, 4) to[R=$r_{0p}$] (7, 2) -- (4.5, 2)
+        (-4.5, 4) -- (-7, 4) to[R=$r_{0p}$] (-7, 2) -- (-4.5, 2)
+        (7, 2) to[R=$r_{0n}$] (7, 0) -- (4.5, 0)
+        (-7, 2) to[R=$r_{0n}$] (-7, 0) -- (-4.5, 0)
+        (7, 2) to[-o] (7.5, 2) node[anchor=west] {$v_{o+}$}
+        (-7, 2) to[-o] (-7.5, 2) node[anchor=east] {$v_{o+}$}
         ;
     \end{circuitikz}
 \end{center}
 
-On applique le principe de superposition: on met $v_2 = \SI{0}{V}$.
-On a alors (diviseur de courant)
-\[i_0 = \frac{2g_m}{2g_m + 2/r_0}g_m v_1.\]
-La tension en sortie est donc
-\[v_O+ = 0;\]
-\[v_O- = \frac{r_0}{2}\left(\frac{i_0}{2} - g_m v_1\right)
-= \frac{r_0}{2}\left(\frac{1}{2}\frac{g_m}{g_m+1/r_0} - 1\right)g_m v_1.\]
+Ce schéma petit signal contient en fait 3 circuits indépendants. Le premier
+nous permet de trouver la tension inconnue $v_x$
+\[v_x = -\frac{g_{mn}}{2g_{mp}}(v_{i+}+v_{i-}).\]
 
-On calcule ensuite la tension de sortie avec $v_1 = \SI{0}{V}$ (le calcul est identique):
-\[v_O+ = \frac{r_0}{2}\left(\frac{1}{2}\frac{g_m}{g_m+1/r_0} - 1\right)g_m v_2;\]
-\[v_O- = 0.\]
+\begin{center}
+	\begin{circuitikz}
+		\draw
+		(2,0) -- (0, 0) to [cI_=$g_{mn}(v_{i+}+v_{i-})$] (0,-2) -- (2,-2)
+		(2, 0) to[R=$\frac{1}{2g_{mp}}$] (2, -2)
+		(1,-2) node[ground] {}
+		(2,0) to[short,-o] (2.5,0) node[anchor=west] {$v_x$}
+		;
+ 	\end{circuitikz}
+\end{center}
 
-Il s'ensuit que
-\[v_O+ - v_O- = \frac{r_0}{2}\left(\frac{1}{2}\frac{g_m}{g_m+1/r_0}-1\right)g_m(v_1-v_2),\]
-le gain différentiel est alors
-\[A_{diff} =
-\frac{v_O+ - v_O-}{v_1-v_2} = \frac{r_0}{2}\left(\frac{1}{2}\frac{g_m}{g_m+1/r_0}-1\right)g_m.\]
+Les deux autres nous permettent de trouver $v_{o+}$ et $v_{o-}$. Pour simplifier
+les notations, on utilise $g_{dn}$ et $g_{dp}$ pour désigner les conductances
+d'Early. Le circuit de gauche nous permet d'obtenir
+\begin{align*}
+	v_{o+} 	&= \frac{(g_{mn}v_{i+} + g_{mp}v_x)}{g_{dn} + g_{dp}} \\
+			&= \frac{1}{2}\frac{g_{mn}}{g_{dn}+g_{dp}}(v_{i+}-v_{i-})
+\end{align*}
+tandis que le circuit de droite nous permet d'obtenir
+\begin{align*}
+	v_{o-} 	&= \frac{(g_{mn}v_{i-} + g_{mp}v_x)}{g_{dn} + g_{dp}} \\
+			&= \frac{1}{2}\frac{g_{mn}}{g_{dn}+g_{dp}}(v_{i-}-v_{i+}).
+\end{align*}
 
-\paragraph{Remarque} $A_{diff}$ est positif, donc $v_1$ est logiquement nommée $v_{in+}$ et
-$v_2$, $v_{in-}$.
+\begin{center}
+	\begin{circuitikz}
+		\draw
+		(2,0) -- (0, 0) to [cI_=$g_{mn}v_{i+}+g_{mp}v_x$] (0,-2) -- (2,-2)
+		(2, 0) to[R=$r_{0p}||r_{0n}$] (2, -2)
+		(1,-2) node[ground] {}
+		(2,0) to[short,-o] (2.5,0) node[anchor=west] {$v_{o+}$}
+		;
+ 	\end{circuitikz}
+ 	\begin{circuitikz}
+		\draw
+		(2,0) -- (0, 0) to [cI_=$g_{mn}v_{i-}+g_{mp}v_x$] (0,-2) -- (2,-2)
+		(2, 0) to[R=$r_{0p}||r_{0n}$] (2, -2)
+		(1,-2) node[ground] {}
+		(2,0) to[short,-o] (2.5,0) node[anchor=west] {$v_{o-}$}
+		;
+ 	\end{circuitikz}
+\end{center}
 
-
+On a donc finalement
+\[ \frac{v_{o+}-v_{o-}}{v_{i+}-v_{i-}} = \frac{g_{mn}}{g_{dn}+g_{dp}}.\]
+Il ne reste plus qu'à calculer la valeur de $g_{mn}$, $g_{dn}$ et $g_{dp}$ en
+s'aidant dans la table 9.1 du CMOS.
+On sait que $g_{mn} = \frac{2I_D}{V_{OV}}$. Vu la symétrie du circuit, $I_D =
+\SI{2.5}{\micro\ampere}$. On peut ensuite calculer
+\[ V_{OV} = \sqrt{\frac{2I_D}{KP_n\frac{W}{L}}} = \SI{0.091}{\volt}\]
+et donc $g_{mn} = \SI{54.8}{\micro\ampere\per\volt}$. Les conductances d'Early
+sont quand à elle données par $g_{dn} = \lambda_n I_D = \SI{25}{\nano\siemens}$
+et $g_{dp} = \lambda_pI_D = \SI{31.25}{\nano\siemens}$. Le gain vaut donc
+$\SI{973.73}{\volt\per\volt}$.
 
 \end{document}
 
