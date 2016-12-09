@@ -82,8 +82,10 @@ On a donc
 
 \subsection*{Résistance de sortie}
 En se rappellant qu'un transistor de transconductance $g_m$ monté en diode
-(i.e. dont la grille est connectée au drain) est équivalement à une résistance
-de valeur $1/g_m$, on obtient le schéma petit-signal suivant.
+(i.e. dont la grille est connectée au drain) est équivalent à une résistance
+de valeur $1/g_m$, on obtient le schéma petit-signal suivant. Notons également
+que la source de courant DC introduit une \emph{masse virtuelle} AC aux sources
+de M1 et M2.
 \begin{center}
 \begin{circuitikz}
     \draw
@@ -96,14 +98,19 @@ de valeur $1/g_m$, on obtient le schéma petit-signal suivant.
     (1, 4) node[ground, yscale=-1] {};
 \end{circuitikz}
 \end{center}
-On néglige l'effet Early du transistor 1. En effet, la tension à son drain est
-pratiquement constante (vu que le courant dans M3 varie peu).
-De plus, on approxime la conductance de M3 par $g_m$.
+Dans la branche de gauche du circuit, il faudrait en théorie ajouter les résistances
+d'Early des transistors M1 et M3. Néanmoins, comme $\frac{1}{g_{m,3}} \ll (r_{0,1} || r_{0,2})$,
+celles-ci peuvent-être négligées.
 
-On oberve alors que la résistance de sortie est $r_0/2$.
+On calcule ensuite la résistance de sortie comme
+\[R_{out} = \frac{v_t}{i_t}\bigg\rvert_{v_1=v_2=0}\]
+avec $v_t$ une source de tension de test à la sortie et $i_t$
+le courant courant entrant. On obtient finalement
+\[R_{out} = \frac{r_0}{2}. \]
 
 \subsection*{Gain différentiel}
-En considérant $v_1 = -v_2 = v_{id}/2$, on applique le principe de superposition:
+Le gain différentiel est donné par $A = \frac{v_{out}}{v_{di}}$
+avec $v_{di} = v_1 - v_2$. Par le principe de superposition,
 on applique d'abord $v_1$ et on met $v_2$ à zéro:
 \begin{center}
 \begin{circuitikz}
@@ -118,7 +125,7 @@ on applique d'abord $v_1$ et on met $v_2$ à zéro:
 \end{circuitikz}
 \end{center}
 On a alors un courant $i_3 = g_m v_1$ qui passe dans la
-résistance de sortie pour donner une tension $r_0/2 g_m v_1$.
+résistance de sortie pour donner une tension $\frac{r_0}{2} g_m v_1$.
 
 On applique ensuite $v_2$ et on met $v_1$ à zéro:
 \begin{center}
@@ -134,16 +141,18 @@ On applique ensuite $v_2$ et on met $v_1$ à zéro:
 \end{circuitikz}
 \end{center}
 On a alors un courant $-g_m v_2$ qui passe dans la résistance
-de sortie pour donner une tension $-r_0/2 g_m v_2$.
+de sortie pour donner une tension $-\frac{r_0}{2} g_m v_2$.
 
-On a donc au total: $v_{out} = r_0/2 g_m (v_1 - v_2) = r_0/2 g_m v_{id}$.
-Le gain est alors $A = r_0 g_m / 2 = 224$.
+On a donc au total: $v_{out} = \frac{r_0}{2} g_m (v_1 - v_2) = \frac{r_0}{2} g_m v_{di}$.
+Le gain est alors $A = \frac{r_0}{2}g_m = 224$.
 
 \section*{Exercice 2 : Paire différentielle complexe}
 
-On considère la paire différentielle complexe de la Figure \ref{fig11-2} dans une technologie canal long 1?$\mu$m. Les paramètres technologiques sont dans la table 9.1 du cours. NMOS : 10/2, PMOS : 20/2. 
-Obtenez l'expression analytique ainsi que la valeur du gain ($V_{out,+}-V_{out,-}$)/($V_{in,+}-V_{in,-}$).
-\begin{figure}[!htbp]
+On considère la paire différentielle complexe de la Figure~\ref{fig11-2} dans une technologie
+canal long 1$\mu$m. Les paramètres technologiques sont dans la table 9.1 du cours. NMOS : 10/2,
+PMOS : 20/2. 
+Obtenez l'expression analytique ainsi que la valeur du gain ($V_{o,+}-V_{o,-}$)/($V_{i,+}-V_{i,-}$).
+\begin{figure}
     \centering
     \includegraphics[width=10cm]{figures/fig11-2.png}
     \caption{Exercice 1}
@@ -152,7 +161,14 @@ Obtenez l'expression analytique ainsi que la valeur du gain ($V_{out,+}-V_{out,-
 
 \hspace{1cm}\hrule\hspace{1cm}
 
-Schéma petit-signal:
+Comme précédemment, par symétrie du circuit, le courant dans chaque branche est
+identique.
+Le schéma petit signal du circuit s'obtient de la même façon que le précédent.
+A nouveau, on néglige les résistances d'Early des transistors connectés en diodes
+car $\frac{1}{g_m} \ll r_0$.
+\todo[inline]{On peut également négliger les résistances d'Early des 2 NMOS
+car, à nouveau, $\frac{1}{2g_m} \ll \frac{r_0}{2}$.}
+
 \begin{center}
     \begin{circuitikz}
         \draw
