@@ -18,7 +18,7 @@
 
 
 \section*{Exercice 1: Paire différentielle simple}
-On considère la paire différentielle de la Figure \ref{fig11-1} avec :
+On considère la paire différentielle de la Figure~\ref{fig11-1} avec :
 
 \begin{align*}
     k_n = k_p &= \SI{200}{\micro A/V^2} &
@@ -39,7 +39,7 @@ On considère la paire différentielle de la Figure \ref{fig11-1} avec :
     \item  Pour $I_{ref}= \SI{10}{\micro A}$, calculez la dynamique de sortie de la paire, la transconductance des transistors d'entrée et la conductance d'Early des 4 transistors.
     \item  Calculez la résistance de sortie de la paire différentielle
     \item  Obtenez l'expression et la valeur du gain en tension de la paire par le principe de superposions.
-    \item  Reproduisez les résultats de a, b et c pour $I_{ref}= \SI{100}{\micro A}$.
+    \item  Reproduisez les résultats de 1, 2 et 3 pour $I_{ref}= \SI{100}{\micro A}$.
 \end{enumerate}
 
 \hspace{1cm}\hrule\hspace{1cm}
@@ -62,7 +62,7 @@ donc
 
 \paragraph{Dynamique de sortie}
 $V_{OUT}$ doit être telle que les transistors restent
-en régime saturé. Pour le NM0S: $V_{OUT} = V_{DS2} + V_0$.
+en régime saturé. Pour le NMOS: $V_{OUT} = V_{DS2} + V_0$.
 Or, pour être en saturation, il faut $V_{DS2} \ge V_2 - V_0 - V_T$.
 On trouve donc
 \[V_{OUT} \ge V_2 - V_T = \SI{-1}{V}\].
@@ -105,7 +105,7 @@ celles-ci peuvent-être négligées.
 On calcule ensuite la résistance de sortie comme
 \[R_{out} = \frac{v_t}{i_t}\bigg\rvert_{v_1=v_2=0}\]
 avec $v_t$ une source de tension de test à la sortie et $i_t$
-le courant courant entrant. On obtient finalement
+le courant entrant. On obtient finalement
 \[R_{out} = \frac{r_0}{2}. \]
 
 \subsection*{Gain différentiel}
@@ -146,6 +146,7 @@ de sortie pour donner une tension $-\frac{r_0}{2} g_m v_2$.
 On a donc au total: $v_{out} = \frac{r_0}{2} g_m (v_1 - v_2) = \frac{r_0}{2} g_m v_{di}$.
 Le gain est alors $A = \frac{r_0}{2}g_m = 224$.
 
+\clearpage
 \section*{Exercice 2 : Paire différentielle complexe}
 
 On considère la paire différentielle complexe de la Figure~\ref{fig11-2} dans une technologie
